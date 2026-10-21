@@ -20,7 +20,8 @@ Work through the brief's phases one at a time and stop after each for review. Th
 ## Data and storage
 
 - Files in `data/` are the source of truth and are committed (raw responses as `.json.gz`). Supabase is a copy: a failed Supabase write must warn, not stop a run; `python run.py sync` fills gaps.
-- Supabase schema changes go in new numbered files in `supabase/migrations/`; never edit an applied migration.
+- Supabase project: `fpl-agents-experiment` (ref `adijcrtvxrnvalezelhg`, org "FPL Experiment", free plan, ap-south-1). Never touch the user's other Supabase projects.
+- Supabase schema changes go in new timestamped files in `supabase/migrations/` and are applied with the MCP `apply_migration` tool; never edit an applied migration.
 - Secrets live in `.env` (see `.env.example`), never committed.
 
 ## FPL API gotchas
