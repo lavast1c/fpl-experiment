@@ -39,4 +39,4 @@ CACHE_MAX_AGE_HOURS = {
 # --- Snapshot ------------------------------------------------------------
 FIXTURES_AHEAD = 3            # how many upcoming gameweeks of fixtures each player row shows
 CHARS_PER_TOKEN = 3.5         # rough token estimate (see METHODS.md); exact counts come from real calls
-SNAPSHOT_FILTER = "played"   # provisional until chosen at the phase 1 review
+SNAPSHOT_FILTER = "all"   # chosen 2026-10-21 for now; must be fixed before the first real gameweek
