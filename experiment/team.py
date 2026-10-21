@@ -18,11 +18,14 @@ class Player:
     club: int           # team id
     price: int          # now_cost, tenths of £m
     status: str         # a = available, d = doubtful, i = injured, s = suspended, u = unavailable, n = not eligible
+    club_short: str = ""  # e.g. ARS
 
 
 def players_from_bootstrap(bootstrap: dict) -> dict[int, Player]:
+    clubs = {t["id"]: t["short_name"] for t in bootstrap["teams"]}
     return {
-        p["id"]: Player(p["id"], p["web_name"], p["element_type"], p["team"], p["now_cost"], p.get("status", "a"))
+        p["id"]: Player(p["id"], p["web_name"], p["element_type"], p["team"], p["now_cost"], p.get("status", "a"),
+                        clubs.get(p["team"], ""))
         for p in bootstrap["elements"]
     }
 

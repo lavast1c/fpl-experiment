@@ -16,3 +16,4 @@
 - Scorer (`experiment/scorer.py`): automatic substitutions, captain/vice-captain, triple captain, bench boost.
 - `run.py check-scorer`: one-off check against official scores of random public teams (passed exactly).
 - Official player points for GW1-7 (`event/{gw}/live/`).
+- Prompt v1, forced answer format, real and mock agents, `run.py decide` / `score` / `test-calls`.

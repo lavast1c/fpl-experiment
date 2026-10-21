@@ -48,3 +48,29 @@ Every methodological decision, with the date it was made. Once the season starts
   - *Scoring:* **98 team-weeks from 16 teams across GW1–7: every gameweek total and every bench total matched FPL exactly**, as did the players brought on by automatic substitution. This covered triple captain 6 times, bench boost 4, wildcard 5 and free hit 1, plus 43 weeks with automatic subs and 3 where the vice-captain took the armband.
   - *How subs were tested.* FPL's lineup pages already show the lineup after substitutions, so the check first undoes them and lets our scorer redo them. Because FPL re-sorts the XI afterwards, the original order of two starters in the *same* position can't be recovered. So the check compares the players brought on and the positions of the players taken off; the exact pairs also matched in 39 of the 43 weeks.
   - *Free transfers and hits:* **518 team-weeks from 80 teams were replayed with our rules, with 0 differences** from the official hit costs. This includes 25 wildcard or free hit weeks and 54 weeks with a hit. The check is sensitive: a 3-point hit would have caused 54 differences, and gaining a free transfer in wildcard or free hit weeks would have caused 6. The 5-transfer maximum was not exercised (no team saved 5 in seven weeks).
+
+## 2026-10-22: Phase 4, prompt, answer format and runner
+
+- **Framing.** Agents are told only that they manage an FPL team for the rest of the 2026/27 season and should score as many points as possible. They are not told about the experiment, other agents or the bots, so that nothing nudges their behaviour.
+- **Prompt v1** (`prompts/v1/`): a short system prompt that *replaces* Claude Code's own coding-assistant prompt. The weekly template has these sections:
+  - the rules, generated from `experiment/rules.py`, so the prompt can't disagree with the validator
+  - the team's squad, bank, free transfers and available chips
+  - (memory teams only, from phase 5) the memory section
+  - the full player table
+  - the answer format
+
+  Every team gets identical text apart from its own squad and memory. Templates are versioned and never edited once the season starts. A change means a new version folder, logged here.
+- **Answer format.** The format is forced with the CLI's `--json-schema`. The schema checks only the *shape* (which fields, numbers vs text); every FPL rule is checked by our validator. The answer also includes a short `reasoning` (at most 80 words).
+- **Each real call** is `claude -p` with:
+  - the exact model ID and `--effort medium` (the same for all)
+  - `--tools ""` (no tools), `--strict-mcp-config` (no MCP servers), `--safe-mode` (no CLAUDE.md, plugins, hooks or skills) and `--disable-slash-commands`
+  - `--no-session-persistence` (a fresh session every time; never `--continue` or `--resume`)
+  - `--output-format json`, with the prompt sent on standard input
+  - a run from a new empty temporary folder
+  - API-key environment variables removed, so only the subscription can be used
+
+  Model aliases and Fable models are refused in code. The models the CLI reports in `modelUsage` are logged for every call, and any mismatch is flagged.
+- **Retries.** A retry is a new fresh call: the original prompt plus the rejected answer and the validator's error messages. If a call *itself* fails (usage limit, network, CLI error), that is not counted as the agent's attempt. Nothing is saved for that team, and re-running `decide` continues with the teams not yet decided. Teams are always run one at a time.
+- **Logged per call:** the exact prompt, raw output, parsed answer, validator errors, stale picks, models used, input and output tokens, duration, and the CLI's API-equivalent cost figure (not billed; for information only). A token summary is printed after each run.
+- **Mock runs** use a fake agent (random legal answers, with deliberate mistakes on about 30% of first attempts) and are saved in `data/mock/`, which is git-ignored and never part of the dataset. A six-gameweek mock season (54 team-weeks) ran without problems. It covered retries, eight kinds of rule errors, stale picks, 45 transfers, 32 hit points and all four chips. Tests also cover the no-squad and no-change fallbacks and the free hit reverting.
+- **Scoring** (`run.py score`) only runs once FPL marks the gameweek final: bonus points added for every day of the gameweek, and the gameweek's data checked.

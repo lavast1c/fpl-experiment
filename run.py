@@ -4,14 +4,16 @@
     python run.py snapshot [--filter F]  build the player table agents receive (no network)
     python run.py sync                   copy local data files to Supabase
     python run.py check-scorer           one-off: compare our scorer with real teams' official scores
+    python run.py decide --gw N [--mock] all teams make their gameweek N decision
+    python run.py score --gw N [--mock]  score gameweek N once it is final
+    python run.py test-calls --gw N --yes-real-calls   phase 4 check: 2 real calls per model
 
-Later phases add `decide` and `score`.
 """
 
 import argparse
 import sys
 
-from experiment import api_rules, config, fetch, scorer_check, snapshot, supabase_sync
+from experiment import api_rules, config, fetch, runner, scorer_check, snapshot, supabase_sync, test_calls
 from experiment.files import read_json_gz
 from experiment.gameweeks import deadline, hours_until_deadline
 
@@ -65,6 +67,30 @@ def cmd_check_scorer(args) -> None:
         sys.exit(1)
 
 
+def _teams(names: str | None):
+    if not names:
+        return runner.TEAMS
+    wanted = names.split(",")
+    unknown = set(wanted) - {t.id for t in runner.TEAMS}
+    if unknown:
+        sys.exit(f"Unknown team(s): {sorted(unknown)}")
+    return [t for t in runner.TEAMS if t.id in wanted]
+
+
+def cmd_decide(args) -> None:
+    runner.decide(args.gw, args.mock, _teams(args.teams), args.yes_real_calls)
+
+
+def cmd_score(args) -> None:
+    runner.score_gameweek(args.gw, args.mock)
+
+
+def cmd_test_calls(args) -> None:
+    if not args.yes_real_calls:
+        sys.exit("This makes 6 real `claude -p` calls (2 per model). Add --yes-real-calls once agreed.")
+    test_calls.run(args.gw)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="FPL agents experiment")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -85,6 +111,23 @@ def main() -> None:
     p.add_argument("--teams", type=int, default=15, help="teams to check every finished gameweek for")
     p.add_argument("--keep", action="store_true", help="keep the test cache (for debugging)")
     p.set_defaults(func=cmd_check_scorer)
+
+    p = commands.add_parser("decide", help="all teams make their decision for a gameweek")
+    p.add_argument("--gw", type=int, required=True)
+    p.add_argument("--mock", action="store_true", help="fake agent, saved in data/mock (no quota used)")
+    p.add_argument("--teams", help="comma-separated team ids, e.g. H-none,S-none (default: all 9)")
+    p.add_argument("--yes-real-calls", action="store_true", help="confirm real `claude -p` calls (uses your plan)")
+    p.set_defaults(func=cmd_decide)
+
+    p = commands.add_parser("score", help="score a gameweek once FPL has finalised it")
+    p.add_argument("--gw", type=int, required=True)
+    p.add_argument("--mock", action="store_true", help="score the mock run (fake points if not played yet)")
+    p.set_defaults(func=cmd_score)
+
+    p = commands.add_parser("test-calls", help="phase 4 check: one probe and one decision call per model")
+    p.add_argument("--gw", type=int, required=True)
+    p.add_argument("--yes-real-calls", action="store_true")
+    p.set_defaults(func=cmd_test_calls)
 
     args = parser.parse_args()
     args.func(args)

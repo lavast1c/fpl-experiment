@@ -55,3 +55,17 @@ CACHE_MAX_AGE_HOURS = {
 FIXTURES_AHEAD = 3            # how many upcoming gameweeks of fixtures each player row shows
 CHARS_PER_TOKEN = 3.5         # rough token estimate (see METHODS.md); exact counts come from real calls
 SNAPSHOT_FILTER = "all"   # chosen 2026-10-21 for now; must be fixed before the first real gameweek
+
+# --- Agents --------------------------------------------------------------
+# Exact model IDs only. Never Fable, never aliases like "opus" (they can change mid-season).
+MODELS = {"H": "claude-haiku-5-5", "S": "claude-sonnet-5-5", "O": "claude-opus-5-5"}
+EFFORT = "medium"                       # the same for every agent (chosen 2026-10-22)
+PROMPT_VERSION = "v1"                   # folder in prompts/; never edit a version once the season starts
+PROMPTS_DIR = PROJECT_ROOT / "prompts"
+CLAUDE_TIMEOUT_SECONDS = 900            # give up on one call after 15 minutes
+DEADLINE_WARNING_HOURS = 3              # `decide` warns when the deadline is closer than this
+
+# --- Where runs are saved -------------------------------------------------
+# Real runs write into DATA_DIR (committed: the open dataset). Mock runs write into MOCK_DIR
+# (git-ignored), so test data can never mix with real results.
+MOCK_DIR = DATA_DIR / "mock"
