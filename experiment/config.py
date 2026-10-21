@@ -10,13 +10,27 @@ DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"              # every API response, gzipped, one folder per gameweek
 SNAPSHOT_DIR = DATA_DIR / "snapshots"   # the player table every agent receives
 RULES_DIR = DATA_DIR / "rules"          # rule settings read from the API
+TEST_CACHE_DIR = DATA_DIR / "test_cache"  # phase 3 scorer check only: git-ignored, deleted after use
 
 # --- FPL API -------------------------------------------------------------
 API_BASE = "https://fantasy.premierleague.com/api/"
 
-# The only endpoints this project is allowed to read in phase 1.
-# Anything else must be added here on purpose (see METHODS.md).
-ALLOWED_ENDPOINTS = ("bootstrap-static/", "fixtures/", "event-status/")
+# The only endpoints this project may read (regular expressions for the whole path).
+# Anything else must be added here on purpose and recorded in METHODS.md.
+ALLOWED_ENDPOINTS = (
+    r"bootstrap-static/",
+    r"fixtures/",
+    r"event-status/",
+    r"event/\d+/live/",            # official points and minutes per player, for scoring
+)
+
+# Endpoints about individual managers' teams. Used ONLY by the one-off scorer check
+# (experiment/scorer_check.py), saved only in TEST_CACHE_DIR with names removed, then deleted.
+TEST_ONLY_ENDPOINTS = (
+    r"leagues-classic/314/standings/\?page_standings=\d+",   # 314 = the "Overall" league
+    r"entry/\d+/history/",
+    r"entry/\d+/event/\d+/picks/",
+)
 
 # Identify ourselves honestly. No cookies, logins or auth headers are ever sent.
 USER_AGENT = "fpl-agents-experiment/0.1 (research project; https://github.com/lavast1c/fpl-experiment)"
@@ -29,11 +43,12 @@ REQUEST_DELAY_SECONDS = 3.0
 # Going over it needs --force, and is logged.
 MAX_FETCHES_PER_GAMEWEEK = 4
 
-# Reuse a cached response if it is younger than this (hours).
+# Reuse a cached response if it is younger than this (hours). Keys are ALLOWED_ENDPOINTS patterns.
 CACHE_MAX_AGE_HOURS = {
-    "bootstrap-static/": 6,
-    "fixtures/": 6,
-    "event-status/": 1,
+    r"bootstrap-static/": 6,
+    r"fixtures/": 6,
+    r"event-status/": 1,
+    r"event/\d+/live/": 6,
 }
 
 # --- Snapshot ------------------------------------------------------------

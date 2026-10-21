@@ -11,6 +11,7 @@ and logged in data/raw/fetch_log.csv.
 """
 
 import hashlib
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -33,8 +34,8 @@ class FetchCapReached(Exception):
 
 
 def endpoint_slug(endpoint: str) -> str:
-    """'bootstrap-static/' -> 'bootstrap-static', 'event/8/live/' -> 'event_8_live'."""
-    return endpoint.strip("/").replace("/", "_")
+    """'bootstrap-static/' -> 'bootstrap-static', 'event/8/live/' -> 'event-8-live'."""
+    return re.sub(r"[/?=_]+", "-", endpoint.strip("/"))
 
 
 def cached_files(raw_dir: Path, gw: int, endpoint: str) -> list[Path]:
@@ -49,15 +50,24 @@ def saved_at(path: Path) -> datetime:
     return datetime.strptime(stamp, TIME_FORMAT).replace(tzinfo=timezone.utc)
 
 
+def matches(endpoint: str, patterns) -> bool:
+    return any(re.fullmatch(pattern, endpoint) for pattern in patterns)
+
+
 def is_fresh(path: Path, endpoint: str, now: datetime) -> bool:
-    max_age_hours = config.CACHE_MAX_AGE_HOURS.get(endpoint, 1)
+    max_age_hours = next((hours for pattern, hours in config.CACHE_MAX_AGE_HOURS.items()
+                          if re.fullmatch(pattern, endpoint)), 1)
     return (now - saved_at(path)).total_seconds() < max_age_hours * 3600
 
 
-def _download(endpoint: str, http_get, sleep) -> dict | list:
-    """One GET request, spaced at least REQUEST_DELAY_SECONDS after the previous one."""
+def _download(endpoint: str, http_get, sleep, test_only: bool = False) -> dict | list:
+    """One GET request, spaced at least REQUEST_DELAY_SECONDS after the previous one.
+
+    test_only=True also allows TEST_ONLY_ENDPOINTS (only the scorer check passes it).
+    """
     global _last_request_at
-    if endpoint not in config.ALLOWED_ENDPOINTS:
+    allowed = matches(endpoint, config.ALLOWED_ENDPOINTS) or (test_only and matches(endpoint, config.TEST_ONLY_ENDPOINTS))
+    if not allowed:
         raise ValueError(f"Endpoint {endpoint!r} is not on the allowed list in config.py.")
     if _last_request_at is not None:
         wait = config.REQUEST_DELAY_SECONDS - (time.monotonic() - _last_request_at)
