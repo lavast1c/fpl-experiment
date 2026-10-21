@@ -1,0 +1,4 @@
+fetched_at,gw,endpoint,file,sha256,bytes,forced
+2026-10-21T17:55:37+00:00,8,bootstrap-static/,gw8/bootstrap-static_20261021T175537Z.json.gz,c3536317fa26e0cac5861e08432a478b495bca867261f1b35e9f6ce336a534db,1947088,False
+2026-10-21T17:55:37+00:00,8,fixtures/,gw8/fixtures_20261021T175537Z.json.gz,bc14ed5f95e1f4f43b459e7a9b1ac01f0ea907cdd1799dc51210ff44926184ee,314613,False
+2026-10-21T17:55:40+00:00,8,event-status/,gw8/event-status_20261021T175540Z.json.gz,0efdc877b1fc209afbdcf4f082f25a6921d650740ed8238576884bdab9ace784,250,False
