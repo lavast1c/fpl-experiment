@@ -25,3 +25,9 @@ CLAUDE.local.md
 Thumbs.db
 .vscode/
 .idea/
+
+# Phase 3 scorer test data (real public teams) - never commit
+data/test_cache/
+
+# Temporary files
+*.tmp
