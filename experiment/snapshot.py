@@ -23,6 +23,9 @@ FILTERS = {
     "all": lambda row: True,
     "played": lambda row: row["minutes"] > 0,
     "played_or_expected": lambda row: row["minutes"] > 0 or row["ep_next"] > 0,
+    # Also keeps 0-minute players who are available and owned by at least 0.5% of managers
+    # (often new signings, which the API does not flag).
+    "played_or_owned": lambda row: row["minutes"] > 0 or (row["status"] == "a" and row["own_pct"] >= 0.5),
 }
 
 
@@ -88,7 +91,9 @@ def build_rows(bootstrap: dict, fixtures: list[dict], gw: int) -> list[dict]:
             "news": " ".join((p.get("news") or "").split()).replace("|", "/"),
             "next_fixtures": fixture_text[p["team"]],
         })
-    rows.sort(key=lambda r: (r["pos"], r["club"], r["id"]))
+    # Goalkeepers, defenders, midfielders, forwards (the API's position order), then club, then id.
+    position_order = {short: pos_id for pos_id, short in positions.items()}
+    rows.sort(key=lambda r: (position_order[r["pos"]], r["club"], r["id"]))
     return rows
 
 

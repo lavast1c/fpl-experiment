@@ -43,6 +43,7 @@ def test_filters(bootstrap, fixtures):
     assert ids("all") == {1, 2, 3, 4}
     assert ids("played") == {1, 2}
     assert ids("played_or_expected") == {1, 2, 4}  # the 0-minute new signing with ep_next > 0 stays
+    assert ids("played_or_owned") == {1, 2, 3, 4}  # 0-minute, available, 12.3% owned players stay
 
 
 def test_prompt_table_has_one_line_per_player(bootstrap, fixtures):
