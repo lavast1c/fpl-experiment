@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Fixed
+- Wildcard and free hit weeks keep saved free transfers but gain no new one.
+
 ### Added
 - Project brief, README, MIT licence, METHODS and CHANGELOG.
 - `run.py fetch`: cached, rate-limited, capped download of public FPL data.

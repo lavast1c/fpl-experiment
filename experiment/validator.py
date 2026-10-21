@@ -14,7 +14,7 @@ import copy
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 
-from .rules import UNVERIFIED_RULES, Chip, Rules
+from .rules import MANUAL_RULES, Chip, Rules
 from .team import Lineup, Player, TeamState, selling_price
 
 
@@ -169,7 +169,7 @@ def validate(decision, state: TeamState, players: dict[int, Player], rules: Rule
             chip, error = find_chip(chip_name, state, rules, gw)
             if error:
                 result.errors.append(error)
-            elif first_week and chip.kind == "transfer" and UNVERIFIED_RULES["transfer_chips_not_in_first_week"]["value"]:
+            elif first_week and chip.kind == "transfer" and MANUAL_RULES["transfer_chips_not_in_first_week"]["value"]:
                 result.errors.append(Error("CHIP_NOT_IN_FIRST_WEEK", f"{chip_name} can't be played in a team's first gameweek."))
                 chip = None
 
@@ -248,7 +248,7 @@ def apply(decision: dict, state: TeamState, players: dict[int, Player], rules: R
     if not state.has_squad:
         new.squad = {pid: players[pid].price for pid in decision["squad"]}
         new.has_squad = True
-        new.free_transfers = UNVERIFIED_RULES["new_team_free_transfers"]["value"]
+        new.free_transfers = MANUAL_RULES["new_team_free_transfers"]["value"]
     else:
         if chip is not None and chip.name == "freehit":
             # Keep the real squad aside; start_gameweek() puts it back next week.
@@ -258,11 +258,12 @@ def apply(decision: dict, state: TeamState, players: dict[int, Player], rules: R
             del new.squad[t["out"]]
             new.squad[t["in"]] = players[t["in"]].price
         transfers = len(decision.get("transfers", []))
-        if chip is not None and chip.kind == "transfer" and UNVERIFIED_RULES["chips_keep_saved_transfers"]["value"]:
-            saved = state.free_transfers
+        if chip is not None and chip.kind == "transfer":
+            # Wildcard / free hit week: saved free transfers are kept, but no new one is gained.
+            new.free_transfers = state.free_transfers
         else:
             saved = max(0, state.free_transfers - transfers)
-        new.free_transfers = min(rules.max_free_transfers, saved + rules.free_transfers_per_gw)
+            new.free_transfers = min(rules.max_free_transfers, saved + rules.free_transfers_per_gw)
 
     new.bank = result.bank_after
     new.lineup = Lineup(decision["starting_xi"], result.bench_order, decision["captain"], decision["vice_captain"])

@@ -30,3 +30,8 @@ Every methodological decision, with the date it was made. Once the season starts
 - **First week.** A new team gives a full 15-player `squad` instead of transfers. It can't play a wildcard or free hit that week, but bench boost and triple captain are allowed.
 - **Players removed from the game** (very rare): a team must transfer them out, and they sell for their purchase price.
 - **Rules the API does not publish (to be confirmed on the FPL site):** a hit costs 4 points; you gain 1 free transfer per gameweek; you can save up to 5 (read from `max_extra_free_transfers` = 4, whose exact meaning isn't documented); selling price is rounded down to £0.1m; only one chip per gameweek; wildcard and free hit don't use up saved free transfers; the free hit squad reverts the next week; a new mid-season team has 1 free transfer after its first week; no wildcard or free hit in a team's first week; the substitute goalkeeper always sits first on the bench. Also unexplained: the API's `transfers_cap` = 20 (not used).
+
+## 2026-10-22: Manual rules confirmed, one correction
+
+- The project owner checked the rules listed above on the FPL site and confirmed them, with **one correction**: in a wildcard or free hit week, saved free transfers are kept but **no new free transfer is gained** (not "+1 as usual"). The code now does this. The rule list now lives in `MANUAL_RULES` in `experiment/rules.py`, marked as confirmed on 2026-10-22.
+- **Formations.** The starting XI limits come from the API (GK exactly 1, DEF 3–5, MID 2–5, FWD 1–3, 11 players). That allows exactly 8 formations: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-2-3, 5-3-2 and 5-4-1. A test checks that every one of them passes and every other combination fails.

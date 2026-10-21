@@ -3,9 +3,9 @@
 Rules come from two places:
 1. VERIFIED: read from the API's own settings (data/rules/{season}_api_rules.json, saved by
    `run.py snapshot`). These are loaded by load_rules().
-2. UNVERIFIED: rules the API does not publish. They are written once here, in UNVERIFIED_RULES,
-   and must be checked by a human on the FPL website (see METHODS.md). Never hardcode an FPL
-   rule anywhere else in the code.
+2. MANUAL: rules the API does not publish. They are written once here, in MANUAL_RULES, and were
+   confirmed by hand on the FPL website (date in CONFIRMED_ON and METHODS.md). Never hardcode an
+   FPL rule anywhere else in the code.
 
 All money is in tenths of £m, as the API uses (1000 = £100.0m), so there are no rounding errors.
 """
@@ -16,8 +16,10 @@ from pathlib import Path
 from . import config
 from .files import read_json
 
-# --- Rules the API does not publish (check these on the FPL site) ---------------------------
-UNVERIFIED_RULES = {
+# --- Rules the API does not publish (confirmed by hand on the FPL site) ---------------------
+CONFIRMED_ON = "2026-10-22"
+
+MANUAL_RULES = {
     "hit_cost": {
         "value": 4,
         "rule": "Each transfer beyond your free transfers costs 4 points.",
@@ -40,9 +42,10 @@ UNVERIFIED_RULES = {
         "value": True,
         "rule": "Only one chip can be played in a gameweek.",
     },
-    "chips_keep_saved_transfers": {
-        "value": True,
-        "rule": "Playing a wildcard or free hit does not use up saved free transfers; you still gain 1 for the next gameweek.",
+    "chip_week_free_transfers": {
+        "value": "kept, none gained",
+        "rule": "In a wildcard or free hit week, saved free transfers are kept but no new free transfer is gained "
+                "(corrected 2026-10-22).",
     },
     "free_hit_reverts": {
         "value": True,
@@ -95,8 +98,8 @@ class Rules:
     max_free_transfers: int
     positions: dict[int, Position]
     chips: list[Chip] = field(default_factory=list)
-    hit_cost: int = UNVERIFIED_RULES["hit_cost"]["value"]
-    free_transfers_per_gw: int = UNVERIFIED_RULES["free_transfers_per_gameweek"]["value"]
+    hit_cost: int = MANUAL_RULES["hit_cost"]["value"]
+    free_transfers_per_gw: int = MANUAL_RULES["free_transfers_per_gameweek"]["value"]
 
     def position_by_short(self, short: str) -> Position:
         return next(p for p in self.positions.values() if p.short == short)
@@ -127,7 +130,7 @@ def load_rules(path: Path | None = None) -> Rules:
     return rules_from_api(read_json(path))
 
 
-def unverified_report() -> str:
-    """The list of rules a human must confirm on the FPL website."""
-    lines = [f"- {key}: {item['rule']}" for key, item in UNVERIFIED_RULES.items()]
+def manual_rules_report() -> str:
+    """The rules that came from the FPL website instead of the API."""
+    lines = [f"- {key}: {item['rule']}" for key, item in MANUAL_RULES.items()]
     return "\n".join(lines)

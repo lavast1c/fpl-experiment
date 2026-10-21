@@ -145,6 +145,34 @@ def test_transfer_chips_not_in_first_week(players):
 
 # --- lineup ---------------------------------------------------------------------------------
 
+def test_allowed_formations_from_api_limits():
+    """The XI limits read from the API (GK 1, DEF 3-5, MID 2-5, FWD 1-3) allow exactly these 8 formations."""
+    limits = {p.short: (p.min_play, p.max_play) for p in RULES.positions.values()}
+    formations = sorted(
+        f"{d}-{m}-{f}"
+        for d in range(limits["DEF"][0], limits["DEF"][1] + 1)
+        for m in range(limits["MID"][0], limits["MID"][1] + 1)
+        for f in range(limits["FWD"][0], limits["FWD"][1] + 1)
+        if 1 + d + m + f == RULES.xi_size
+    )
+    assert formations == ["3-4-3", "3-5-2", "4-3-3", "4-4-2", "4-5-1", "5-2-3", "5-3-2", "5-4-1"]
+
+
+def test_every_allowed_formation_passes_and_others_fail(team, players):
+    defs, mids, fwds = [11, 12, 13, 14, 15], [21, 22, 23, 24, 25], [31, 32, 33]
+    for d in range(1, 6):
+        for m in range(1, 6):
+            f = 10 - d - m
+            if not 0 <= f <= 3:
+                continue
+            xi = [1] + defs[:d] + mids[:m] + fwds[:f]
+            bench = [2] + [p for p in defs + mids + fwds if p not in xi]
+            captain = xi[-1]
+            result = validate(week(xi=xi, bench=bench, captain=captain, vice=xi[1]), team, players, RULES, GW)
+            allowed = 3 <= d and 2 <= m and 1 <= f
+            assert result.ok == allowed, (f"{d}-{m}-{f}", result.feedback())
+
+
 def test_formation(team, players):
     xi = [1, 11, 12, 21, 22, 23, 24, 25, 31, 32, 33]          # only 2 defenders
     assert "XI_FORMATION" in codes(week(xi=xi, bench=[2, 13, 14, 15]), team, players)
@@ -221,12 +249,16 @@ def test_transfer_must_keep_positions(team, players):
 
 # --- chips ----------------------------------------------------------------------------------
 
-def test_wildcard_no_hits_and_keeps_saved_transfers(team, players):
+def test_wildcard_no_hits_keeps_saved_transfers_but_gains_none(team, players):
+    # Save up a second free transfer first, so "kept" and "gained" give different answers.
+    saved = apply(week(), team, players, RULES, GW, validate(week(), team, players, RULES, GW))
+    assert saved.free_transfers == 2
     decision = week([(33, 34), (15, 16), (14, 17)], chip="wildcard", bench=[2, 16, 17, 34])
-    result = validate(decision, team, players, RULES, GW)
+    result = validate(decision, saved, players, RULES, GW + 1)
     assert result.ok and result.hit_points == 0
-    new = apply(decision, team, players, RULES, GW, result)
-    assert new.free_transfers == 2 and new.chips_used == [{"chip_id": 1, "name": "wildcard", "gw": GW}]
+    new = apply(decision, saved, players, RULES, GW + 1, result)
+    assert new.free_transfers == 2   # kept the 2, gained no new one
+    assert new.chips_used == [{"chip_id": 1, "name": "wildcard", "gw": GW + 1}]
 
 
 def test_free_hit_reverts_next_week(team, players):
@@ -234,7 +266,7 @@ def test_free_hit_reverts_next_week(team, players):
     result = validate(decision, team, players, RULES, GW)
     assert result.ok and result.hit_points == 0
     during = apply(decision, team, players, RULES, GW, result)
-    assert 34 in during.squad
+    assert 34 in during.squad and during.free_transfers == team.free_transfers == 1
     after = start_gameweek(TeamState.from_dict(during.to_dict()))   # also survives saving to JSON
     assert after.squad == team.squad and after.bank == team.bank and after.lineup == team.lineup
     assert after.free_hit_backup is None
