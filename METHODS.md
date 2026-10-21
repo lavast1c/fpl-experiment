@@ -35,3 +35,16 @@ Every methodological decision, with the date it was made. Once the season starts
 
 - The project owner checked the rules listed above on the FPL site and confirmed them, with **one correction**: in a wildcard or free hit week, saved free transfers are kept but **no new free transfer is gained** (not "+1 as usual"). The code now does this. The rule list now lives in `MANUAL_RULES` in `experiment/rules.py`, marked as confirmed on 2026-10-22.
 - **Formations.** The starting XI limits come from the API (GK exactly 1, DEF 3–5, MID 2–5, FWD 1–3, 11 players). That allows exactly 8 formations: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-2-3, 5-3-2 and 5-4-1. A test checks that every one of them passes and every other combination fails.
+
+## 2026-10-22: Phase 3, the scorer and its check against official scores
+
+- **Player points are FPL's own.** Each player's gameweek points and minutes come from the public `event/{gw}/live/` data (now an allowed endpoint, saved like other raw data). Our code only does the team-level part (`experiment/scorer.py`).
+- **Automatic substitutions** (not on bench boost weeks): the starters are gone through in XI order (GK, DEF, MID, FWD). Each one who played 0 minutes is replaced by the highest-priority bench player who played and keeps a valid formation. The goalkeeper can only be replaced by the bench goalkeeper, and outfield players only by outfield players.
+- **Captain:** ×2, or ×3 with triple captain. If the captain played 0 minutes, the vice-captain gets the multiplier; if neither played, nobody does.
+- **Bench boost:** all 15 players' points count and no substitutions are made. Transfer hits are taken off separately.
+- **Check against real teams** (`python run.py check-scorer`, run once on 2026-10-22):
+  - *Choosing teams.* Teams were chosen at random positions in the Overall league (unseeded, never recorded). Names were removed as soon as each response arrived. Everything was kept only in the git-ignored `data/test_cache/` and deleted afterwards. No team number or name is published.
+  - *Requests.* 81 league-table pages, 80 team histories and 98 team-week lineups (259 requests), plus the 7 public `live` files.
+  - *Scoring:* **98 team-weeks from 16 teams across GW1–7: every gameweek total and every bench total matched FPL exactly**, as did the players brought on by automatic substitution. This covered triple captain 6 times, bench boost 4, wildcard 5 and free hit 1, plus 43 weeks with automatic subs and 3 where the vice-captain took the armband.
+  - *How subs were tested.* FPL's lineup pages already show the lineup after substitutions, so the check first undoes them and lets our scorer redo them. Because FPL re-sorts the XI afterwards, the original order of two starters in the *same* position can't be recovered. So the check compares the players brought on and the positions of the players taken off; the exact pairs also matched in 39 of the 43 weeks.
+  - *Free transfers and hits:* **518 team-weeks from 80 teams were replayed with our rules, with 0 differences** from the official hit costs. This includes 25 wildcard or free hit weeks and 54 weeks with a hit. The check is sensitive: a 3-point hit would have caused 54 differences, and gaining a free transfer in wildcard or free hit weeks would have caused 6. The 5-transfer maximum was not exercised (no team saved 5 in seven weeks).

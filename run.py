@@ -3,6 +3,7 @@
     python run.py fetch [--force]        download this gameweek's public data (cached, rate-limited)
     python run.py snapshot [--filter F]  build the player table agents receive (no network)
     python run.py sync                   copy local data files to Supabase
+    python run.py check-scorer           one-off: compare our scorer with real teams' official scores
 
 Later phases add `decide` and `score`.
 """
@@ -10,7 +11,7 @@ Later phases add `decide` and `score`.
 import argparse
 import sys
 
-from experiment import api_rules, config, fetch, snapshot, supabase_sync
+from experiment import api_rules, config, fetch, scorer_check, snapshot, supabase_sync
 from experiment.files import read_json_gz
 from experiment.gameweeks import deadline, hours_until_deadline
 
@@ -59,6 +60,11 @@ def cmd_sync(args) -> None:
         sys.exit(1)
 
 
+def cmd_check_scorer(args) -> None:
+    if not scorer_check.run(args.sample, args.teams, args.keep):
+        sys.exit(1)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="FPL agents experiment")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -73,6 +79,12 @@ def main() -> None:
 
     p = commands.add_parser("sync", help="copy local data files to Supabase")
     p.set_defaults(func=cmd_sync)
+
+    p = commands.add_parser("check-scorer", help="one-off: compare our scorer with real teams' official scores")
+    p.add_argument("--sample", type=int, default=40, help="random teams to look at")
+    p.add_argument("--teams", type=int, default=15, help="teams to check every finished gameweek for")
+    p.add_argument("--keep", action="store_true", help="keep the test cache (for debugging)")
+    p.set_defaults(func=cmd_check_scorer)
 
     args = parser.parse_args()
     args.func(args)
