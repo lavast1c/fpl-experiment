@@ -2,11 +2,13 @@
 
 import pytest
 
-from experiment import config, metrics, runner, supabase_sync
+from experiment import bots, config, metrics, runner, supabase_sync
+from experiment.teams import TEAMS
 from experiment.agents import MockAgent
 from experiment.files import read_csv, read_json
 from experiment.team import Lineup
 
+N = len(TEAMS) + len(bots.BOTS)   # every team in a gameweek
 EP = {1: 2.0, 2: 3.0, 3: 4.0, 4: 1.0, 5: 5.0}
 LINEUP = Lineup(starting_xi=[1, 2, 3], bench_order=[4, 5], captain=3, vice_captain=2)
 
@@ -20,7 +22,7 @@ def test_expected_points_formula():
 
 @pytest.fixture(scope="module")
 def season(tmp_path_factory):
-    """Three mock gameweeks for all 9 AI teams and both bots."""
+    """Three mock gameweeks for all 9 AI teams and the bots."""
     folder = tmp_path_factory.mktemp("mock")
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(config, "MOCK_DIR", folder)
@@ -33,8 +35,8 @@ def season(tmp_path_factory):
 
 def test_results_cover_every_team_and_week(season):
     rows = read_csv(season / "results" / "all_gameweeks.csv")
-    assert len(rows) == 3 * 11
-    assert {r["team"] for r in rows} >= {"form-bot", "crowd-bot", "O-verified"}
+    assert len(rows) == 3 * N
+    assert {r["team"] for r in rows} >= {"form-bot", "crowd-bot", "stats-bot", "O-verified"}
     week8 = read_json(season / "results" / "gw8.json")["teams"]
     assert min(r["rank"] for r in week8) == 1
     assert all(r["captain_changed"] is None for r in week8)          # nothing to compare with yet
@@ -49,7 +51,7 @@ def test_standings_are_sorted_and_bots_use_no_tokens(season):
     standings = read_json(season / "results" / "standings.json")
     assert [s["points"] for s in standings] == sorted((s["points"] for s in standings), reverse=True)
     bots = [s for s in standings if s["kind"] == "bot"]
-    assert len(bots) == 2 and all(s["input_tokens"] == 0 and s["rule_breaks"] == 0 for s in bots)
+    assert len(bots) == 3 and all(s["input_tokens"] == 0 and s["rule_breaks"] == 0 for s in bots)
 
 
 def test_memory_metrics_present_for_memory_teams(season):
@@ -61,7 +63,7 @@ def test_memory_metrics_present_for_memory_teams(season):
 def test_supabase_rows_match_the_tables(season):
     tables = supabase_sync.experiment_rows(season)
     assert {t: len(rows) for t, (rows, _) in tables.items()} == {
-        "teams": 11, "decisions": 33, "results": 33, "standings": 11,
+        "teams": N, "decisions": 3 * N, "results": 3 * N, "standings": N,
         "memory_notes": 18, "lessons": len(tables["lessons"][0])}
     assert set(tables["results"][0][0]) == supabase_sync.RESULT_COLUMNS | {"players", "transfer_points",
                                                                             "memory_detail"}

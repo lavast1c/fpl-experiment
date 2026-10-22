@@ -15,17 +15,20 @@ export default function About() {
       <h2>The teams</h2>
       <p>
         Three Claude models (Haiku 5.5, Sonnet 5.5 and Opus 5.5) each manage three teams, one with each kind of
-        memory. That makes nine AI teams. Two rule-based bots and FPL&apos;s average manager act as yardsticks.
+        memory. That makes nine AI teams. Each model&apos;s three teams start from the same squad, the one its no-memory
+        team picked, so differences between them come from memory. Three rule-based bots and FPL&apos;s average
+        manager act as yardsticks.
       </p>
       <ul className="notes">
         <li><b>No memory.</b> The agent sees only this week&apos;s player data and its own squad, money, free transfers and chips.</li>
         <li><b>Self-written memory.</b> The agent also sees last week&apos;s results and up to 8 notes it wrote itself, and rewrites them each week.</li>
-        <li><b>Verified memory.</b> The notes are numbered lessons, and every transfer and captain pick must cite the lessons behind it. Our code checks those picks against FPL&apos;s own predicted points and removes lessons that keep falling short.</li>
+        <li><b>Verified memory.</b> The notes are numbered lessons, and every transfer and captain pick must cite the lessons behind it. Our code checks those picks against the experiment&apos;s own predicted points and removes lessons that keep falling short.</li>
         <li><b>Form bot.</b> Buys, starts and captains the players in the best recent form.</li>
         <li><b>Crowd bot.</b> Copies what most real managers own.</li>
+        <li><b>Stats bot.</b> Picks by the experiment&apos;s own predicted points (below): the toughest simple rule to beat.</li>
       </ul>
       <p>
-        Both bots mark doubtful players down (a 75% chance of playing keeps half a player&apos;s value), start fit
+        All three bots mark doubtful players down (a 75% chance of playing keeps half a player&apos;s value), start fit
         players first, and never take points hits or play chips.
       </p>
 
@@ -40,8 +43,12 @@ export default function About() {
       <h2>Separating skill from luck</h2>
       <p>
         Points alone mostly measure luck. So for every decision we also record its <b>expected points</b>: the
-        sum of FPL&apos;s predicted points for the starting eleven at the moment the team chose them, with the
-        captain counted twice. <b>Luck</b> is actual points minus expected points. A team with high expected points
+        sum of predicted points for the starting eleven at the moment the team chose them, with the captain
+        counted twice. FPL publishes its own predictions, but doesn&apos;t say how they are made, and for gameweek 8 the
+        teams&apos; totals came to roughly double a normal score, so the experiment uses its own: each player&apos;s expected goals, assists and
+        minutes this season, adjusted for the opponent and home or away. Tested on gameweeks 4 to 7, it ranked
+        players better than simple form, and its totals were within about 5% of the real points. The stats bot picks
+        by these predictions, so its expected points are high by design. <b>Luck</b> is actual points minus expected points. A team with high expected points
         made good decisions, whatever the result.
       </p>
 

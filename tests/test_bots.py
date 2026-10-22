@@ -4,7 +4,7 @@ import copy
 
 import pytest
 
-from experiment import bots, runner
+from experiment import bots, runner, xpoints
 from experiment.rules import load_rules
 from experiment.team import TeamState, players_from_bootstrap
 from experiment.validator import apply, validate
@@ -13,13 +13,13 @@ from experiment.validator import apply, validate
 @pytest.fixture(scope="module")
 def week():
     bootstrap, _, _ = runner.gameweek_inputs(8)
-    return bootstrap["elements"], players_from_bootstrap(bootstrap), load_rules()
+    return bootstrap["elements"], players_from_bootstrap(bootstrap), load_rules(), xpoints.for_snapshot(8)
 
 
 def first_week(bot, week):
-    elements, players, rules = week
+    elements, players, rules, projections = week
     state = TeamState(bot.id)
-    answer = bots.decide(bot, state, elements, players, rules)
+    answer = bots.decide(bot, state, elements, players, rules, projections)
     result = validate(answer, state, players, rules, 8)
     return answer, result, apply(answer, state, players, rules, 8, result) if result.ok else None
 
@@ -36,17 +36,17 @@ def test_score_is_marked_down_by_chance_of_playing():
     news = [("a", None), ("d", 75), ("d", 50), ("d", 25), ("i", 0), ("u", None)]
     elements = [{"id": i, "form": "8.0", "status": status, "chance_of_playing_next_round": chance}
                 for i, (status, chance) in enumerate(news, start=1)]
-    rank = bots.ranking(bots.BOTS[0], elements)
+    rank = bots.ranking("form", elements)
     assert [rank[pid][0] for pid in range(1, 7)] == [8.0, 4.0, 2.0, 0.0, 0.0, 0.0]
 
 
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
 def test_first_squad_is_legal_and_captain_is_best_scoring(bot, week):
-    elements, players, _ = week
+    elements, players, _, projections = week
     answer, result, _ = first_week(bot, week)
     assert result.ok, result.errors
     assert answer["chip"] is None
-    rank = bots.ranking(bot, elements)
+    rank = bots.ranking(bot.lineup_by or bot.ranks_by, elements, projections)
     fit = [pid for pid in answer["starting_xi"] if bots.chance_of_playing(next(e for e in elements if e["id"] == pid)) == 100]
     assert answer["captain"] == max(fit, key=lambda pid: rank[pid])
     assert all(bots.fitness_weight(e) > 0 for e in elements if e["id"] in answer["squad"])
@@ -54,12 +54,12 @@ def test_first_squad_is_legal_and_captain_is_best_scoring(bot, week):
 
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
 def test_injured_player_is_sold_and_no_hits(bot, week):
-    _, players, rules = week
+    _, players, rules, projections = week
     _, _, state = first_week(bot, week)
     state.free_transfers = 1
     injured = state.lineup.captain
     elements = set_chance(week[0], injured, "i", 0)
-    answer = bots.decide(bot, state, elements, players, rules)
+    answer = bots.decide(bot, state, elements, players, rules, projections)
     result = validate(answer, state, players, rules, 9)
     assert result.ok, result.errors
     assert answer["transfers"][0]["out"] == injured
@@ -68,31 +68,31 @@ def test_injured_player_is_sold_and_no_hits(bot, week):
 
 @pytest.mark.parametrize("chance", [75, 25])
 def test_doubtful_player_is_never_captain_while_a_fit_player_starts(chance, week):
-    _, players, rules = week
+    _, players, rules, projections = week
     bot = bots.BOTS[0]
     _, _, state = first_week(bot, week)
     state.free_transfers = 0
     star = state.lineup.captain
-    answer = bots.decide(bot, state, set_chance(week[0], star, "d", chance), players, rules)
+    answer = bots.decide(bot, state, set_chance(week[0], star, "d", chance), players, rules, projections)
     assert star not in (answer["captain"], answer["vice_captain"])
 
 
 def test_no_free_transfers_means_no_transfers(week):
-    elements, players, rules = week
+    elements, players, rules, projections = week
     _, _, state = first_week(bots.BOTS[0], week)
     state.free_transfers = 0
     assert bots.decide(bots.BOTS[0], state, elements, players, rules)["transfers"] == []
 
 
 def test_player_removed_from_the_game_is_replaced(week):
-    elements, players, rules = week
+    elements, players, rules, projections = week
     _, _, state = first_week(bots.BOTS[1], week)
     state.free_transfers, state.bank = 1, 20   # enough money for any cheap replacement
     players = copy.deepcopy(players)
     gone = state.lineup.bench_order[1]
     position = players[gone].position
     del players[gone]
-    answer = bots.decide(bots.BOTS[1], state, elements, players, rules)
+    answer = bots.decide(bots.BOTS[1], state, elements, players, rules, projections)
     result = validate(answer, state, players, rules, 9)
     assert result.ok, result.errors
     assert answer["transfers"][0]["out"] == gone and players[answer["transfers"][0]["in"]].position == position

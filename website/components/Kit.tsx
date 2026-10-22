@@ -20,6 +20,7 @@ export function Kit({ team, size = 32 }: { team: string; size?: number }) {
         {info.pattern === "hoops" &&
           [18, 32, 46].map((y) => <rect key={y} x="0" y={y - 3.5} width="64" height="7" fill="var(--kit-trim)" />)}
         {info.pattern === "sash" && <path d="M4 10 L18 4 L62 54 L50 64 Z" fill="var(--kit-trim)" />}
+        {info.pattern === "halves" && <rect x="32" y="0" width="32" height="64" fill="var(--kit-trim)" />}
       </g>
       <path d={SHIRT} fill="none" stroke="var(--kit-edge)" strokeWidth="2.5" strokeLinejoin="round" />
     </svg>

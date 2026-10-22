@@ -8,10 +8,12 @@ Verified memory ("verified"):
     Like self-written memory, but the notes are lessons with ids (L1, L2, ...). The answer says
     which lessons to keep and which new ones to add, and every decision (each player sold,
     each player bought, the captain) cites the ids of the lessons that influenced it.
-    Our code then scores each cited decision against FPL's expected points at decision time:
-        player bought:  value = actual points - ep_next      (bought someone who beat expectations)
-        player sold:    value = ep_next - actual points      (sold someone who fell short)
-        captain:        value = actual points - ep_next
+    Our code then scores each cited decision against the project's own expected points (xP, see
+    xpoints.py) at decision time; until 2026-10-22 this was FPL's ep_next, but no lesson was ever
+    checked against ep_next:
+        player bought:  value = actual points - xP      (bought someone who beat expectations)
+        player sold:    value = xP - actual points      (sold someone who fell short)
+        captain:        value = actual points - xP
     A lesson cited in at least LESSON_MIN_USES decisions whose values average below
     LESSON_REMOVE_BELOW is removed, and the agent is told which one and why.
 
@@ -92,7 +94,7 @@ def memory_section(kind: str, memory: dict, last: dict | None) -> str:
         parts.append("Your notes (written by you):")
         parts += [f"- {n}" for n in notes] if notes else ["(none yet)"]
     else:
-        parts.append("Your lessons (each decision you cite them for is checked against FPL's expected points; "
+        parts.append("Your lessons (each decision you cite them for is checked against our expected points; "
                      "see the answer format):")
         lessons = active_lessons(memory)
         for lesson in lessons:
@@ -120,9 +122,11 @@ def answer_fields(kind: str) -> str:
         "New lessons get an id next gameweek.",
         '- lesson citations: in every transfer add "out_lesson_ids" and "in_lesson_ids", and add "captain_lesson_ids": '
         "the ids of your current lessons that influenced selling that player, buying that player and choosing your "
-        "captain ([] if none). After the gameweek each cited decision is checked against FPL's expected points "
-        "(ep_next) at the time: a player bought or a captain who scores above his ep_next counts as positive, a player "
-        "sold who scores below his ep_next counts as positive. A lesson cited in at least "
+        "captain ([] if none). After the gameweek each cited decision is checked against the experiment's own "
+        "expected points for that player at the time (a prediction from this season's expected goals and assists, "
+        "minutes and fixture difficulty; it is not in your player table): a player bought or a captain who scores "
+        "above his expected points counts as positive, a player sold who scores below them counts as positive. "
+        "A lesson cited in at least "
         f"{config.LESSON_MIN_USES} decisions whose decisions average more than {-config.LESSON_REMOVE_BELOW:g} point "
         "below expected is removed.",
     ])
@@ -184,7 +188,7 @@ def check_answer(kind: str, answer, memory: dict) -> list[Error]:
 # --- updating memory after an accepted answer ------------------------------------------------
 
 def apply_answer(kind: str, answer: dict, memory: dict, gw: int, expected: dict[int, float]) -> dict:
-    """New memory after an accepted decision. `expected` maps player id -> ep_next at decision time."""
+    """New memory after an accepted decision. `expected` maps player id -> our xP at decision time."""
     memory = deepcopy(memory)
     if kind == "self":
         memory["notes"] = list(answer["updated_notes"])

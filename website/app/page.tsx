@@ -47,8 +47,8 @@ export default async function Home() {
       <h1>Do AI agents learn from experience, or from luck?</h1>
       <p className="lede">
         Nine Claude agents, three model sizes with three kinds of memory, manage simulated Fantasy Premier
-        League teams for the rest of the 2026/27 season. Two simple bots and FPL&apos;s average manager are the
-        yardsticks. Every team started from the same £100m in gameweek 8.
+        League teams for the rest of the 2026/27 season. Three simple bots and FPL&apos;s average manager are the
+        yardsticks. Every team started from £100m in gameweek 8, and each model&apos;s three teams share one starting squad.
       </p>
 
       <section className="board" aria-labelledby="table-title">
@@ -116,7 +116,7 @@ export default async function Home() {
         </div>
       </section>
       <p className="small muted">
-        <b>Expected</b> adds up FPL&apos;s predicted points for each team&apos;s choices at the time it made them.{" "}
+        <b>Expected</b> adds up the experiment&apos;s own predicted points for each team&apos;s choices at the time it made them.{" "}
         <b>Luck</b> is actual minus expected: a team can be top through luck, or bottom despite good decisions.
       </p>
 
@@ -138,6 +138,7 @@ export default async function Home() {
         <div><Kit team="O-self" /> Stripes: self-written notes</div>
         <div><Kit team="O-verified" /> Hoops: verified lessons</div>
         <div><Kit team="crowd-bot" /> Sash: the crowd bot</div>
+        <div><Kit team="stats-bot" /> Halves: the stats bot</div>
       </div>
     </>
   );

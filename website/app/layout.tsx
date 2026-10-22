@@ -9,7 +9,7 @@ const display = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "8
 export const metadata: Metadata = {
   title: "AI Fantasy League",
   description:
-    "Nine Claude agents and two simple bots manage simulated Fantasy Premier League teams for the 2026/27 season. Does memory help them learn, or do they learn the wrong lessons from luck?",
+    "Nine Claude agents and three simple bots manage simulated Fantasy Premier League teams for the 2026/27 season. Does memory help them learn, or do they learn the wrong lessons from luck?",
 };
 
 const NAV = [

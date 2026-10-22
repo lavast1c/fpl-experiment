@@ -24,7 +24,7 @@ export default async function Memory() {
       <p className="lede">
         Memory teams carry something from week to week. Self-written teams keep up to 8 notes and rewrite them
         freely. Verified teams keep numbered lessons and must cite them for every transfer and captain pick; our
-        code then checks how those picks did against FPL&apos;s own prediction.
+        code then checks how those picks did against the experiment&apos;s own predicted points.
       </p>
 
       <h2>Self-written notes</h2>
@@ -33,7 +33,7 @@ export default async function Memory() {
 
       <h2>Verified lessons</h2>
       <p>
-        Each lesson&apos;s record compares the points of the picks that cited it with FPL&apos;s predicted points
+        Each lesson&apos;s record compares the points of the picks that cited it with the experiment&apos;s predicted points
         for them at decision time. A lesson cited at least 5 times whose picks average more than 1 point below
         prediction is removed, and the team is told why. See the{" "}
         <a href="https://github.com/lavast1c/fpl-experiment/blob/main/METHODS.md">methods</a> for the exact rule.

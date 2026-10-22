@@ -7,9 +7,9 @@ re-run at any time with `python run.py metrics`. Output, inside the run folder (
     results/standings.json and .csv      season totals per team, best first
 
 Expected points (luck-adjusted score), fixed for the season (METHODS.md, 2026-10-22):
-    sum of FPL's ep_next for the starting XI, taken from the snapshot at decision time,
-    with the captain counted twice (three times with triple captain),
-    plus the bench's ep_next with bench boost,
+    sum of our own expected points (xP, see xpoints.py) for the starting XI, from the same data as
+    the snapshot at decision time, with the captain counted twice (three times with triple captain),
+    plus the bench's xP with bench boost,
     minus transfer hits.
     "Luck" = actual net points - expected points.
 """

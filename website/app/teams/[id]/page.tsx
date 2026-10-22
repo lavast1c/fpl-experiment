@@ -43,7 +43,7 @@ export default async function TeamPage({ params }: Props) {
 
       <div className="stat-row">
         <div className="stat"><b>{latest?.season_points ?? 0}</b><span>season points</span></div>
-        <div className="stat"><b>{latest ? `#${latest.season_rank}` : "–"}</b><span>rank of 11</span></div>
+        <div className="stat"><b>{latest ? `#${latest.season_rank}` : "–"}</b><span>rank of {TEAM_IDS.length}</span></div>
         <div className="stat"><b>{latest ? Math.round(latest.season_expected) : "–"}</b><span>expected points</span></div>
         <div className="stat"><b>{decisions.reduce((n, d) => n + d.transfers_made, 0)}</b><span>transfers</span></div>
         <div className="stat"><b>{decisions.reduce((n, d) => n + d.errors_by_attempt.filter((e) => e.length).length, 0)}</b><span>rule breaks</span></div>
@@ -71,11 +71,12 @@ async function Week({ decision: d, result }: { decision: Decision; result?: Resu
       <div className="week-head">
         <h2 id={`gw${d.gw}`}>Gameweek {d.gw}</h2>
         <span className="week-score">
-          {result ? <>{result.net_points} pts, #{result.rank} of 11</> : <span className="muted">Not scored yet</span>}
+          {result ? <>{result.net_points} pts, #{result.rank} of {TEAM_IDS.length}</> : <span className="muted">Not scored yet</span>}
         </span>
       </div>
       <div className="tags">
         {d.first_week && <span className="tag">First squad, £100m</span>}
+        {d.copied_from && <span className="tag">Shared start: same squad as {d.copied_from}</span>}
         {d.chip && <span className="tag">{CHIPS[d.chip] ?? d.chip}</span>}
         {d.expected_points !== null && <span className="tag">Expected {d.expected_points} pts</span>}
         {result?.luck !== null && result?.luck !== undefined && (

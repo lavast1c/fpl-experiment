@@ -1,8 +1,11 @@
-"""The two rule-based baseline teams (brief section 3.2). They make no Claude calls.
+"""The three rule-based baseline teams (brief section 3.2). They make no Claude calls.
 
-Both follow the same simple rules and differ only in how they rank players:
+All follow the same simple rules and differ only in how they rank players:
     form bot:   FPL's `form` (average points over roughly the last 30 days)
     crowd bot:  `selected_by_percent` (share of real FPL managers who own the player)
+    stats bot:  our own expected points (xpoints.py), if fit: the total for the next 3 gameweeks
+                for buying and selling, and next gameweek's for the lineup and captain
+                (added 2026-10-22 as a stronger simple baseline)
 A player's score is that number marked down by FPL's chance of playing next round. Doubtful
 players often miss out or play only a few minutes, so the mark-down is steeper than the chance:
 75% keeps half the score, 50% a quarter, and 25% or less (injured, suspended, unavailable) nothing.
@@ -36,13 +39,18 @@ CANT_PLAY = {"i", "s", "u", "n"}   # injured, suspended, unavailable, not eligib
 @dataclass(frozen=True)
 class Bot:
     id: str
-    ranks_by: str     # the bootstrap-static field the bot ranks players by
+    ranks_by: str     # the bootstrap-static field, or the expected-points value, the bot ranks players by
     description: str
+    lineup_by: str | None = None   # a different value for the lineup and captain (None: the same)
 
+
+PROJECTION_FIELDS = {"xp_if_fit", "xp_3gw_if_fit"}   # come from xpoints.py, not from bootstrap-static
 
 BOTS = [
     Bot("form-bot", "form", "ranks players by FPL form"),
     Bot("crowd-bot", "selected_by_percent", "ranks players by ownership (the template team)"),
+    Bot("stats-bot", "xp_3gw_if_fit", "ranks players by the experiment's expected points (next 3 gameweeks "
+        "for transfers, next gameweek for the lineup)", lineup_by="xp_if_fit"),
 ]
 
 
@@ -63,10 +71,14 @@ def fitness_weight(element: dict) -> float:
     return FITNESS_WEIGHT[max(level for level in FITNESS_WEIGHT if level <= chance)]
 
 
-def ranking(bot: Bot, elements: list[dict]) -> dict[int, tuple]:
+def ranking(field: str, elements: list[dict], projections: dict[int, dict] | None = None) -> dict[int, tuple]:
     """A sort key per player id: higher is better. The first part is the player's score."""
-    return {p["id"]: (round(float(p.get(bot.ranks_by) or 0) * fitness_weight(p), 3),
-                      p.get("total_points") or 0, -p["id"]) for p in elements}
+    def value(p: dict) -> float:
+        if field in PROJECTION_FIELDS:
+            return projections.get(p["id"], {}).get(field, 0.0) if projections else 0.0
+        return float(p.get(field) or 0)
+    return {p["id"]: (round(value(p) * fitness_weight(p), 3), p.get("total_points") or 0, -p["id"])
+            for p in elements}
 
 
 # --- first week: a full squad -----------------------------------------------------------------
@@ -187,9 +199,13 @@ def choose_lineup(squad: list[int], rank: dict, fit: set[int], players: dict[int
     return {"starting_xi": xi, "bench_order": bench, "captain": starters[0], "vice_captain": starters[1]}
 
 
-def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, Player], rules: Rules) -> dict:
+def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, Player], rules: Rules,
+           projections: dict[int, dict] | None = None) -> dict:
     """The bot's answer, in the same format as an AI team's answer."""
-    rank = ranking(bot, elements)
+    if bot.ranks_by in PROJECTION_FIELDS and projections is None:
+        raise ValueError(f"{bot.id} needs the expected-points projections.")
+    rank = ranking(bot.ranks_by, elements, projections)
+    lineup_rank = ranking(bot.lineup_by, elements, projections) if bot.lineup_by else rank
     buyable = {p["id"] for p in elements if p["id"] in players and fitness_weight(p) > 0}
     fit = {p["id"] for p in elements if chance_of_playing(p) == 100}
     if not state.has_squad:
@@ -199,5 +215,5 @@ def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, 
         transfers = choose_transfers(rank, buyable, state, players, rules)
         squad = [pid for pid in state.squad if pid not in {t["out"] for t in transfers}] + [t["in"] for t in transfers]
         answer = {"transfers": transfers}
-    return {**answer, **choose_lineup(squad, rank, fit, players, rules), "chip": None,
+    return {**answer, **choose_lineup(squad, lineup_rank, fit, players, rules), "chip": None,
             "reasoning": f"Rule-based: {bot.description}."}

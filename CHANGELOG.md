@@ -26,4 +26,6 @@
 - Full README.
 - First real gameweek (8): all 9 AI teams and both bots picked their first squads.
 - Shared start: each model's memory teams start from the squad its no-memory team picked (gameweek 8 redone without new calls; the original picks are archived).
+- Our own expected points (`experiment/xpoints.py`), checked on gameweeks 4-7, replace FPL's ep_next for the luck score and lesson checks.
+- Stats bot: a third rule-based team that picks by our expected points.
 - Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.

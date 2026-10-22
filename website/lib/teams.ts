@@ -6,10 +6,10 @@ export const TEAM_IDS = [
   "H-none", "H-self", "H-verified",
   "S-none", "S-self", "S-verified",
   "O-none", "O-self", "O-verified",
-  "form-bot", "crowd-bot",
+  "form-bot", "crowd-bot", "stats-bot",
 ] as const;
 
-export type Pattern = "plain" | "stripes" | "hoops" | "sash";
+export type Pattern = "plain" | "stripes" | "hoops" | "sash" | "halves";
 
 export type TeamInfo = {
   id: string;
@@ -38,7 +38,7 @@ const MEMORY: Record<string, { name: string; pattern: Pattern; blurb: string }> 
   verified: {
     name: "Verified memory",
     pattern: "hoops",
-    blurb: "Keeps numbered lessons and must cite them; lessons whose picks keep falling short of FPL's prediction are removed.",
+    blurb: "Keeps numbered lessons and must cite them; lessons whose picks keep falling short of the experiment's predicted points are removed.",
   },
 };
 
@@ -54,6 +54,12 @@ export function teamInfo(id: string): TeamInfo {
       id, name: "Crowd bot", model: "Rule-based", modelId: "rule-based", memory: "No memory",
       colour: "var(--bot)", pattern: "sash",
       blurb: "Copies what most real managers own: the template team. No AI.",
+    };
+  if (id === "stats-bot")
+    return {
+      id, name: "Stats bot", model: "Rule-based", modelId: "rule-based", memory: "No memory",
+      colour: "var(--bot)", pattern: "halves",
+      blurb: "Picks by the experiment's own predicted points, which weigh expected goals, minutes and fixture difficulty. No AI.",
     };
   const [letter, memory] = id.split("-");
   const model = MODELS[letter];
@@ -71,6 +77,7 @@ export function dashFor(id: string): string | undefined {
   if (id.endsWith("-self")) return "7 4";
   if (id.endsWith("-verified")) return "2 4";
   if (id === "crowd-bot") return "10 3 2 3";
+  if (id === "stats-bot") return "1 3";
   return undefined;
 }
 

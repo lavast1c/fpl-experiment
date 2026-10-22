@@ -17,18 +17,21 @@ If you give an AI agent memory of its past decisions, does it actually improve o
 | `claude-sonnet-5-5` | S-none | S-self | S-verified |
 | `claude-opus-5-5` | O-none | O-self | O-verified |
 
-There are also three baselines, none of which uses AI:
+Each model's three teams start from the same squad: the one its no-memory team picked in gameweek 8. So differences between them come from memory, not from a luckier first squad.
+
+There are also four baselines, none of which uses AI:
 - **form-bot:** buys and captains the players in the best recent form.
 - **crowd-bot:** copies what most real managers own (the "template" team).
+- **stats-bot:** picks by this project's own expected points (below): the toughest simple rule to beat.
 - **FPL average:** the official average score of all real managers each gameweek.
 
-Both bots mark a player's score down by FPL's chance of playing (75% keeps half the score, 50% a quarter, 25% or less nothing) and pick transfers by that score. Fully fit players always start and captain ahead of doubtful ones. The bots never take −4 hits or play chips.
+All three bots mark a player's score down by FPL's chance of playing (75% keeps half the score, 50% a quarter, 25% or less nothing) and pick transfers by that score. Fully fit players always start and captain ahead of doubtful ones. The bots never take −4 hits or play chips.
 
 ### The three kinds of memory
 
 - **No memory.** Each week the agent sees only this week's player data and its own squad, bank, free transfers and chips.
 - **Self-written memory.** The agent also sees last week's results and its own notes. It rewrites those notes itself, with up to 8 notes and 300 words. We never edit them.
-- **Verified memory.** The notes are numbered lessons. Every transfer and captain pick must cite the lessons behind it. After the gameweek, our code compares each cited pick with FPL's own prediction for that player (`ep_next`). A lesson cited at least 5 times whose picks average more than 1 point below prediction is removed, and the agent is told why. The agent also sees each lesson's track record.
+- **Verified memory.** The notes are numbered lessons. Every transfer and captain pick must cite the lessons behind it. After the gameweek, our code compares each cited pick with this project's expected points for that player at decision time. A lesson cited at least 5 times whose picks average more than 1 point below prediction is removed, and the agent is told why. The agent also sees each lesson's track record.
 
 Every memory team is told: *"Your notes are advice, not commitments. Re-evaluate every decision from scratch."*
 
@@ -57,12 +60,14 @@ Every methodological decision, with its date and reason, is in [`METHODS.md`](ME
 
 ## Expected points (the luck-adjusted score)
 
-For each decision we add up FPL's `ep_next` (its predicted points) for the starting XI, as shown in the snapshot at decision time:
+For each decision we add up the predicted points of the starting XI at decision time:
 - the captain counts twice, or three times with triple captain;
 - the bench counts too with bench boost;
 - transfer hits are subtracted.
 
 **Luck** = actual points − expected points. A team that scores well with low expected points was lucky. A team with high expected points made good decisions, whatever the result.
+
+The predictions are our own (`experiment/xpoints.py`), not FPL's `ep_next`: FPL doesn't publish how `ep_next` is made, and for gameweek 8 the teams' `ep_next` totals were about double a normal score. For each player and fixture, ours adds appearance points (from recent minutes), goals and assists (his expected goals and assists per 90, scaled by his team's attack against the opponent's defence, home or away), clean-sheet and goals-conceded points, and his usual bonus, saves and defensive points. Point values come from the API, and nothing is tuned by hand. On gameweeks 4–7 it ranked players better than recent form or points per game, and its totals were within about 5% of the real points (`data/checks/xpoints_backtest.json`). Agents don't see it; their player table is unchanged. The stats bot picks by it, so its expected points are high by design.
 
 ## The open dataset
 
@@ -78,6 +83,8 @@ Everything a real run produces is committed to [`data/`](data/):
 | `teams/{team}/` | each team's squad, bank, free transfers and chips after every gameweek |
 | `memory/{team}/` | notes and lessons after every gameweek, and every lesson check (`evaluations.csv`) |
 | `scores/` | points per team per gameweek, with each player's points and role |
+| `xpoints/` | this project's expected points for every player, each gameweek (with FPL's `ep_next` alongside) |
+| `archive/` | decisions replaced before a deadline, kept for transparency (see the README inside) |
 | `results/` | all metrics per gameweek (`gw{N}.csv`), every row so far (`all_gameweeks.csv`), and the season table (`standings.csv`) |
 
 The same results, decisions and memory are copied to a Supabase database. Anyone can read it, but only the project can write to it, and it will power the website. Raw prompts and replies stay in this repository only.
@@ -96,7 +103,7 @@ python run.py decide --gw 9 --mock   # practice run with a fake agent (no Claude
 python run.py score --gw 9 --mock    # score the practice run (made-up points if not played yet)
 python run.py metrics --mock         # rebuild the results files
 
-python run.py decide --gw 9 --yes-real-calls   # real run: 9 agents + 2 bots (uses your Claude plan)
+python run.py decide --gw 9 --yes-real-calls   # real run: 9 agents + 3 bots (uses your Claude plan)
 python run.py score --gw 9                     # after FPL has finalised the gameweek
 python run.py sync                             # copy local data to Supabase (also done after real runs)
 
@@ -120,6 +127,7 @@ python -m pytest                     # run the tests
 | `experiment/bots.py` | the form bot and the crowd bot |
 | `experiment/runner.py` | the weekly `decide` and `score` |
 | `experiment/metrics.py` | results, expected points and the season table |
+| `experiment/xpoints.py`, `xpoints_check.py` | this project's expected points, and its check on past gameweeks |
 | `experiment/supabase_sync.py`, `supabase/migrations/` | the database copy |
 | `website/` | the public website (Next.js on Vercel), reading the database with the read-only key |
 

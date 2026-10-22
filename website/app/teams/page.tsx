@@ -1,4 +1,4 @@
-// All 11 teams, grouped by model, linking to each team's week-by-week page.
+// All 12 teams, grouped by model, linking to each team's week-by-week page.
 import Link from "next/link";
 import { Kit } from "@/components/Kit";
 import { TEAM_IDS, teamInfo } from "@/lib/teams";
@@ -9,7 +9,7 @@ const GROUPS = [
   { title: "Claude Haiku 5.5", ids: ["H-none", "H-self", "H-verified"] },
   { title: "Claude Sonnet 5.5", ids: ["S-none", "S-self", "S-verified"] },
   { title: "Claude Opus 5.5", ids: ["O-none", "O-self", "O-verified"] },
-  { title: "Rule-based bots", ids: ["form-bot", "crowd-bot"] },
+  { title: "Rule-based bots", ids: ["form-bot", "crowd-bot", "stats-bot"] },
 ];
 
 export default function Teams() {

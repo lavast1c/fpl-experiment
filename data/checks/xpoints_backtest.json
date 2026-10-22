@@ -1,0 +1,91 @@
+{
+  "test_gameweeks": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "average": {
+    "our xP": {
+      "correlation": 0.501,
+      "MAE": 1.824,
+      "top-50 pick": 4.03
+    },
+    "form": {
+      "correlation": 0.461,
+      "MAE": 1.955,
+      "top-50 pick": 3.89
+    },
+    "ppg": {
+      "correlation": 0.463,
+      "MAE": 1.953,
+      "top-50 pick": 3.865
+    }
+  },
+  "per_gameweek": {
+    "our xP": {
+      "correlation": [
+        0.473,
+        0.534,
+        0.461,
+        0.537
+      ],
+      "MAE": [
+        1.991,
+        1.817,
+        1.776,
+        1.713
+      ],
+      "top-50 pick": [
+        4.8,
+        4.2,
+        3.2,
+        3.92
+      ]
+    },
+    "form": {
+      "correlation": [
+        0.439,
+        0.492,
+        0.445,
+        0.465
+      ],
+      "MAE": [
+        2.085,
+        1.958,
+        1.9,
+        1.876
+      ],
+      "top-50 pick": [
+        4.68,
+        3.7,
+        3.58,
+        3.6
+      ]
+    },
+    "ppg": {
+      "correlation": [
+        0.451,
+        0.497,
+        0.433,
+        0.472
+      ],
+      "MAE": [
+        2.078,
+        1.946,
+        1.901,
+        1.887
+      ],
+      "top-50 pick": [
+        4.7,
+        3.82,
+        3.64,
+        3.3
+      ]
+    }
+  },
+  "inputs": {
+    "bootstrap": "gw8/bootstrap-static_20261022T143206Z.json.gz",
+    "fixtures": "gw8/fixtures_20261022T143207Z.json.gz"
+  }
+}

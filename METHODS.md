@@ -174,3 +174,34 @@ Decided with the project owner, before the gameweek 8 deadline. Code in `experim
 - **Rule.** Each model's no-memory team picks its first squad as before. Its self-written and verified teams then copy that squad, starting eleven, captain and vice-captain, with no Claude call. Their memory starts empty, and they first write notes or lessons in their next decision. If the no-memory team had no legal squad to copy, a memory team would pick its own.
 - **Not changed.** The three models still pick their own first squads, so the model comparison includes squad building. The bots still build their own squads.
 - **Gameweek 8.** The six memory teams had already picked their own squads in a real run earlier the same day (one extra retry for S-self). Those decisions, team states, memory and raw logs are kept unchanged in `data/archive/gw8_own_squads/`, and play no part in the scores.
+
+## 2026-10-22: Our own expected points replace FPL's ep_next
+
+Decided with the project owner, before any gameweek was scored. Code in `experiment/xpoints.py`; check in `experiment/xpoints_check.py`.
+
+- **Why.** FPL doesn't publish how `ep_next` is calculated, and many managers treat it as crude. For gameweek 8 the teams' starting elevens added up to 92–110 `ep_next` points, about double a normal score. Two parts of the experiment depend on it: the luck-adjusted score, and verified memory's lesson checks. Paid projections (Opta, FPL Review) were ruled out, because the project only uses free public FPL data and must be able to publish everything.
+- **The model (fixed for the season).** For each player and fixture it adds up:
+  - appearance points, from how often he played 60+ or 1–59 minutes in his team's last 4 matches;
+  - goals and assists: his season expected goals and expected assists per 90, times his expected minutes, times this fixture's expected team goals relative to his team's average. Expected team goals = league average × team attack × opponent defence × home or away factor, all measured from this season's xG;
+  - clean-sheet points, using a Poisson chance of conceding 0;
+  - goals-conceded points per goal, measured from this season's official point breakdowns;
+  - everything else (bonus, saves, defensive contributions, cards), from his own average per 90.
+
+  Doubles add fixtures and blanks score 0. Player rates are shrunk towards the position average as if he had also played 450 average minutes. Team ratings are shrunk towards the league average as if the team had also played 4 average matches. Point values come from `game_config.scoring`, and the minute thresholds are measured from the breakdowns (both 60 this season). Next gameweek's value is multiplied by FPL's chance of playing (`xp`), and the bots use the value if fit.
+- **Check (gameweeks 4–7, each predicted only from earlier gameweeks).** Average over the four weeks:
+
+  | Method | Rank correlation | Error (points) | Points of top 50 picks |
+  |---|---|---|---|
+  | Our xP | 0.501 | 1.82 | 4.03 |
+  | Recent form | 0.461 | 1.96 | 3.89 |
+  | Points per game | 0.463 | 1.95 | 3.87 |
+
+  Total predicted points were within about 5% of the real totals each week. FPL's past `ep_next` values were never saved, so it can't be part of this check. From gameweek 8 on, both are saved every week (`data/xpoints/`), so the two can be compared during the season. The settings (450 minutes, 4 matches) were chosen before the check. Trying 180–450 minutes and 2–4 matches changed the results by less than the week-to-week noise, so they were left as chosen.
+- **Where it's used.** The expected points of every decision (and so luck), and verified memory's lesson checks. The verified teams' instructions now describe the check this way; their earlier wording, naming `ep_next`, was never used for a counted decision. Agents don't see our predictions, and their player table (which includes `ep_next`) is unchanged.
+- **Gameweek 8.** Decided before the switch. The expected points were recalculated with `runner.recompute_expected_points(8)`, using only data from before the deadline.
+
+## 2026-10-22: Stats bot
+
+- A third rule-based team, `stats-bot`, gives a stronger simple yardstick than form or ownership. It follows the same bot rules (fitness mark-down, fit players start first, free transfers only, no hits, no chips). It ranks players by our expected points if fit: the next 3 gameweeks' total for buying and selling, and next gameweek's value for the lineup and captain. It started in gameweek 8 like every other team.
+- Its expected points are high by design, because it picks by the same predictions that measure expected points. So its luck score shows how the predictions performed rather than its decision-making.
+- The bots don't affect the AI teams; they only answer the side question of whether the AI teams beat simple rules.

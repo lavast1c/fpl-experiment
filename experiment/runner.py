@@ -17,7 +17,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import bots, config, fetch, memory, metrics
+from . import bots, config, fetch, memory, metrics, xpoints
 from .agents import CallContext, ClaudeAgent, MockAgent
 from .files import read_json, read_json_gz, write_csv, write_json, write_json_gz
 from .gameweeks import deadline, get_event, hours_until_deadline
@@ -66,6 +66,15 @@ def gameweek_inputs(gw: int, mock: bool = False) -> tuple[dict, str, dict]:
 
 # --- decide ------------------------------------------------------------------------------------
 
+def expected_points_for(gw: int, meta: dict, bootstrap: dict, base: Path) -> dict[int, dict]:
+    """Our expected points for the gameweek, from the same data as the agents' snapshot.
+    Saved as xpoints/gw{N}.csv (real runs: data/xpoints/, the open dataset)."""
+    fixtures = read_json_gz(config.RAW_DIR / meta["sources"]["fixtures"])
+    projections = xpoints.predict(gw, bootstrap, fixtures)
+    xpoints.save(gw, projections, bootstrap, base / "xpoints")
+    return projections
+
+
 def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed: bool = False,
            bot_list: list[bots.Bot] = bots.BOTS) -> None:
     if teams and not mock and not real_calls_confirmed:
@@ -78,10 +87,12 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         raise SystemExit(f"The gameweek {gw} deadline has passed. Nothing was run.")
     if hours < config.DEADLINE_WARNING_HOURS:
         print(f"WARNING: the deadline is only {hours:.1f} hours away.")
+    projections = expected_points_for(gw, meta, bootstrap, base)
     week = Week(gw=gw, when=f"{deadline(events, gw):%Y-%m-%d %H:%M}", base=base, mock=mock,
                 system=load_template("system.txt"), table=table, players=players_from_bootstrap(bootstrap),
                 rules=load_rules(), elements=bootstrap["elements"],
-                expected={p["id"]: float(p.get("ep_next") or 0) for p in bootstrap["elements"]})
+                projections=projections,
+                expected={pid: v["xp"] for pid, v in projections.items()})
     print(f"Gameweek {gw}: {'MOCK' if mock else 'REAL'} run for {len(teams)} AI teams and {len(bot_list)} bots "
           f"(prompt {config.PROMPT_VERSION}, effort {config.EFFORT}, snapshot filter '{meta['filter']}')")
 
@@ -114,7 +125,8 @@ class Week:
     players: dict
     rules: object
     elements: list[dict]         # bootstrap-static players (the bots rank by their fields)
-    expected: dict[int, float]   # ep_next per player at decision time (memory checks, expected points)
+    projections: dict[int, dict]  # our expected points per player (xpoints.py): xp, xp_if_fit, xp_3gw_if_fit
+    expected: dict[int, float]   # our xP per player at decision time (memory checks, expected points)
 
 
 def last_week_results(base: Path, team_id: str, gw: int) -> dict | None:
@@ -258,10 +270,27 @@ def copy_first_squad(team: Team, source_id: str, state: TeamState, week: Week) -
     return summary
 
 
+def recompute_expected_points(gw: int, mock: bool = False) -> None:
+    """Rewrite every saved decision's expected points for gameweek gw with our xP. Used once, for
+    gameweek 8, decided before the switch from ep_next (METHODS.md, 2026-10-22). Only data from
+    before the deadline is used, so the result is the same as if xP had been used at the time."""
+    base = base_dir(mock)
+    bootstrap, _, meta = gameweek_inputs(gw, mock)
+    expected = {pid: v["xp"] for pid, v in expected_points_for(gw, meta, bootstrap, base).items()}
+    for path in sorted((base / "decisions" / f"gw{gw}").glob("*.json")):
+        d = read_json(path)
+        state = TeamState.load(base / "teams" / d["team"] / f"gw{gw}.json")
+        old = d.get("expected_points")
+        d["expected_points"] = metrics.expected_points(state.lineup if d["decision"] else None, d["chip"],
+                                                       d["hit_points"], expected)
+        write_json(path, d)
+        print(f"  {d['team']:<11} expected points {old} (ep_next) -> {d['expected_points']} (our xP)")
+
+
 def run_bot(bot: bots.Bot, week: Week) -> dict:
     """A rule-based team: no calls, the same validator, the same files as an AI team."""
     state = start_gameweek(load_state(week.base, bot.id))
-    decision = bots.decide(bot, state, week.elements, week.players, week.rules)
+    decision = bots.decide(bot, state, week.elements, week.players, week.rules, week.projections)
     result = validate(decision, state, week.players, week.rules, week.gw)
     errors, outcome = [e.code for e in result.errors], "accepted"
     if not result.ok:

@@ -22,6 +22,7 @@ export type Decision = {
   decided_at: string;
   outcome: string;
   first_week: boolean;
+  copied_from?: string | null;
   attempts: number;
   errors_by_attempt: string[][];
   stale_picks: unknown[];
