@@ -3,10 +3,10 @@
   "model": "claude-sonnet-5-5",
   "memory": "verified",
   "gw": 8,
-  "prompt_version": "v1",
+  "prompt_version": "v2",
   "effort": "medium",
   "mock": false,
-  "decided_at": "2026-10-22T16:21:39+00:00",
+  "decided_at": "2026-10-22T17:22:45+00:00",
   "first_week": true,
   "outcome": "accepted",
   "copied_from": "S-none",
@@ -16,45 +16,45 @@
   "stale_picks": [],
   "decision": {
     "squad": [
-      496,
-      497,
+      250,
+      572,
       115,
       504,
       8,
-      31,
+      330,
       173,
-      399,
-      156,
-      400,
-      427,
       124,
+      399,
+      427,
+      156,
+      101,
       411,
       165,
       79
     ],
     "starting_xi": [
-      496,
+      572,
       115,
       504,
       8,
+      330,
+      124,
       399,
-      156,
-      400,
       427,
+      156,
       411,
-      165,
-      79
+      165
     ],
     "bench_order": [
-      497,
-      31,
-      124,
+      250,
+      79,
+      101,
       173
     ],
     "captain": 411,
     "vice_captain": 165,
     "chip": null,
-    "reasoning": "Premium Haaland captain, in-form Chelsea/Man Utd/City attackers, and Brighton defenders in strong form (max 3 Brighton). Cheap Spurs keeper and Coventry defender fill the bench. Squad costs £99.2m."
+    "reasoning": "Balanced squad around in-form, high-scoring players (Haaland, João Pedro, Cherki, Mbeumo, Groß, De Cuyper) with cheap enablers on the bench. Max 3 per club respected, £97.4m spent. Haaland captain with João Pedro as vice."
   },
   "chip": null,
   "transfers_made": 0,
@@ -65,5 +65,5 @@
   "input_tokens": 0,
   "output_tokens": 0,
   "duration_ms": 0,
-  "expected_points": 48.35
+  "expected_points": 51.35
 }

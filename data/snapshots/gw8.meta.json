@@ -1,12 +1,12 @@
 {
   "gw": 8,
   "season": "2026-27",
-  "built_at": "2026-10-22T14:32:18+00:00",
+  "built_at": "2026-10-22T17:21:51+00:00",
   "filter": "all",
   "players_in_game": 668,
   "players_in_snapshot": 668,
-  "chars": 76333,
-  "est_tokens": 21810,
+  "chars": 73647,
+  "est_tokens": 21042,
   "token_method": "characters / 3.5 (estimate)",
   "fixtures_ahead": 3,
   "sources": {

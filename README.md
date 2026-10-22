@@ -38,7 +38,7 @@ Every memory team is told: *"Your notes are advice, not commitments. Re-evaluate
 ## How a gameweek works
 
 1. **Fetch.** We download the public FPL data a few times a week. It is cached and rate-limited, and we never log in.
-2. **Snapshot.** We build one table of all players: price, form, expected goals and assists, FPL's expected points, ownership, injury news and the next 3 fixtures. Every agent gets exactly the same table.
+2. **Snapshot.** We build one table of all players: price, form, expected goals and assists, minutes, ownership, injury news and the next 3 fixtures with difficulty ratings. Every agent gets exactly the same table. FPL's own expected points (`ep_next`) are left out of it, so agents judge players from the underlying numbers; they are still saved in the dataset.
 3. **Decide.** Each agent gets one prompt and returns one JSON answer. The answer contains transfers, the starting XI, the bench order, the captain, a chip and a short reasoning, plus notes or lessons for memory teams. Agent calls:
    - run one at a time with `claude -p`, using the exact model ID and effort `medium`;
    - have no tools and no web access;
@@ -67,7 +67,7 @@ For each decision we add up the predicted points of the starting XI at decision 
 
 **Luck** = actual points − expected points. A team that scores well with low expected points was lucky. A team with high expected points made good decisions, whatever the result.
 
-The predictions are our own (`experiment/xpoints.py`), not FPL's `ep_next`: FPL doesn't publish how `ep_next` is made, and for gameweek 8 the teams' `ep_next` totals were about double a normal score. For each player and fixture, ours adds appearance points (from recent minutes), goals and assists (his expected goals and assists per 90, scaled by his team's attack against the opponent's defence, home or away), clean-sheet and goals-conceded points, and his usual bonus, saves and defensive points. Point values come from the API, and nothing is tuned by hand. On gameweeks 4–7 it ranked players better than recent form or points per game, and its total predicted points were 3% below the real total across the four weeks (1–9% off in any single week; `data/checks/xpoints_backtest.json`). Agents don't see it; their player table is unchanged. The stats bot picks by it, so its expected points are high by design.
+The predictions are our own (`experiment/xpoints.py`), not FPL's `ep_next`: FPL doesn't publish how `ep_next` is made, and for gameweek 8 the teams' `ep_next` totals were about double a normal score. For each player and fixture, ours adds appearance points (from recent minutes), goals and assists (his expected goals and assists per 90, scaled by his team's attack against the opponent's defence, home or away), clean-sheet and goals-conceded points, and his usual bonus, saves and defensive points. Point values come from the API, and nothing is tuned by hand. On gameweeks 4–7 it ranked players better than recent form or points per game, and its total predicted points were 3% below the real total across the four weeks (1–9% off in any single week; `data/checks/xpoints_backtest.json`). Agents see neither our predictions nor FPL's `ep_next`. The stats bot picks by it, so its expected points are high by design.
 
 ## The open dataset
 
@@ -121,7 +121,7 @@ python -m pytest                     # run the tests
 | `experiment/snapshot.py` | the weekly player table |
 | `experiment/rules.py`, `validator.py`, `team.py` | FPL rules and team bookkeeping |
 | `experiment/scorer.py` | points, auto-subs, captaincy, chips |
-| `experiment/prompt.py`, `prompts/v1/` | the prompt template and answer format |
+| `experiment/prompt.py`, `prompts/v2/` | the prompt template and answer format (`v1` was replaced before any gameweek was scored) |
 | `experiment/agents.py` | the real Claude agent and the fake one used for testing |
 | `experiment/memory.py` | self-written notes and verified lessons |
 | `experiment/bots.py` | the form bot and the crowd bot |

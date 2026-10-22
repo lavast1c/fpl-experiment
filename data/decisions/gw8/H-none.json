@@ -3,10 +3,10 @@
   "model": "claude-haiku-5-5",
   "memory": "none",
   "gw": 8,
-  "prompt_version": "v1",
+  "prompt_version": "v2",
   "effort": "medium",
   "mock": false,
-  "decided_at": "2026-10-22T14:32:52+00:00",
+  "decided_at": "2026-10-22T17:22:32+00:00",
   "first_week": true,
   "outcome": "accepted",
   "attempts": 1,
@@ -17,45 +17,45 @@
   "stale_picks": [],
   "decision": {
     "squad": [
-      1,
+      384,
       572,
-      504,
-      115,
       8,
-      31,
-      592,
+      115,
+      504,
+      330,
+      447,
       101,
       156,
-      129,
-      400,
+      427,
       236,
-      411,
-      599,
-      165
-    ],
-    "starting_xi": [
-      1,
-      115,
-      504,
-      8,
-      101,
-      156,
-      129,
       400,
       411,
       165,
-      599
+      138
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      504,
+      330,
+      101,
+      156,
+      427,
+      400,
+      411,
+      165
     ],
     "bench_order": [
       572,
-      31,
       236,
-      592
+      138,
+      447
     ],
-    "captain": 101,
-    "vice_captain": 411,
+    "captain": 411,
+    "vice_captain": 165,
     "chip": null,
-    "reasoning": "Budget squad at £95.3m. Henderson (CHE, ep 10.5, £4.9m) is strong value and captain; Haaland (ep 9.5) vice. Midfield of Henderson, Neto (ep 10), Ayari (ep 8) and Doku (ep 9) gives attacking returns. BHA defenders De Cuyper and Vuskovic (high ep) plus Calafiori anchor the back line. Cherif (ep 6.5, £5.0m) and João Pedro add forward punch. Bench covers with Konsa, Dewsbury-Hall and Ouattara. Club limits respected; no chip yet."
+    "reasoning": "Budget build (~£98.9m, 3 max per club respected). Haaland leads the attack and takes the captaincy; João Pedro (strong form and xG) is vice. Form-led midfield: Henderson (10.5 form), Neto (10.0), Mbeumo (8.0), Doku (9.0). Defence mixes Calafiori, De Cuyper and Vuskovic (form 7.5 to 10.5) with Bogle (ppg 6.4). Dewsbury-Hall and Kostoulas on the bench as cover. Donnarumma and Tzolakis in goal."
   },
   "chip": null,
   "transfers_made": 0,
@@ -65,8 +65,8 @@
   "models_used": [
     "claude-haiku-5-5"
   ],
-  "input_tokens": 64754,
-  "output_tokens": 4800,
-  "duration_ms": 24390,
-  "expected_points": 43.79
+  "input_tokens": 62053,
+  "output_tokens": 3693,
+  "duration_ms": 19177,
+  "expected_points": 48.48
 }

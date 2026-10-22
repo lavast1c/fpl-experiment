@@ -11,11 +11,15 @@ from pathlib import Path
 from . import config
 from .files import write_csv, write_json
 
-# Column order, used for the CSV file and the prompt table.
+# Column order of the CSV file (the open dataset).
 COLUMNS = [
     "id", "name", "club", "pos", "price", "form", "ppg", "total_pts", "minutes",
     "xg", "xa", "ep_next", "own_pct", "status", "chance_next", "news", "next_fixtures",
 ]
+# The columns agents see. FPL's own expected points (ep_next) are kept in the CSV for comparison
+# but left out of the agents' table from prompt v2 (METHODS.md, 2026-10-22), so agents judge players
+# from the underlying numbers instead of anchoring on FPL's unexplained prediction.
+TABLE_COLUMNS = [c for c in COLUMNS if c != "ep_next"]
 
 # Candidate filters for which players go into the snapshot. One is chosen and then fixed
 # for the season (config.SNAPSHOT_FILTER, documented in METHODS.md).
@@ -104,9 +108,9 @@ def apply_filter(rows: list[dict], filter_name: str) -> list[dict]:
 
 def prompt_table(rows: list[dict]) -> str:
     """The compact text form agents see: a header line, then one pipe-separated line per player."""
-    lines = ["|".join(COLUMNS)]
+    lines = ["|".join(TABLE_COLUMNS)]
     for row in rows:
-        lines.append("|".join(_cell(row[c]) for c in COLUMNS))
+        lines.append("|".join(_cell(row[c]) for c in TABLE_COLUMNS))
     return "\n".join(lines) + "\n"
 
 

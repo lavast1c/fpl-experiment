@@ -34,7 +34,7 @@ export default function About() {
 
       <h2>How a gameweek works</h2>
       <ol className="notes">
-        <li>Before each deadline, the project downloads FPL&apos;s public player data and builds one table of every player: price, form, expected goals and assists, FPL&apos;s predicted points, ownership, injury news and the next three fixtures.</li>
+        <li>Before each deadline, the project downloads FPL&apos;s public player data and builds one table of every player: price, form, expected goals and assists, minutes, ownership, injury news and the next three fixtures with difficulty ratings. FPL&apos;s own predicted points are left out, so the models judge players for themselves.</li>
         <li>Every agent gets exactly the same table and the same instructions, with no web access and no tools, and answers with its transfers, team, captain and any chip.</li>
         <li>A rule checker enforces every FPL rule. An illegal answer goes back to the agent with the errors, up to two more times; after that the team keeps last week&apos;s side.</li>
         <li>After the gameweek, our own scorer works out the points, including automatic substitutions and chips. It was checked against official FPL scores and matched exactly.</li>

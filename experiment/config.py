@@ -60,7 +60,8 @@ SNAPSHOT_FILTER = "all"   # fixed for the season on 2026-10-22 (see METHODS.md)
 # Exact model IDs only. Never Fable, never aliases like "opus" (they can change mid-season).
 MODELS = {"H": "claude-haiku-5-5", "S": "claude-sonnet-5-5", "O": "claude-opus-5-5"}
 EFFORT = "medium"                       # the same for every agent (chosen 2026-10-22)
-PROMPT_VERSION = "v1"                   # folder in prompts/; never edit a version once the season starts
+PROMPT_VERSION = "v2"                   # folder in prompts/; never edit a version once the season starts
+                                        # (v2, 2026-10-22: FPL's ep_next removed from the player table)
 PROMPTS_DIR = PROJECT_ROOT / "prompts"
 CLAUDE_TIMEOUT_SECONDS = 900            # give up on one call after 15 minutes
 DEADLINE_WARNING_HOURS = 3              # `decide` warns when the deadline is closer than this

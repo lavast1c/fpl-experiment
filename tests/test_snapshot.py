@@ -49,9 +49,15 @@ def test_filters(bootstrap, fixtures):
 def test_prompt_table_has_one_line_per_player(bootstrap, fixtures):
     rows = snapshot.build_rows(bootstrap, fixtures, 9)
     lines = snapshot.prompt_table(rows).splitlines()
-    assert lines[0] == "|".join(snapshot.COLUMNS)
+    assert lines[0] == "|".join(snapshot.TABLE_COLUMNS)
     assert len(lines) == len(rows) + 1
-    assert all(line.count("|") == len(snapshot.COLUMNS) - 1 for line in lines)
+    assert all(line.count("|") == len(snapshot.TABLE_COLUMNS) - 1 for line in lines)
+
+
+def test_agents_do_not_see_fpls_expected_points(bootstrap, fixtures):
+    rows = snapshot.build_rows(bootstrap, fixtures, 9)
+    assert "ep_next" not in snapshot.prompt_table(rows)
+    assert "ep_next" in snapshot.COLUMNS            # still saved in the dataset for comparison
 
 
 def test_save_snapshot(tmp_path, bootstrap, fixtures):

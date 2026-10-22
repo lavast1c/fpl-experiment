@@ -205,3 +205,12 @@ Decided with the project owner, before any gameweek was scored. Code in `experim
 - A third rule-based team, `stats-bot`, gives a stronger simple yardstick than form or ownership. It follows the same bot rules (fitness mark-down, fit players start first, free transfers only, no hits, no chips). It ranks players by our expected points if fit: the next 3 gameweeks' total for buying and selling, and next gameweek's value for the lineup and captain. It started in gameweek 8 like every other team.
 - Its expected points are high by design, because it picks by the same predictions that measure expected points. So its luck score shows how the predictions performed rather than its decision-making.
 - The bots don't affect the AI teams; they only answer the side question of whether the AI teams beat simple rules.
+
+## 2026-10-22: FPL's expected points removed from the agents' table (prompt v2)
+
+Decided with the project owner, before the gameweek 8 deadline and before any points were scored.
+
+- **Why.** FPL doesn't publish how `ep_next` is calculated. In the first picks it echoed short hot streaks: Chelsea's Henderson had 270 minutes, form 10.5 and `ep_next` 10.5, against 3.0 in our prediction. Haiku captained him over Haaland because his `ep_next` was higher. We want each model's own judgement from the underlying numbers, not how far it trusts FPL's headline figure.
+- **Change.** Prompt `v2` is identical to `v1` except that the player table, and its description, no longer include `ep_next`. Everything else is unchanged: form, points per game, total points, minutes, xG, xA, ownership, status, chance of playing, news, and fixtures with difficulty. `ep_next` is still saved in the snapshot CSV, the database and `data/xpoints/` for comparison. `prompts/v1/` stays unchanged. This is a small loss of realism, because real managers can see `ep_next`.
+- **Gameweek 8 redone.** The nine AI teams' earlier picks (prompt v1) were archived unchanged in `data/archive/gw8_with_fpl_predictions/`. The three no-memory teams then picked again with prompt v2, and their memory teams copied those squads (shared start). The redo applies to every AI team because the input changed, not because of any particular pick. The player data was the same download as before (14:32 UTC, under the project's 6-hour cache limit, so not downloaded again). The three bots were not re-run: they never used `ep_next`, and their data had not changed.
+- **Tokens.** The table is about 3.5% shorter (estimate ~21,000 tokens instead of ~21,800).
