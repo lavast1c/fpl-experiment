@@ -112,3 +112,40 @@ Decided with the project owner. Code in `experiment/memory.py`. These rules stay
 - **Track record shown.** Verified agents see each active lesson's record, for example "used 4 time(s), average +1.2 points vs expected" or "not used yet". This tells the agent how its lessons are doing. It is part of what makes the memory "verified".
 - **When lessons are checked.** Lessons are checked when the gameweek is scored (`run.py score`), so the results are ready before the next decision.
 - **Mock test.** Ten mock gameweeks (8–17, fake points) for all nine teams ran without errors. Two lessons were removed by the rule, and the removal notice appeared in the next prompt. 12 new tests cover the limits, citations, the formula, the removal rule, the prompt text and retries.
+
+## 2026-10-22: Phase 6, bots, metrics and website data
+
+Decided with the project owner. Code in `experiment/bots.py`, `experiment/metrics.py` and `experiment/supabase_sync.py`.
+
+- **Bots.** The form bot ranks players by FPL `form`. The crowd bot ranks them by `selected_by_percent` (ownership). Ties go to the higher `total_points`, then the lower id, so runs are repeatable. Both use the same snapshot data as the agents, follow the same rules below, and go through the same validator.
+  - *First squad:* go down the ranking and buy each available player (status `a`) who still fits the position counts and the 3-per-club limit. A player is only bought if enough money is left to fill every remaining place with the cheapest available players.
+  - *Transfers:* the bots never take a −4 hit and never play chips. First they sell players who can't play (status `i`, `s`, `u`, `n`, or gone from the game) for the best-ranked affordable player in the same position. Then, while free transfers are left, they make the single swap with the biggest ranking gain, as long as the gain is positive. Unused transfers are saved. Doubtful players (status `d`) are not sold.
+  - *Lineup:* available players first, then by ranking. The best goalkeeper starts, then the minimum of each outfield position, then the best remaining outfield players. The bench goalkeeper comes first. Captain and vice-captain are the two best-ranked starters.
+  - *Fallback:* if a bot's answer breaks a rule (for example, a player left the game and no replacement is affordable), the bot keeps last week's team, the same rule the AI teams follow.
+- **Bot chips: never.** The brief doesn't mention them, so we keep the bots as pure baselines. This slightly handicaps them against the FPL average.
+- **Global average.** FPL's `average_entry_score` for each finished gameweek. It is shown in the results and the season table as the `fpl-average` row.
+- **Expected points (luck-adjusted score), fixed for the season.** The formula is:
+  - add up `ep_next` for the starting XI, taken from the snapshot at decision time;
+  - count the captain twice, or three times with triple captain;
+  - add the bench's `ep_next` with bench boost;
+  - subtract transfer hits.
+
+  It is worked out when the decision is made and saved in the decision file, because `ep_next` changes later. **Luck** = actual net points − expected points. A team that kept last week's team gets the expected points of that team.
+- **Other metrics,** per team per gameweek in `results/gw{N}.csv`, all rows in `results/all_gameweeks.csv`, and season totals in `results/standings.csv`:
+  - rank among the 11 teams (equal points share a rank);
+  - the gap to the FPL average;
+  - running season points and expected points;
+  - outcome, attempts, rejected attempts (`rule_breaks`) and error codes with counts;
+  - stale picks;
+  - transfers made, and whether the captain changed from the team's previous decision (blank in a team's first week);
+  - chip, automatic substitutions, bench points and tokens.
+- **Memory metrics.**
+  - *Self-written:* the number of notes, total words, and notes added or removed compared with the previous decision. Notes are compared by exact text, and the full lists are kept in the gameweek's JSON.
+  - *Verified:* active, new and dropped lessons; lessons removed by the rule after scoring; and "proven" lessons (still active after at least 5 uses).
+- **Website data (Supabase).** The website can read these tables publicly (read only):
+  - results, standings, decisions (squad, transfers, lineup, captain, chip, reasoning, errors, tokens), notes and lessons;
+  - gameweeks, including FPL's average;
+  - snapshots and players.
+
+  Only the project's secret key can write. The fetch log stays private. Raw prompts and agent replies stay in this repository only, because they are large (about 32,000 tokens per prompt). Only real runs are copied, never mock runs. Real `decide` and `score` runs sync automatically and only warn if Supabase fails. Migration: `20261022190000_phase6_results_and_public_read.sql`.
+- **Mock test.** Eight mock gameweeks (8–15) for all 11 teams ran with no errors. 12 new tests cover the bots, the expected-points formula, the results files and the database rows. 81 tests pass in total. In mock runs the bots make no transfers, because the same snapshot is reused every week, so the rankings never change.

@@ -7,6 +7,8 @@ Per gameweek N, inside that folder:
     logs/gw{N}/{team}/prompt.txt.gz           the exact prompt sent
     logs/gw{N}/{team}/attempt{k}.json         every call: raw output, parsed answer, validator result, tokens
     scores/gw{N}.json and gw{N}.csv           points per team
+    results/...                               metrics (see metrics.py)
+The two rule-based bots (bots.py) are run after the AI teams and saved the same way, without logs.
 """
 
 import random
@@ -15,7 +17,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import config, fetch, memory
+from . import bots, config, fetch, memory, metrics
 from .agents import CallContext, ClaudeAgent, MockAgent
 from .files import read_json, read_json_gz, write_csv, write_json, write_json_gz
 from .gameweeks import deadline, get_event, hours_until_deadline
@@ -64,8 +66,9 @@ def gameweek_inputs(gw: int, mock: bool = False) -> tuple[dict, str, dict]:
 
 # --- decide ------------------------------------------------------------------------------------
 
-def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed: bool = False) -> None:
-    if not mock and not real_calls_confirmed:
+def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed: bool = False,
+           bot_list: list[bots.Bot] = bots.BOTS) -> None:
+    if teams and not mock and not real_calls_confirmed:
         raise SystemExit("Real runs use your Claude plan. Add --yes-real-calls once you have agreed to it.")
     base = base_dir(mock)
     bootstrap, table, meta = gameweek_inputs(gw, mock)
@@ -77,9 +80,9 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         print(f"WARNING: the deadline is only {hours:.1f} hours away.")
     week = Week(gw=gw, when=f"{deadline(events, gw):%Y-%m-%d %H:%M}", base=base, mock=mock,
                 system=load_template("system.txt"), table=table, players=players_from_bootstrap(bootstrap),
-                rules=load_rules(),
+                rules=load_rules(), elements=bootstrap["elements"],
                 expected={p["id"]: float(p.get("ep_next") or 0) for p in bootstrap["elements"]})
-    print(f"Gameweek {gw}: {'MOCK' if mock else 'REAL'} run for {len(teams)} teams "
+    print(f"Gameweek {gw}: {'MOCK' if mock else 'REAL'} run for {len(teams)} AI teams and {len(bot_list)} bots "
           f"(prompt {config.PROMPT_VERSION}, effort {config.EFFORT}, snapshot filter '{meta['filter']}')")
 
     summary = []
@@ -91,6 +94,11 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         outcome = run_team(team, week)
         if outcome is not None:
             summary.append(outcome)
+    for bot in bot_list:
+        if (base / "decisions" / f"gw{gw}" / f"{bot.id}.json").exists():
+            print(f"  {bot.id}: already decided, skipped")
+        else:
+            run_bot(bot, week)
     print_token_summary(summary)
 
 
@@ -105,7 +113,8 @@ class Week:
     table: str                   # the player table
     players: dict
     rules: object
-    expected: dict[int, float]   # ep_next per player at decision time (for verified memory)
+    elements: list[dict]         # bootstrap-static players (the bots rank by their fields)
+    expected: dict[int, float]   # ep_next per player at decision time (memory checks, expected points)
 
 
 def last_week_results(base: Path, team_id: str, gw: int) -> dict | None:
@@ -199,11 +208,46 @@ def run_team(team: Team, week: Week) -> dict | None:
         "input_tokens": sum(a["input_tokens"] for a in attempts),
         "output_tokens": sum(a["output_tokens"] for a in attempts),
         "duration_ms": sum(a["duration_ms"] for a in attempts),
+        "expected_points": metrics.expected_points(new_state.lineup if decision else None,
+                                                   decision.get("chip") if decision else None,
+                                                   result.hit_points if result and result.ok else 0, week.expected),
     }
     write_json(base / "decisions" / f"gw{gw}" / f"{team.id}.json", summary)
     print(f"  {team.id}: {outcome} after {len(attempts)} attempt(s)"
           + (f", hit -{summary['hit_points']}" if summary["hit_points"] else "")
           + (f", chip {summary['chip']}" if summary["chip"] else ""))
+    return summary
+
+
+def run_bot(bot: bots.Bot, week: Week) -> dict:
+    """A rule-based team: no calls, the same validator, the same files as an AI team."""
+    state = start_gameweek(load_state(week.base, bot.id))
+    decision = bots.decide(bot, state, week.elements, week.players, week.rules)
+    result = validate(decision, state, week.players, week.rules, week.gw)
+    errors, outcome = [e.code for e in result.errors], "accepted"
+    if not result.ok:
+        # Very rare (e.g. a player left the game and no replacement is affordable). Same rule as the
+        # AI teams: keep last week's team.
+        print(f"  WARNING {bot.id}: its decision broke a rule ({', '.join(errors)}); keeping last week's team.")
+        decision = no_change_decision(state)
+        result = validate(decision, state, week.players, week.rules, week.gw) if decision else None
+        outcome = "no_change" if result is not None and result.ok else "no_change_failed"
+    new_state = apply(decision, state, week.players, week.rules, week.gw, result) if outcome != "no_change_failed" else state
+    ok = outcome != "no_change_failed"
+    save_state(week.base, new_state, week.gw)
+    summary = {
+        "team": bot.id, "model": "rule-based", "memory": "none", "gw": week.gw, "mock": week.mock,
+        "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "first_week": not state.has_squad, "outcome": outcome, "attempts": 1, "max_attempts": 1,
+        "errors_by_attempt": [errors], "stale_picks": [], "decision": decision if ok else None, "chip": None,
+        "transfers_made": result.transfers_made if ok else 0, "hit_points": result.hit_points if ok else 0,
+        "notes": result.notes if ok else [],
+        "model_mismatch": False, "models_used": [], "input_tokens": 0, "output_tokens": 0, "duration_ms": 0,
+        "expected_points": metrics.expected_points(new_state.lineup, None, result.hit_points if ok else 0,
+                                                   week.expected),
+    }
+    write_json(week.base / "decisions" / f"gw{week.gw}" / f"{bot.id}.json", summary)
+    print(f"  {bot.id}: {outcome}, {summary['transfers_made']} transfer(s)" if state.has_squad else f"  {bot.id}: new squad")
     return summary
 
 
@@ -243,11 +287,11 @@ def fake_live(players: dict, gw: int) -> dict[int, LivePlayer]:
 CSV_FIELDS = ["team", "gw", "points", "hit_points", "net_points", "captain", "auto_subs", "bench_points", "chip"]
 
 
-def _team_row(team: Team, gw: int, decision: dict, state: TeamState, players: dict, positions: dict,
+def _team_row(team_id: str, gw: int, decision: dict, state: TeamState, players: dict, positions: dict,
               live: dict, rules) -> dict:
     """One team's score, plus the details memory teams see next week."""
     if not state.has_squad or state.lineup is None:
-        return {"team": team.id, "gw": gw, "points": 0, "hit_points": 0, "net_points": 0, "captain": None,
+        return {"team": team_id, "gw": gw, "points": 0, "hit_points": 0, "net_points": 0, "captain": None,
                 "auto_subs": 0, "bench_points": 0, "chip": None, "players": [], "transfers": [],
                 "auto_subs_detail": []}
     result = score(state.lineup, decision["chip"], positions, live, rules)
@@ -267,7 +311,7 @@ def _team_row(team: Team, gw: int, decision: dict, state: TeamState, players: di
     transfers = [{"out": t["out"], "out_name": name(t["out"]), "out_points": pts(t["out"]),
                   "in": t["in"], "in_name": name(t["in"]), "in_points": pts(t["in"])}
                  for t in (decision["decision"] or {}).get("transfers", [])] if decision["outcome"] == "accepted" else []
-    return {"team": team.id, "gw": gw, "points": result.points, "hit_points": decision["hit_points"],
+    return {"team": team_id, "gw": gw, "points": result.points, "hit_points": decision["hit_points"],
             "net_points": result.points - decision["hit_points"], "captain": result.captain,
             "auto_subs": len(result.auto_subs), "bench_points": result.bench_points, "chip": decision["chip"],
             "players": [{"id": pid, "name": name(pid), "points": pts(pid), "role": roles[pid]}
@@ -292,13 +336,13 @@ def score_gameweek(gw: int, mock: bool) -> list[dict]:
         average = get_event(fresh["events"], gw).get("average_entry_score")
 
     rows = []
-    for team in TEAMS:
+    for team in TEAMS + bots.BOTS:
         path = base / "decisions" / f"gw{gw}" / f"{team.id}.json"
         if not path.exists():
             continue
         state = TeamState.load(base / "teams" / team.id / f"gw{gw}.json")
-        rows.append(_team_row(team, gw, read_json(path), state, players, positions, live, rules))
-        if team.memory == "verified":
+        rows.append(_team_row(team.id, gw, read_json(path), state, players, positions, live, rules))
+        if getattr(team, "memory", "none") == "verified":
             # Check the decisions that cited lessons this gameweek; remove lessons that fail the rule.
             mem = memory.load_memory(base, team.id, "verified")
             mem = memory.evaluate(mem, gw, {pid: lp.points for pid, lp in live.items()},
@@ -312,4 +356,5 @@ def score_gameweek(gw: int, mock: bool) -> list[dict]:
     print(f"Gameweek {gw} scores ({source}" + (f", FPL average {average}" if average is not None else "") + "):")
     for row in sorted(rows, key=lambda r: -r["net_points"]):
         print(f"  {row['team']:<11} {row['net_points']:>4}" + (f"  (hit -{row['hit_points']})" if row["hit_points"] else ""))
+    metrics.build_all(base)
     return rows

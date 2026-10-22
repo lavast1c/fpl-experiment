@@ -19,3 +19,7 @@
 - Prompt v1, forced answer format, real and mock agents, `run.py decide` / `score` / `test-calls`.
 - Memory (`experiment/memory.py`): self-written notes and verified lessons with citations, lesson checks against expected points, removal of lessons that keep underperforming, and last week's results in memory teams' prompts.
 - Score files now include each player's points and role, transfers, automatic substitutions and FPL's average score.
+- Form bot and crowd bot (`experiment/bots.py`): rule-based baseline teams, run after the AI teams in `decide`.
+- Metrics (`experiment/metrics.py`, `run.py metrics`): rank, expected points and luck, gap to the FPL average, hits, rule breaks, stale picks, transfers, captain changes, memory changes, and the season table.
+- Supabase tables for the website (teams, decisions, results, standings, notes, lessons), readable by anyone and writable only by the project. Real runs sync automatically.
+- Full README.

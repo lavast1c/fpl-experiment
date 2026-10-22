@@ -13,7 +13,7 @@
 import argparse
 import sys
 
-from experiment import api_rules, config, fetch, runner, scorer_check, snapshot, supabase_sync, test_calls
+from experiment import api_rules, bots, config, fetch, metrics, runner, scorer_check, snapshot, supabase_sync, test_calls
 from experiment.files import read_json_gz
 from experiment.gameweeks import deadline, hours_until_deadline
 
@@ -68,21 +68,31 @@ def cmd_check_scorer(args) -> None:
 
 
 def _teams(names: str | None):
+    """AI teams and bots named in --teams (default: all of them)."""
     if not names:
-        return runner.TEAMS
+        return runner.TEAMS, bots.BOTS
     wanted = names.split(",")
-    unknown = set(wanted) - {t.id for t in runner.TEAMS}
+    unknown = set(wanted) - {t.id for t in runner.TEAMS + bots.BOTS}
     if unknown:
         sys.exit(f"Unknown team(s): {sorted(unknown)}")
-    return [t for t in runner.TEAMS if t.id in wanted]
+    return [t for t in runner.TEAMS if t.id in wanted], [b for b in bots.BOTS if b.id in wanted]
 
 
 def cmd_decide(args) -> None:
-    runner.decide(args.gw, args.mock, _teams(args.teams), args.yes_real_calls)
+    teams, bot_list = _teams(args.teams)
+    runner.decide(args.gw, args.mock, teams, args.yes_real_calls, bot_list)
+    if not args.mock:
+        supabase_sync.sync()
+
+
+def cmd_metrics(args) -> None:
+    metrics.build_all(runner.base_dir(args.mock))
 
 
 def cmd_score(args) -> None:
     runner.score_gameweek(args.gw, args.mock)
+    if not args.mock:
+        supabase_sync.sync()
 
 
 def cmd_test_calls(args) -> None:
@@ -115,7 +125,7 @@ def main() -> None:
     p = commands.add_parser("decide", help="all teams make their decision for a gameweek")
     p.add_argument("--gw", type=int, required=True)
     p.add_argument("--mock", action="store_true", help="fake agent, saved in data/mock (no quota used)")
-    p.add_argument("--teams", help="comma-separated team ids, e.g. H-none,S-none (default: all 9)")
+    p.add_argument("--teams", help="comma-separated team ids, e.g. H-none,form-bot (default: all 9 and both bots)")
     p.add_argument("--yes-real-calls", action="store_true", help="confirm real `claude -p` calls (uses your plan)")
     p.set_defaults(func=cmd_decide)
 
@@ -123,6 +133,10 @@ def main() -> None:
     p.add_argument("--gw", type=int, required=True)
     p.add_argument("--mock", action="store_true", help="score the mock run (fake points if not played yet)")
     p.set_defaults(func=cmd_score)
+
+    p = commands.add_parser("metrics", help="rebuild the results and metrics files from saved data")
+    p.add_argument("--mock", action="store_true")
+    p.set_defaults(func=cmd_metrics)
 
     p = commands.add_parser("test-calls", help="phase 4 check: one probe and one decision call per model")
     p.add_argument("--gw", type=int, required=True)
