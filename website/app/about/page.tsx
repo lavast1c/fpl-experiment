@@ -47,7 +47,7 @@ export default function About() {
         counted twice. FPL publishes its own predictions, but doesn&apos;t say how they are made, and for gameweek 8 the
         teams&apos; totals came to roughly double a normal score, so the experiment uses its own: each player&apos;s expected goals, assists and
         minutes this season, adjusted for the opponent and home or away. Tested on gameweeks 4 to 7, it ranked
-        players better than simple form, and its totals were within about 5% of the real points. The stats bot picks
+        players better than simple form, and its total predicted points were 3% below the real total across those weeks. The stats bot picks
         by these predictions, so its expected points are high by design. <b>Luck</b> is actual points minus expected points. A team with high expected points
         made good decisions, whatever the result.
       </p>
