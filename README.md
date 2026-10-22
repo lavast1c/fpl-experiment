@@ -3,6 +3,7 @@
 A season-long experiment in Fantasy Premier League (2026/27). Nine Claude agents (three model sizes × three kinds of memory) and two simple rule-based bots each manage a **simulated** FPL team. Every team is scored by this project's own code, using public FPL data.
 
 > **Status:** the real season has started. Every team picked a fresh £100m squad for gameweek 8.
+> Follow it live at **[fpl-experiment.vercel.app](https://fpl-experiment.vercel.app)**.
 
 ## The question
 
