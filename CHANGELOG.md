@@ -30,4 +30,5 @@
 - Our own expected points (`experiment/xpoints.py`), checked on gameweeks 4-7, replace FPL's ep_next for the luck score and lesson checks.
 - Stats bot: a third rule-based team that picks by our expected points.
 - Prompt v2: FPL's ep_next removed from the agents' player table; the nine AI teams picked their gameweek 8 squads again (earlier picks archived).
+- Expected points, season version: assists scaled per position, a stronger pull to the average, and 25% whole-season playing time, chosen on four past seasons. The stats bot picked its gameweek 8 squad again (earlier pick archived); all gameweek 8 expected points recalculated.
 - Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.

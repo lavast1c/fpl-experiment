@@ -9,7 +9,9 @@ FPL's `ep_next` itself is compared live from gameweek 8 onwards (both are saved 
 
 Scores, over every player who had played before the test gameweek:
     correlation   how well the ranking of players matches the ranking of their points (Spearman)
-    MAE           average size of the error, in points
+    RMSE          typical size of the error, in points (MAE would reward predicting too low,
+                  because most players score 1-2 and a few score a lot)
+    bias          average predicted minus actual points
     top-50 pick   average actual points of the 50 players each method rated highest
 """
 
@@ -66,7 +68,8 @@ def run(test_gws=range(4, 8), bootstrap_file: str = "gw8/bootstrap-static_202610
             values = [pred[pid] for pid in candidates]
             top = sorted(candidates, key=lambda pid: -pred[pid])[:50]
             scores[name]["correlation"].append(spearman(values, actual))
-            scores[name]["MAE"].append(sum(abs(v - a) for v, a in zip(values, actual)) / len(actual))
+            scores[name]["RMSE"].append((sum((v - a) ** 2 for v, a in zip(values, actual)) / len(actual)) ** 0.5)
+            scores[name]["bias"].append(sum(v - a for v, a in zip(values, actual)) / len(actual))
             scores[name]["top-50 pick"].append(sum(points_by_gw[gw].get(pid, 0) for pid in top) / len(top))
     summary = {name: {metric: round(sum(v) / len(v), 3) for metric, v in m.items()} for name, m in scores.items()}
     per_gw = {name: {metric: [round(x, 3) for x in v] for metric, v in m.items()} for name, m in scores.items()}
@@ -74,7 +77,7 @@ def run(test_gws=range(4, 8), bootstrap_file: str = "gw8/bootstrap-static_202610
               "inputs": {"bootstrap": bootstrap_file, "fixtures": fixtures_file}}
     write_json(config.DATA_DIR / "checks" / "xpoints_backtest.json", result)
     print(f"Predictor check, gameweeks {min(test_gws)}-{max(test_gws)} (average over gameweeks):")
-    print(f"  {'method':<8} {'correlation':>12} {'MAE':>7} {'top-50 pick':>12}")
+    print(f"  {'method':<8} {'correlation':>12} {'RMSE':>7} {'bias':>7} {'top-50 pick':>12}")
     for name, m in summary.items():
-        print(f"  {name:<8} {m['correlation']:>12.3f} {m['MAE']:>7.2f} {m['top-50 pick']:>12.2f}")
+        print(f"  {name:<8} {m['correlation']:>12.3f} {m['RMSE']:>7.2f} {m['bias']:>7.2f} {m['top-50 pick']:>12.2f}")
     return result

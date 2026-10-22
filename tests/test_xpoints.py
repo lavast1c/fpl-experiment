@@ -33,23 +33,31 @@ def test_predicted_totals_are_close_to_real_totals(inputs):
     assert abs(predicted_total - sum(actual.values())) / sum(actual.values()) < 0.15
 
 
-def test_default_settings_are_the_fixed_version(inputs):
+def test_the_season_version_is_the_default(inputs):
     bootstrap, fixtures = inputs
-    assert xpoints.predict(8, bootstrap, fixtures) == xpoints.predict(8, bootstrap, fixtures, settings=xpoints.Settings())
+    assert xpoints.predict(8, bootstrap, fixtures) == xpoints.predict(8, bootstrap, fixtures, settings=xpoints.SEASON)
+    assert xpoints.SEASON == xpoints.Settings(prior_minutes=900, conceded_all_goals=False, scale_assists=True,
+                                              clean_sheet_on_pitch=False, season_minutes_weight=0.25)
+    # Settings() is still the original version of 2026-10-22, for comparison.
     assert xpoints.Settings() == xpoints.Settings(prior_minutes=450, conceded_all_goals=False, scale_assists=False,
                                                   clean_sheet_on_pitch=False, season_minutes_weight=0.0)
 
 
 def test_each_option_moves_predictions_the_expected_way(inputs):
     bootstrap, fixtures = inputs
-    base = xpoints.load_history(8, bootstrap, fixtures)
+    original = xpoints.Settings()
+    base = xpoints.load_history(8, bootstrap, fixtures, settings=original)
     assert base.assists_per_xa["FWD"] > base.assists_per_xa["DEF"] > 1     # FPL is generous with assists
     fixed = xpoints.load_history(8, bootstrap, fixtures, settings=xpoints.Settings(conceded_all_goals=True))
     for pos in ("GKP", "DEF"):                                             # smaller deduction per goal
         assert base.conceded_points[pos] < fixed.conceded_points[pos] < 0
-    xp = xpoints.predict(8, bootstrap, fixtures)
+    xp = xpoints.predict(8, bootstrap, fixtures, settings=original)
     more_assists = xpoints.predict(8, bootstrap, fixtures, settings=xpoints.Settings(scale_assists=True))
     assert all(more_assists[p]["xp_if_fit"] >= xp[p]["xp_if_fit"] for p in xp)
+    # The stronger pull towards the average lowers the very top predictions.
+    pulled = xpoints.predict(8, bootstrap, fixtures, settings=xpoints.Settings(prior_minutes=900))
+    top = sorted(xp, key=lambda p: -xp[p]["xp_if_fit"])[:15]
+    assert sum(pulled[p]["xp_if_fit"] for p in top) < sum(xp[p]["xp_if_fit"] for p in top)
 
 
 def test_past_season_rows_split_into_the_official_total():

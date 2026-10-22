@@ -13,7 +13,8 @@ saves, cards, defensive contributions...). check_rules() confirms on each season
 the point values we split with really give the official totals.
 
 Then, as in xpoints_check.py, each gameweek from 4 on is predicted from the gameweeks before it
-and compared with the official points, for the fixed version and each candidate change.
+and compared with the official points, for the original version, each candidate change and the
+version chosen for the season (xpoints.SEASON).
 
 The dataset also has FPL's own prediction ("xP", from `ep_this`), but fpl_xp_timing() shows it was
 saved after the matches were played, so it is not used as a yardstick.
@@ -159,9 +160,9 @@ def bootstrap_for(gw: int, rows: list[dict], team_ids: dict[str, int], scoring: 
             "game_config": {"scoring": scoring}}
 
 
-# The fixed version first, then the candidate changes from the 2026-10-22 review, one at a time and together.
+# The original version first, then the candidate changes from the 2026-10-22 review, one at a time and together.
 VARIANTS = {
-    "fixed version": Settings(),
+    "original version (2026-10-22)": Settings(),
     "conceded fix only": Settings(conceded_all_goals=True),
     "assist fix only": Settings(scale_assists=True),
     "clean-sheet fix only": Settings(clean_sheet_on_pitch=True),
@@ -169,7 +170,7 @@ VARIANTS = {
     "season minutes 25% only": Settings(season_minutes_weight=0.25),
     "season minutes 50% only": Settings(season_minutes_weight=0.5),
     "pull 900 + season 25%": Settings(prior_minutes=900, season_minutes_weight=0.25),
-    "assists + pull 900 + season 25%": Settings(scale_assists=True, prior_minutes=900, season_minutes_weight=0.25),
+    "SEASON VERSION: assists + pull 900 + season 25%": xpoints.SEASON,
     "conceded + assists + pull 900 + season 25%": Settings(conceded_all_goals=True, scale_assists=True,
                                                            prior_minutes=900, season_minutes_weight=0.25),
     "all four + pull 900 + season 25%": Settings(conceded_all_goals=True, scale_assists=True,

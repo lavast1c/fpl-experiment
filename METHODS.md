@@ -180,7 +180,7 @@ Decided with the project owner, before the gameweek 8 deadline. Code in `experim
 Decided with the project owner, before any gameweek was scored. Code in `experiment/xpoints.py`; check in `experiment/xpoints_check.py`.
 
 - **Why.** FPL doesn't publish how `ep_next` is calculated, and many managers treat it as crude. For gameweek 8 the teams' starting elevens added up to 92–110 `ep_next` points, about double a normal score. Two parts of the experiment depend on it: the luck-adjusted score, and verified memory's lesson checks. Paid projections (Opta, FPL Review) were ruled out, because the project only uses free public FPL data and must be able to publish everything.
-- **The model (fixed for the season).** For each player and fixture it adds up:
+- **The model (fixed for the season; three settings were changed on 2026-10-23, before any gameweek was scored, see below).** For each player and fixture it adds up:
   - appearance points, from how often he played 60+ or 1–59 minutes in his team's last 4 matches;
   - goals and assists: his season expected goals and expected assists per 90, times his expected minutes, times this fixture's expected team goals relative to his team's average. Expected team goals = league average × team attack × opponent defence × home or away factor, all measured from this season's xG;
   - clean-sheet points, using a Poisson chance of conceding 0;
@@ -227,21 +227,36 @@ Asked for by the project owner after a line-by-line review of the predictor. Cod
 
 | Version | Correlation | Top-50 actual | RMSE | Bias | Top-50 bias | Top-15 bias | GKP bias | DEF bias |
 |---|---|---|---|---|---|---|---|---|
-| Fixed version (2026-10-22) | 0.593 | 4.30 | 2.452 | -0.06 | +0.21 | +0.26 | +0.02 | -0.05 |
+| Original version (2026-10-22) | 0.593 | 4.30 | 2.452 | -0.06 | +0.21 | +0.26 | +0.02 | -0.05 |
 | Goals-conceded change only | 0.591 | 4.32 | 2.455 | -0.02 | +0.24 | +0.30 | +0.12 | +0.04 |
 | Assists-by-position change only | 0.593 | 4.31 | 2.454 | -0.01 | +0.34 | +0.41 | +0.02 | -0.03 |
 | Clean-sheet change only | 0.592 | 4.30 | 2.453 | -0.04 | +0.25 | +0.29 | +0.06 | -0.02 |
 | Stronger pull to average (900 minutes) only | 0.593 | 4.32 | 2.453 | -0.06 | +0.09 | +0.09 | +0.02 | -0.05 |
 | 25% whole-season minutes only | 0.594 | 4.32 | 2.439 | -0.04 | +0.07 | +0.06 | +0.03 | -0.04 |
-| Assists + pull 900 + season 25% | 0.595 | 4.32 | 2.442 | -0.00 | +0.10 | +0.06 | +0.03 | -0.03 |
+| **Season version:** assists + pull 900 + season 25% | 0.595 | 4.32 | 2.442 | -0.00 | +0.10 | +0.06 | +0.03 | -0.03 |
 | Goals conceded + assists + pull 900 + season 25% | 0.593 | 4.34 | 2.444 | +0.04 | +0.14 | +0.10 | +0.13 | +0.06 |
 | Form (last 4 gameweeks) | 0.550 | 3.71 | 2.670 | -0.05 | +1.97 | +3.14 | -0.01 | -0.05 |
 
 - **What it shows.**
-  - The fixed version holds up: it ranks players clearly better than form in every season (0.58-0.61 against 0.53-0.57), its overall bias is -0.06 points per player per gameweek, and no position is off by more than 0.07.
+  - The original version holds up: it ranks players clearly better than form in every season (0.58-0.61 against 0.53-0.57), its overall bias is -0.06 points per player per gameweek, and no position is off by more than 0.07.
   - Two of the three "mistakes" found on this season's four weeks were mostly chance. Over four seasons clean sheets are not under-predicted (a team's predicted clean-sheet chance averaged 25.1%, actual 23.6%), so the clean-sheet change makes predictions worse. The goals-conceded deduction really is too large (keepers and defenders: -8.3k points predicted against -6.4k actual), but it cancels a similar-sized over-estimate of their clean sheets, goals and appearances, so correcting it on its own leaves keepers 0.12 too high.
   - Assists are under-predicted because FPL awards more assists than expected-assist (xA) data counts, and by a stable amount per position: about 1.35 FPL assists per xA for midfielders, 2.1 for forwards and 1.1-1.3 for defenders in every season. Scaling each position's xA by its rate, measured each week from the season so far, removes the midfield and forward bias.
   - Over-confidence about the highest-rated players is real in every season (+0.21 points for the top 50 each week, +0.26 for the top 15). Pulling each player's rates harder towards his position's average (as if he had also played 900 average minutes, not 450) and mixing 25% of his whole-season playing time into the last-4-match figure fix most of it. The season mix also has the lowest RMSE. Mixing in 50% lowers the ranking quality, so it is not proposed.
   - No change improves the ranking much: every version's correlation is 0.592-0.595, and its top 50 scored 4.30-4.35 points.
-- **Decision.** Not yet made. The fixed version stays in use until the project owner chooses.
+- **Scoring rules in each tested season.** Checked on the web on 2026-10-23, because the test uses this season's point values for every season:
+  - 2022/23: no change to how points were scored. It was the World Cup season, with unlimited transfers during the break. Five substitutes became permanent in the Premier League. ([AllAboutFPL](https://allaboutfpl.com/2022/07/2022-23-fpl-season-launch-new-rules-prices-positions-chips-in-fpl/))
+  - 2023/24: the scoring system was the same as 2022/23. ([Fantasy Football Scout](https://www.fantasyfootballscout.co.uk/2023/07/05/fpl-2023-24-is-live))
+  - 2024/25: a goalkeeper's goal went from 6 to 10 points. The bonus points system (BPS) changed, and the Assistant Manager chip was added. ([Yahoo Sport](https://uk.sports.yahoo.com/news/fpl-2024-25-changes-fantasy-104219212.html), [Fantasy Football Scout](https://www.fantasyfootballscout.co.uk/2024/08/20/the-new-bonus-points-system-how-did-it-affect-fpl-gameweek-1/))
+  - 2025/26: defensive contribution points were added (2 points for 10 clearances, blocks, interceptions and tackles for defenders, or 12 including recoveries for midfielders and forwards). Assist rules were relaxed; FPL estimated this would have given 41 more assists in 2024/25. There were more BPS changes. ([Fantasy Football Scout](https://www.fantasyfootballscout.co.uk/2025/07/19/fpl-2025-26-more-assists-to-come-as-rules-are-relaxed), [Rotowire](https://www.rotowire.com/soccer/article/fpl-rule-changes-2025-26-season-assists-defensive-contributions-fantasy-premier-league-double-chips-94629))
+  - 2026/27 (now): point values unchanged and defensive contributions kept. Only BPS changed (no BPS lost for being tackled, 1 BPS per 3 clearances, blocks and interceptions instead of per 2, and new save scoring), and scores now become final at 09:00 UK time the next day. ([Fantasy Football Scout](https://www.fantasyfootballscout.co.uk/2026/07/20/fpl-2026-27-5-rule-changes-new-features-announced), [Premier League](https://www.premierleague.com/en/news/4679873/all-you-need-to-know-about-changes-to-fpl-for-202627))
+
+  **Effect on the test: none on its conclusions.**
+  - The five point values the test splits off (appearance, goals, assists, clean sheets, goals conceded) gave the official totals in every season. The keeper-goal change could not matter, because no keeper scored in any tested match.
+  - Bonus, saves and defensive contributions fall in "everything else", which the predictor learns per player from the same season, so BPS changes and the new defensive points are learned, not assumed.
+  - The 2025/26 assist change hardly moved FPL assists per xA (2025/26: defenders 1.29, midfielders 1.32, forwards 2.11, in line with earlier seasons). The predictor measures this rate from the current season each week anyway.
+  - 2025/26 is the season closest to this one's rules, and there the season version also beats the original: bias -0.06 to +0.01, top-50 bias +0.29 to +0.16, top-15 bias +0.57 to +0.36, with the same ranking (0.584 to 0.587).
+- **Decision (2026-10-23, with the project owner, before the gameweek 8 deadline and before any points were scored).** The predictor's season version is `xpoints.SEASON`: FPL assists per xA by position, the stronger pull (900 minutes) and 25% whole-season playing time. The goals-conceded and clean-sheet options stay off, because they made predictions worse over four seasons. `Settings()` keeps the original version for comparison. The season version is fixed from now on.
+  - **Stats bot re-run.** It picks by these predictions, so it picked its gameweek 8 squad again (6 of 15 players changed, captain still Haaland). Its original pick is archived unchanged in `data/archive/gw8_stats_bot_original_xp/`. The AI teams and the other two bots were not re-run, because they never see our predictions.
+  - **Expected points recalculated.** Every team's gameweek 8 expected points were recalculated with `runner.recompute_expected_points(8)`, using only data from before the deadline.
+  - **This season's check.** `xpoints_check.py` now reports RMSE and bias instead of MAE. For gameweeks 4-7, the season version scores correlation 0.504, RMSE 2.69 and bias -0.03 points, against 0.461, 2.90 and +0.06 for recent form (`data/checks/xpoints_backtest.json`).
 

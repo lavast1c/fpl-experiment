@@ -68,5 +68,5 @@
   "input_tokens": 62055,
   "output_tokens": 1212,
   "duration_ms": 12753,
-  "expected_points": 51.35
+  "expected_points": 49.9
 }

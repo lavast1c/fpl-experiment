@@ -271,9 +271,10 @@ def copy_first_squad(team: Team, source_id: str, state: TeamState, week: Week) -
 
 
 def recompute_expected_points(gw: int, mock: bool = False) -> None:
-    """Rewrite every saved decision's expected points for gameweek gw with our xP. Used once, for
-    gameweek 8, decided before the switch from ep_next (METHODS.md, 2026-10-22). Only data from
-    before the deadline is used, so the result is the same as if xP had been used at the time."""
+    """Rewrite every saved decision's expected points for gameweek gw with our current xP. Used for
+    gameweek 8, decided before the switch from ep_next (METHODS.md, 2026-10-22) and again after the
+    predictor's season version was chosen (2026-10-23). Only data from before the deadline is used,
+    so the result is the same as if this xP had been used at the time."""
     base = base_dir(mock)
     bootstrap, _, meta = gameweek_inputs(gw, mock)
     expected = {pid: v["xp"] for pid, v in expected_points_for(gw, meta, bootstrap, base).items()}
@@ -284,7 +285,7 @@ def recompute_expected_points(gw: int, mock: bool = False) -> None:
         d["expected_points"] = metrics.expected_points(state.lineup if d["decision"] else None, d["chip"],
                                                        d["hit_points"], expected)
         write_json(path, d)
-        print(f"  {d['team']:<11} expected points {old} (ep_next) -> {d['expected_points']} (our xP)")
+        print(f"  {d['team']:<11} expected points {old} -> {d['expected_points']}")
 
 
 def run_bot(bot: bots.Bot, week: Week) -> dict:

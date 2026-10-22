@@ -2,14 +2,16 @@
 
 Why: FPL's own `ep_next` is a rough number and FPL doesn't publish how it is made. We need a fairer
 yardstick for the luck-adjusted score and the verified-memory lesson checks, and a stronger simple bot.
-The predictor is fixed for the season (METHODS.md, 2026-10-22). Agents never see it: their player
-table is unchanged.
+The version used for the season is SEASON below (METHODS.md, 2026-10-22 and 2026-10-23). Agents
+never see it (nor FPL's `ep_next`).
 
 For one player and one fixture, the prediction adds up:
-    appearance points   from how often he played 60+ / 1-59 minutes in his team's last 4 matches
+    appearance points   from how often he played 60+ / 1-59 minutes: 75% his team's last 4 matches,
+                        25% every match this season
     goals and assists   his expected goals (xG) and assists (xA) per 90 minutes this season,
                         scaled by his expected minutes and by how many goals his team should score
-                        in this fixture (its attack vs the opponent's defence, home or away)
+                        in this fixture (its attack vs the opponent's defence, home or away);
+                        xA is also scaled by how many FPL assists his position gets per xA
     clean sheet         chance his team concedes 0 (Poisson) times the clean-sheet points,
                         if he plays long enough to earn one
     goals conceded      the points per goal conceded seen this season for his position,
@@ -41,8 +43,8 @@ ASSIST_PRIOR_XA = 10       # each position's assists per xA count as if it also 
 
 @dataclass(frozen=True)
 class Settings:
-    """Choices inside the predictor. The defaults are the version fixed on 2026-10-22; the other
-    options were added for the past-season test (xpoints_past.py) and are off unless chosen."""
+    """Choices inside the predictor. Settings() is the original version of 2026-10-22; SEASON (below)
+    is the version used for the season, chosen with the past-season test (xpoints_past.py)."""
     prior_minutes: int = 450              # a player's per-90 rates count as if he also played this many average minutes
     conceded_all_goals: bool = False      # points per goal conceded: divide by every goal conceded,
                                           # not only goals in matches that cost points (breakdowns list only those)
@@ -50,6 +52,12 @@ class Settings:
                                           # (FPL awards assists more generously, forwards' most of all)
     clean_sheet_on_pitch: bool = False    # clean-sheet chance only for the minutes a 60+ minute player is usually on
     season_minutes_weight: float = 0.0    # blend the last 4 matches' playing time with the whole season's
+
+
+# The version used for the season (METHODS.md, 2026-10-23), chosen on four past seasons: assists per xA
+# by position, a stronger pull towards the position average, and 25% whole-season playing time.
+# The goals-conceded and clean-sheet options made predictions worse there, so they stay off.
+SEASON = Settings(scale_assists=True, prior_minutes=900, season_minutes_weight=0.25)
 
 
 @dataclass
@@ -79,7 +87,7 @@ class History:
     clean_sheet_minutes: int                      # minutes needed for a clean sheet (measured)
     assists_per_xa: dict = field(default_factory=dict)  # position -> FPL assists per expected assist (measured)
     long_play_average: float = 90.0               # average minutes of a 60+ minute appearance (measured)
-    settings: Settings = Settings()
+    settings: Settings = SEASON
 
 
 def live_file(gw: int, raw_dir: Path = config.RAW_DIR) -> Path | None:
@@ -88,7 +96,7 @@ def live_file(gw: int, raw_dir: Path = config.RAW_DIR) -> Path | None:
 
 
 def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
-                 settings: Settings = Settings()) -> History:
+                 settings: Settings = SEASON) -> History:
     scoring = bootstrap["game_config"]["scoring"]
     teams_of = {p["id"]: p["team"] for p in bootstrap["elements"]}
     position_of = {p["id"]: POSITIONS[p["element_type"]] for p in bootstrap["elements"]}
@@ -255,7 +263,7 @@ def chance_of_playing(element: dict) -> float:
 
 
 def predict(gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
-            settings: Settings = Settings()) -> dict[int, dict]:
+            settings: Settings = SEASON) -> dict[int, dict]:
     """Per player: xp_if_fit for gameweek gw, xp (times FPL's chance of playing), and the 3-gameweek total if fit."""
     history = load_history(gw, bootstrap, fixtures, raw_dir, settings)
     scoring = bootstrap["game_config"]["scoring"]
