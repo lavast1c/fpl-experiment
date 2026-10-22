@@ -6,74 +6,64 @@
   "prompt_version": "v1",
   "effort": "medium",
   "mock": false,
-  "decided_at": "2026-10-22T14:33:16+00:00",
+  "decided_at": "2026-10-22T16:21:39+00:00",
   "first_week": true,
   "outcome": "accepted",
-  "attempts": 1,
-  "max_attempts": 6,
-  "errors_by_attempt": [
-    []
-  ],
+  "copied_from": "H-none",
+  "attempts": 0,
+  "max_attempts": 0,
+  "errors_by_attempt": [],
   "stale_picks": [],
   "decision": {
     "squad": [
-      109,
-      250,
-      115,
+      1,
+      572,
       504,
+      115,
       8,
       31,
-      257,
+      592,
       101,
       156,
+      129,
       400,
-      427,
       236,
       411,
-      79,
+      599,
       165
     ],
     "starting_xi": [
-      109,
+      1,
       115,
       504,
       8,
-      31,
       101,
       156,
+      129,
       400,
-      427,
       411,
-      79
+      165,
+      599
     ],
     "bench_order": [
-      250,
+      572,
+      31,
       236,
-      165,
-      257
+      592
     ],
-    "captain": 115,
+    "captain": 101,
     "vice_captain": 411,
     "chip": null,
-    "reasoning": "Initial squad of £97.6m with high expected-points players and max 3 per club. Verbruggen (BHA) is strong value in goal. De Cuyper, Vuskovic and Calafiori anchor the defence, with Konsa rotating in. Henderson, Neto, Doku and Mbeumo form the midfield, with Dewsbury-Hall on the bench. Haaland and Evanilson lead the attack, with João Pedro on the bench. De Cuyper captains (ep 10.5); Haaland vice. No chip, so the bench stays flexible for later.",
-    "updated_notes": [
-      "GW8 first squad built: Verbruggen, De Cuyper, Vuskovic, Calafiori, Konsa, Henderson, Neto, Doku, Mbeumo, Haaland, Evanilson in XI.",
-      "Bench: Leno, Dewsbury-Hall, João Pedro, Bassey. £2.4m unspent.",
-      "Captain De Cuyper (ep 10.5), vice Haaland. BHA has 3 players, so no more BHA buys without selling.",
-      "Watch Henderson (CHE, injury-prone history) and Calafiori/Konsa minutes. Consider Kadioglu or Ayari if BHA slots open up.",
-      "Review Haaland price vs cheaper forwards next week."
-    ]
+    "reasoning": "Budget squad at £95.3m. Henderson (CHE, ep 10.5, £4.9m) is strong value and captain; Haaland (ep 9.5) vice. Midfield of Henderson, Neto (ep 10), Ayari (ep 8) and Doku (ep 9) gives attacking returns. BHA defenders De Cuyper and Vuskovic (high ep) plus Calafiori anchor the back line. Cherif (ep 6.5, £5.0m) and João Pedro add forward punch. Bench covers with Konsa, Dewsbury-Hall and Ouattara. Club limits respected; no chip yet."
   },
   "chip": null,
   "transfers_made": 0,
   "hit_points": 0,
   "notes": [],
   "model_mismatch": false,
-  "models_used": [
-    "claude-haiku-5-5"
-  ],
-  "input_tokens": 64949,
-  "output_tokens": 5136,
-  "duration_ms": 24024,
-  "expected_points": 108.5
+  "models_used": [],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "duration_ms": 0,
+  "expected_points": 104.5
 }

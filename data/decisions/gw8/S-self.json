@@ -6,74 +6,64 @@
   "prompt_version": "v1",
   "effort": "medium",
   "mock": false,
-  "decided_at": "2026-10-22T14:34:33+00:00",
+  "decided_at": "2026-10-22T16:21:39+00:00",
   "first_week": true,
   "outcome": "accepted",
-  "attempts": 2,
-  "max_attempts": 6,
-  "errors_by_attempt": [
-    [
-      "CLUB_LIMIT"
-    ],
-    []
-  ],
+  "copied_from": "S-none",
+  "attempts": 0,
+  "max_attempts": 0,
+  "errors_by_attempt": [],
   "stale_picks": [],
   "decision": {
     "squad": [
-      572,
-      110,
+      496,
+      497,
       115,
-      8,
       504,
+      8,
       31,
-      330,
-      124,
+      173,
       399,
       156,
+      400,
       427,
-      101,
+      124,
       411,
       165,
       79
     ],
     "starting_xi": [
-      572,
+      496,
       115,
-      8,
       504,
-      124,
+      8,
       399,
       156,
+      400,
       427,
       411,
       165,
       79
     ],
     "bench_order": [
-      110,
+      497,
       31,
-      330,
-      101
+      124,
+      173
     ],
     "captain": 411,
-    "vice_captain": 399,
+    "vice_captain": 165,
     "chip": null,
-    "reasoning": "Form and xG based squad within 3-per-club limit: Haaland captain, Joao Pedro, Evanilson, Cherki, Mbeumo, Gross, Neto, with Brighton defenders and cheap bench. About £2m in the bank.",
-    "updated_notes": [
-      "GW8 squad: Haaland(C), JoaoPedro, Evanilson, Cherki, Mbeumo, Gross, Neto, Henderson, DeCuyper, Calafiori, Vuskovic, Konsa, Bogle, Tzolakis, Rushworth.",
-      "~£2m in bank. Max 3 per club: BHA has 3 (DeCuyper, Gross, Vuskovic); BHA fixtures LIV(A), MCI(A) tough."
-    ]
+    "reasoning": "Premium Haaland captain, in-form Chelsea/Man Utd/City attackers, and Brighton defenders in strong form (max 3 Brighton). Cheap Spurs keeper and Coventry defender fill the bench. Squad costs £99.2m."
   },
   "chip": null,
   "transfers_made": 0,
   "hit_points": 0,
   "notes": [],
   "model_mismatch": false,
-  "models_used": [
-    "claude-sonnet-5-5"
-  ],
-  "input_tokens": 130396,
-  "output_tokens": 2986,
-  "duration_ms": 31453,
-  "expected_points": 94.0
+  "models_used": [],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "duration_ms": 0,
+  "expected_points": 97.5
 }

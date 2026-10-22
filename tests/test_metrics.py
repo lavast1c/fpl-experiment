@@ -65,3 +65,12 @@ def test_supabase_rows_match_the_tables(season):
         "memory_notes": 18, "lessons": len(tables["lessons"][0])}
     assert set(tables["results"][0][0]) == supabase_sync.RESULT_COLUMNS | {"players", "transfer_points",
                                                                             "memory_detail"}
+
+
+def test_memory_teams_start_from_their_models_no_memory_squad(season):
+    for letter in "HSO":
+        squads = {m: read_json(season / "teams" / f"{letter}-{m}" / "gw8.json")["squad"]
+                  for m in ("none", "self", "verified")}
+        assert squads["self"] == squads["none"] == squads["verified"]
+        copied = read_json(season / "decisions" / "gw8" / f"{letter}-self.json")
+        assert copied["copied_from"] == f"{letter}-none" and copied["input_tokens"] == 0

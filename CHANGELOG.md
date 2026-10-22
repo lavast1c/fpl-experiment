@@ -25,4 +25,5 @@
 - Supabase tables for the website (teams, decisions, results, standings, notes, lessons), readable by anyone and writable only by the project. Real runs sync automatically.
 - Full README.
 - First real gameweek (8): all 9 AI teams and both bots picked their first squads.
+- Shared start: each model's memory teams start from the squad its no-memory team picked (gameweek 8 redone without new calls; the original picks are archived).
 - Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.

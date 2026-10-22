@@ -1,0 +1,29 @@
+{
+  "kind": "verified",
+  "next_id": 4,
+  "lessons": [
+    {
+      "id": "L1",
+      "text": "Captain choice: prefer highest ep_next, but discount players with very few minutes (under 500) for start risk.",
+      "created_gw": 8,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L2",
+      "text": "Value picks: cheap players with high ep_next (4.5-5.5m, e.g. Henderson, Neto) often beat expensive ones per £m.",
+      "created_gw": 8,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L3",
+      "text": "Keep bench covering each position with valid formation (at least 3 DEF and 2 MID in XI); use a DEF and MID sub first.",
+      "created_gw": 8,
+      "status": "active",
+      "uses": []
+    }
+  ],
+  "pending": [],
+  "removed_notices": []
+}

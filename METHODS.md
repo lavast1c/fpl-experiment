@@ -165,3 +165,12 @@ Decided with the project owner, before the season starts. Code in `experiment/bo
 ## 2026-10-22: Snapshot filter fixed for the season
 
 - **All players.** Decided with the project owner before the first real gameweek: every agent sees every player in the game (`SNAPSHOT_FILTER = "all"`), as in the phase 4 test calls. Nothing is hidden from the agents (new signings included), at the cost of a larger prompt. This stays fixed all season.
+
+## 2026-10-22: Shared starting squad per model
+
+Decided with the project owner, before the gameweek 8 deadline. Code in `experiment/runner.py` (`copy_first_squad`) and `experiment/teams.py`.
+
+- **Problem.** There is one team per model and memory type. In the first week, a model's three memory types differ in nothing that matters (every memory starts empty), so their three different first squads were three random draws of the same model. That randomness would last all season and blur the memory comparison.
+- **Rule.** Each model's no-memory team picks its first squad as before. Its self-written and verified teams then copy that squad, starting eleven, captain and vice-captain, with no Claude call. Their memory starts empty, and they first write notes or lessons in their next decision. If the no-memory team had no legal squad to copy, a memory team would pick its own.
+- **Not changed.** The three models still pick their own first squads, so the model comparison includes squad building. The bots still build their own squads.
+- **Gameweek 8.** The six memory teams had already picked their own squads in a real run earlier the same day (one extra retry for S-self). Those decisions, team states, memory and raw logs are kept unchanged in `data/archive/gw8_own_squads/`, and play no part in the scores.

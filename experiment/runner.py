@@ -25,7 +25,7 @@ from .prompt import answer_schema, build_prompt, load_template, retry_text
 from .rules import FIRST_WEEK_EXTRA_RETRIES, MAX_RETRIES, load_rules
 from .scorer import LivePlayer, live_from_api, score
 from .team import TeamState, players_from_bootstrap
-from .teams import TEAMS, Team
+from .teams import TEAMS, Team, starting_squad_source
 from .validator import apply, no_change_decision, start_gameweek, validate
 
 
@@ -133,6 +133,11 @@ def run_team(team: Team, week: Week) -> dict | None:
     gw, base, players, rules = week.gw, week.base, week.players, week.rules
     state = start_gameweek(load_state(base, team.id))
     first_week = not state.has_squad
+    source = starting_squad_source(team)
+    if first_week and source:
+        copied = copy_first_squad(team, source, state, week)
+        if copied is not None:
+            return copied
     max_attempts = 1 + MAX_RETRIES + (FIRST_WEEK_EXTRA_RETRIES if first_week else 0)
     kind = team.memory
     mem, section = None, ""
@@ -216,6 +221,40 @@ def run_team(team: Team, week: Week) -> dict | None:
     print(f"  {team.id}: {outcome} after {len(attempts)} attempt(s)"
           + (f", hit -{summary['hit_points']}" if summary["hit_points"] else "")
           + (f", chip {summary['chip']}" if summary["chip"] else ""))
+    return summary
+
+
+def copy_first_squad(team: Team, source_id: str, state: TeamState, week: Week) -> dict | None:
+    """A memory team's first week: copy the no-memory team's accepted squad, lineup and captain
+    (no Claude call). Its memory starts empty and is first written in its next decision.
+    Returns None, so the team picks its own squad, if there is nothing legal to copy."""
+    path = week.base / "decisions" / f"gw{week.gw}" / f"{source_id}.json"
+    source = read_json(path) if path.exists() else None
+    if source is None or source["outcome"] != "accepted":
+        print(f"  WARNING {team.id}: {source_id} has no accepted squad to copy, so {team.id} picks its own.")
+        return None
+    decision = source["decision"]
+    result = validate(decision, state, week.players, week.rules, week.gw)
+    if not result.ok:
+        print(f"  WARNING {team.id}: {source_id}'s squad can't be copied ({', '.join(result.error_codes())}); "
+              f"{team.id} picks its own.")
+        return None
+    new_state = apply(decision, state, week.players, week.rules, week.gw, result)
+    save_state(week.base, new_state, week.gw)
+    memory.save_memory(week.base, team.id, memory.empty_memory(team.memory), week.gw)
+    summary = {
+        "team": team.id, "model": team.model, "memory": team.memory, "gw": week.gw,
+        "prompt_version": config.PROMPT_VERSION, "effort": config.EFFORT, "mock": week.mock,
+        "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "first_week": True, "outcome": "accepted", "copied_from": source_id, "attempts": 0, "max_attempts": 0,
+        "errors_by_attempt": [], "stale_picks": [], "decision": decision, "chip": decision.get("chip"),
+        "transfers_made": result.transfers_made, "hit_points": result.hit_points, "notes": result.notes,
+        "model_mismatch": False, "models_used": [], "input_tokens": 0, "output_tokens": 0, "duration_ms": 0,
+        "expected_points": metrics.expected_points(new_state.lineup, decision.get("chip"), result.hit_points,
+                                                   week.expected),
+    }
+    write_json(week.base / "decisions" / f"gw{week.gw}" / f"{team.id}.json", summary)
+    print(f"  {team.id}: copied {source_id}'s first squad (no call)")
     return summary
 
 
