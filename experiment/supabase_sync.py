@@ -136,7 +136,8 @@ def experiment_rows(base: Path) -> dict[str, tuple[list[dict], str]]:
         squad = sorted(int(pid) for pid in read_json(state_path)["squad"]) if state_path.exists() else None
         decisions.append({
             "team": d["team"], "gw": d["gw"], "decided_at": d["decided_at"], "outcome": d["outcome"],
-            "first_week": d["first_week"], "attempts": d["attempts"], "errors_by_attempt": d["errors_by_attempt"],
+            "first_week": d["first_week"], "copied_from": d.get("copied_from"),
+            "attempts": d["attempts"], "errors_by_attempt": d["errors_by_attempt"],
             "stale_picks": d["stale_picks"], "transfers": answer.get("transfers", []), "squad": squad,
             "starting_xi": answer.get("starting_xi"), "bench_order": answer.get("bench_order"),
             "captain": answer.get("captain"), "vice_captain": answer.get("vice_captain"), "chip": d["chip"],
