@@ -3,10 +3,11 @@
 Both follow the same simple rules and differ only in how they rank players:
     form bot:   FPL's `form` (average points over roughly the last 30 days)
     crowd bot:  `selected_by_percent` (share of real FPL managers who own the player)
-A player's score is that number times FPL's chance of playing next round: a doubtful player at
-75% keeps 75% of his score, and an injured, suspended or unavailable player scores 0. So the bot
-weighs fitness against quality itself; nobody is sold automatically, except a player missing from
-FPL's data altogether, who can't be fielded.
+A player's score is that number marked down by FPL's chance of playing next round. Doubtful
+players often miss out or play only a few minutes, so the mark-down is steeper than the chance:
+75% keeps half the score, 50% a quarter, and 25% or less (injured, suspended, unavailable) nothing.
+So the bot weighs fitness against quality itself; nobody is sold automatically, except a player
+missing from FPL's data altogether, who can't be fielded.
 Ties are broken by total points, then by the lower player id, so every run is repeatable.
 
 The rules (decided 2026-10-22, see METHODS.md):
@@ -17,9 +18,10 @@ The rules (decided 2026-10-22, see METHODS.md):
     1. replace any player missing from FPL's data (he can't be fielded);
     2. then make the swap that raises the score the most, again and again, while free transfers
        are left and a swap is an improvement. Unused free transfers are saved.
-- Players with a 0% chance of playing are never bought.
-- Lineup, by score: best goalkeeper, then the minimum of each outfield position, then the best
-  remaining outfield players. Captain and vice-captain are the two best-scoring starters.
+- Players whose score is marked down to nothing (25% chance or less) are never bought.
+- Lineup: fully fit players first, then by score. Best goalkeeper, then the minimum of each
+  outfield position, then the best remaining outfield players. Captain and vice-captain are the
+  first two starters in that order, so a doubtful player is never captain while a fit one starts.
 Each answer goes through the same validator as the AI teams' answers.
 """
 
@@ -52,9 +54,18 @@ def chance_of_playing(element: dict) -> int:
     return chance
 
 
+# Share of a player's score kept at each chance of playing (FPL uses 0, 25, 50, 75 and 100).
+FITNESS_WEIGHT = {100: 1.0, 75: 0.5, 50: 0.25, 25: 0.0, 0: 0.0}
+
+
+def fitness_weight(element: dict) -> float:
+    chance = chance_of_playing(element)
+    return FITNESS_WEIGHT[max(level for level in FITNESS_WEIGHT if level <= chance)]
+
+
 def ranking(bot: Bot, elements: list[dict]) -> dict[int, tuple]:
     """A sort key per player id: higher is better. The first part is the player's score."""
-    return {p["id"]: (round(float(p.get(bot.ranks_by) or 0) * chance_of_playing(p) / 100, 3),
+    return {p["id"]: (round(float(p.get(bot.ranks_by) or 0) * fitness_weight(p), 3),
                       p.get("total_points") or 0, -p["id"]) for p in elements}
 
 
@@ -158,8 +169,8 @@ def choose_transfers(rank: dict, buyable_ids: set[int], state: TeamState, player
 
 # --- lineup -------------------------------------------------------------------------------------
 
-def choose_lineup(squad: list[int], rank: dict, players: dict[int, Player], rules: Rules) -> dict:
-    order = sorted(squad, key=lambda pid: rank[pid], reverse=True)
+def choose_lineup(squad: list[int], rank: dict, fit: set[int], players: dict[int, Player], rules: Rules) -> dict:
+    order = sorted(squad, key=lambda pid: (pid in fit, rank[pid]), reverse=True)
     goalkeeper = next(pos for pos, p in rules.positions.items() if p.max_play == 1 and p.squad_count == 2)
     xi = [next(pid for pid in order if players[pid].position == goalkeeper)]
     for pos, position in rules.positions.items():
@@ -179,8 +190,8 @@ def choose_lineup(squad: list[int], rank: dict, players: dict[int, Player], rule
 def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, Player], rules: Rules) -> dict:
     """The bot's answer, in the same format as an AI team's answer."""
     rank = ranking(bot, elements)
-    chance = {p["id"]: chance_of_playing(p) for p in elements}
-    buyable = {pid for pid in players if chance.get(pid, 0) > 0}
+    buyable = {p["id"] for p in elements if p["id"] in players and fitness_weight(p) > 0}
+    fit = {p["id"] for p in elements if chance_of_playing(p) == 100}
     if not state.has_squad:
         squad = build_squad(rank, buyable, players, rules)
         answer = {"squad": squad}
@@ -188,5 +199,5 @@ def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, 
         transfers = choose_transfers(rank, buyable, state, players, rules)
         squad = [pid for pid in state.squad if pid not in {t["out"] for t in transfers}] + [t["in"] for t in transfers]
         answer = {"transfers": transfers}
-    return {**answer, **choose_lineup(squad, rank, players, rules), "chip": None,
+    return {**answer, **choose_lineup(squad, rank, fit, players, rules), "chip": None,
             "reasoning": f"Rule-based: {bot.description}."}

@@ -32,13 +32,12 @@ def set_chance(elements, pid, status, chance):
     return elements
 
 
-def test_score_is_weighed_by_chance_of_playing():
-    elements = [{"id": 1, "form": "8.0", "status": "a", "chance_of_playing_next_round": None},
-                {"id": 2, "form": "8.0", "status": "d", "chance_of_playing_next_round": 75},
-                {"id": 3, "form": "8.0", "status": "i", "chance_of_playing_next_round": 0},
-                {"id": 4, "form": "8.0", "status": "u", "chance_of_playing_next_round": None}]
+def test_score_is_marked_down_by_chance_of_playing():
+    news = [("a", None), ("d", 75), ("d", 50), ("d", 25), ("i", 0), ("u", None)]
+    elements = [{"id": i, "form": "8.0", "status": status, "chance_of_playing_next_round": chance}
+                for i, (status, chance) in enumerate(news, start=1)]
     rank = bots.ranking(bots.BOTS[0], elements)
-    assert [rank[pid][0] for pid in (1, 2, 3, 4)] == [8.0, 6.0, 0.0, 0.0]
+    assert [rank[pid][0] for pid in range(1, 7)] == [8.0, 4.0, 2.0, 0.0, 0.0, 0.0]
 
 
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
@@ -48,8 +47,9 @@ def test_first_squad_is_legal_and_captain_is_best_scoring(bot, week):
     assert result.ok, result.errors
     assert answer["chip"] is None
     rank = bots.ranking(bot, elements)
-    assert answer["captain"] == max(answer["starting_xi"], key=lambda pid: rank[pid])
-    assert all(bots.chance_of_playing(e) > 0 for e in elements if e["id"] in answer["squad"])
+    fit = [pid for pid in answer["starting_xi"] if bots.chance_of_playing(next(e for e in elements if e["id"] == pid)) == 100]
+    assert answer["captain"] == max(fit, key=lambda pid: rank[pid])
+    assert all(bots.fitness_weight(e) > 0 for e in elements if e["id"] in answer["squad"])
 
 
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
@@ -66,17 +66,15 @@ def test_injured_player_is_sold_and_no_hits(bot, week):
     assert len(answer["transfers"]) == 1 and result.hit_points == 0
 
 
-def test_slightly_doubtful_star_is_kept_but_benched_if_very_doubtful(week):
+@pytest.mark.parametrize("chance", [75, 25])
+def test_doubtful_player_is_never_captain_while_a_fit_player_starts(chance, week):
     _, players, rules = week
     bot = bots.BOTS[0]
     _, _, state = first_week(bot, week)
-    state.free_transfers = 1
-    star = state.lineup.captain
-    answer = bots.decide(bot, state, set_chance(week[0], star, "d", 75), players, rules)
-    assert star not in {t["out"] for t in answer["transfers"]}   # 75% of a top score is still worth keeping
     state.free_transfers = 0
-    answer = bots.decide(bot, state, set_chance(week[0], star, "d", 25), players, rules)
-    assert answer["captain"] != star
+    star = state.lineup.captain
+    answer = bots.decide(bot, state, set_chance(week[0], star, "d", chance), players, rules)
+    assert star not in (answer["captain"], answer["vice_captain"])
 
 
 def test_no_free_transfers_means_no_transfers(week):
