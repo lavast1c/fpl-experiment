@@ -8,7 +8,7 @@ never disagree with the validator.
 
 import json
 
-from . import config
+from . import config, memory
 from .rules import Rules
 from .team import Player, TeamState, selling_price
 from .validator import Result, find_chip
@@ -97,7 +97,7 @@ def team_text(state: TeamState, players: dict[int, Player], rules: Rules, gw: in
     return "\n".join(lines)
 
 
-def answer_text(first_week: bool, memory_fields: str = "") -> str:
+def answer_text(first_week: bool, memory_kind: str = "none") -> str:
     if first_week:
         example = {"squad": ["15 player ids"], "starting_xi": ["11 player ids"], "bench_order": ["4 player ids"],
                    "captain": "player id", "vice_captain": "player id", "chip": None,
@@ -109,6 +109,14 @@ def answer_text(first_week: bool, memory_fields: str = "") -> str:
                    "chip": None, "reasoning": "at most 80 words"}
         squad_line = ("- transfers: a list of {\"out\": id, \"in\": id} pairs, or [] for no transfers. "
                       "The rest of your answer refers to your squad after these transfers.")
+    if memory_kind == "self":
+        example["updated_notes"] = ["short note", "another note"]
+    elif memory_kind == "verified":
+        example["lessons"] = {"keep": ["L1"], "new": ["text of a new lesson"]}
+        example["captain_lesson_ids"] = ["L1"]
+        for t in example.get("transfers", []):
+            t.update({"out_lesson_ids": [], "in_lesson_ids": ["L1"]})
+    memory_fields = memory.answer_fields(memory_kind) if memory_kind != "none" else ""
     return "\n".join([
         "Reply with only a JSON object with these fields:",
         squad_line,
@@ -125,7 +133,7 @@ def answer_text(first_week: bool, memory_fields: str = "") -> str:
 
 
 def build_prompt(state: TeamState, players: dict[int, Player], rules: Rules, gw: int, deadline: str,
-                 players_table: str, memory_section: str = "", memory_fields: str = "") -> str:
+                 players_table: str, memory_section: str = "", memory_kind: str = "none") -> str:
     replacements = {
         "gameweek": str(gw),
         "deadline": deadline,
@@ -133,7 +141,7 @@ def build_prompt(state: TeamState, players: dict[int, Player], rules: Rules, gw:
         "team": team_text(state, players, rules, gw),
         "memory": f"\n{memory_section}\n" if memory_section else "",
         "players": players_table,
-        "answer": answer_text(not state.has_squad, memory_fields),
+        "answer": answer_text(not state.has_squad, memory_kind),
     }
     text = load_template("decision.md")
     for key, value in replacements.items():
@@ -165,8 +173,9 @@ def _ids(description: str) -> dict:
     return {"type": "array", "items": {"type": "integer"}, "description": description}
 
 
-def answer_schema(first_week: bool, extra_properties: dict | None = None) -> dict:
+def answer_schema(first_week: bool, memory_kind: str = "none") -> dict:
     """The JSON shape of an answer. It checks types only; FPL rules are checked by the validator."""
+    extra_properties, transfer_extra = memory.schema_extras(memory_kind) if memory_kind != "none" else ({}, {})
     properties = {
         "starting_xi": _ids("ids of the 11 starters"),
         "bench_order": _ids("ids of the 4 substitutes, goalkeeper first"),
@@ -178,9 +187,10 @@ def answer_schema(first_week: bool, extra_properties: dict | None = None) -> dic
     if first_week:
         properties = {"squad": _ids("ids of all 15 players"), **properties}
     else:
+        transfer = {"out": {"type": "integer"}, "in": {"type": "integer"}, **transfer_extra}
         properties = {"transfers": {"type": "array", "items": {
-            "type": "object", "properties": {"out": {"type": "integer"}, "in": {"type": "integer"}},
-            "required": ["out", "in"], "additionalProperties": False}}, **properties}
-    properties.update(extra_properties or {})
+            "type": "object", "properties": transfer, "required": list(transfer), "additionalProperties": False}},
+            **properties}
+    properties.update(extra_properties)
     return {"type": "object", "properties": properties, "required": list(properties),
             "additionalProperties": False}

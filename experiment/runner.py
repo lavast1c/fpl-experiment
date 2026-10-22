@@ -11,11 +11,11 @@ Per gameweek N, inside that folder:
 
 import random
 import zlib
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import config, fetch
+from . import config, fetch, memory
 from .agents import CallContext, ClaudeAgent, MockAgent
 from .files import read_json, read_json_gz, write_csv, write_json, write_json_gz
 from .gameweeks import deadline, get_event, hours_until_deadline
@@ -75,10 +75,10 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         raise SystemExit(f"The gameweek {gw} deadline has passed. Nothing was run.")
     if hours < config.DEADLINE_WARNING_HOURS:
         print(f"WARNING: the deadline is only {hours:.1f} hours away.")
-    when = f"{deadline(events, gw):%Y-%m-%d %H:%M}"
-    players = players_from_bootstrap(bootstrap)
-    rules = load_rules()
-    system = load_template("system.txt")
+    week = Week(gw=gw, when=f"{deadline(events, gw):%Y-%m-%d %H:%M}", base=base, mock=mock,
+                system=load_template("system.txt"), table=table, players=players_from_bootstrap(bootstrap),
+                rules=load_rules(),
+                expected={p["id"]: float(p.get("ep_next") or 0) for p in bootstrap["elements"]})
     print(f"Gameweek {gw}: {'MOCK' if mock else 'REAL'} run for {len(teams)} teams "
           f"(prompt {config.PROMPT_VERSION}, effort {config.EFFORT}, snapshot filter '{meta['filter']}')")
 
@@ -88,30 +88,67 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         if decision_path.exists():
             print(f"  {team.id}: already decided, skipped")
             continue
-        outcome = run_team(team, gw, when, base, mock, system, table, players, rules)
+        outcome = run_team(team, week)
         if outcome is not None:
             summary.append(outcome)
     print_token_summary(summary)
 
 
-def run_team(team: Team, gw: int, when: str, base: Path, mock: bool, system: str, table: str,
-             players: dict, rules) -> dict | None:
+@dataclass
+class Week:
+    """Everything that is the same for every team in one gameweek's run."""
+    gw: int
+    when: str                    # deadline text
+    base: Path                   # data/ or data/mock/
+    mock: bool
+    system: str
+    table: str                   # the player table
+    players: dict
+    rules: object
+    expected: dict[int, float]   # ep_next per player at decision time (for verified memory)
+
+
+def last_week_results(base: Path, team_id: str, gw: int) -> dict | None:
+    """This team's results for gameweek gw-1, for the memory section (None if it didn't play then)."""
+    if not (base / "decisions" / f"gw{gw - 1}" / f"{team_id}.json").exists():
+        return None
+    path = base / "scores" / f"gw{gw - 1}.json"
+    if not path.exists():
+        return {"gw": gw - 1, "missing": True}
+    scores = read_json(path)
+    row = next((r for r in scores["teams"] if r["team"] == team_id), None)
+    return {**row, "average": scores.get("average")} if row else {"gw": gw - 1, "missing": True}
+
+
+def run_team(team: Team, week: Week) -> dict | None:
+    gw, base, players, rules = week.gw, week.base, week.players, week.rules
     state = start_gameweek(load_state(base, team.id))
     first_week = not state.has_squad
     max_attempts = 1 + MAX_RETRIES + (FIRST_WEEK_EXTRA_RETRIES if first_week else 0)
-    base_prompt = build_prompt(state, players, rules, gw, when, table)
-    schema = answer_schema(first_week)
-    if mock:
+    kind = team.memory
+    mem, section = None, ""
+    if kind != "none":
+        mem = memory.load_memory(base, team.id, kind)
+        last = last_week_results(base, team.id, gw)
+        if last and last.get("missing"):
+            print(f"  WARNING {team.id}: gameweek {gw - 1} has not been scored, so its results can't be shown.")
+        section = memory.memory_section(kind, mem, last)
+    base_prompt = build_prompt(state, players, rules, gw, week.when, week.table, section, kind)
+    schema = answer_schema(first_week, kind)
+    if week.mock:
         agent = MockAgent(team.model, seed=zlib.crc32(f"{team.id}-{gw}".encode()))
     else:
         agent = ClaudeAgent(team.model)
     log_dir = base / "logs" / f"gw{gw}" / team.id
-    write_json_gz(log_dir / "prompt.txt.gz", {"system": system, "prompt": base_prompt, "schema": schema})
+    write_json_gz(log_dir / "prompt.txt.gz", {"system": week.system, "prompt": base_prompt, "schema": schema})
 
     prompt, attempts, accepted = base_prompt, [], None
     for number in range(1, max_attempts + 1):
-        record = agent.call(system, prompt, schema, CallContext(state, players, rules, gw, is_retry=number > 1))
+        context = CallContext(state, players, rules, gw, is_retry=number > 1, memory_kind=kind, memory=mem)
+        record = agent.call(week.system, prompt, schema, context)
         result = None if record.error else validate(record.answer, state, players, rules, gw)
+        if result is not None and kind != "none":
+            result.errors += memory.check_answer(kind, record.answer, mem)   # notes/lessons rules
         log = {"attempt": number, "retry_text": prompt[len(base_prompt):], **asdict(record),
                "errors": [asdict(e) for e in result.errors] if result else [],
                "stale_picks": result.stale_picks if result else [], "notes": result.notes if result else []}
@@ -132,6 +169,8 @@ def run_team(team: Team, gw: int, when: str, base: Path, mock: bool, system: str
     if accepted:
         decision, result = accepted
         new_state, outcome = apply(decision, state, players, rules, gw, result), "accepted"
+        if kind != "none":
+            mem = memory.apply_answer(kind, decision, mem, gw, week.expected)
     else:
         decision = no_change_decision(state)
         result = validate(decision, state, players, rules, gw) if decision else None
@@ -141,9 +180,11 @@ def run_team(team: Team, gw: int, when: str, base: Path, mock: bool, system: str
             decision, new_state, outcome = None, state, "no_squad" if first_week else "no_change_failed"
 
     save_state(base, new_state, gw)
+    if kind != "none":
+        memory.save_memory(base, team.id, mem, gw)   # unchanged if every attempt failed
     summary = {
         "team": team.id, "model": team.model, "memory": team.memory, "gw": gw,
-        "prompt_version": config.PROMPT_VERSION, "effort": config.EFFORT, "mock": mock,
+        "prompt_version": config.PROMPT_VERSION, "effort": config.EFFORT, "mock": week.mock,
         "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "first_week": first_week, "outcome": outcome, "attempts": len(attempts), "max_attempts": max_attempts,
         "errors_by_attempt": [[e["code"] for e in a["errors"]] for a in attempts],
@@ -179,12 +220,14 @@ def print_token_summary(summaries: list[dict]) -> None:
 
 # --- score -------------------------------------------------------------------------------------
 
-def gameweek_is_final(gw: int) -> bool:
-    """FPL has finished the gameweek: every day's bonus points added and the event's data checked."""
+def gameweek_is_final(gw: int) -> tuple[bool, dict]:
+    """FPL has finished the gameweek: every day's bonus points added and the event's data checked.
+    Also returns the fresh bootstrap data (it holds FPL's average score for the gameweek)."""
     bootstrap, _ = fetch.get_bootstrap()
     status = fetch.get("event-status/", fetch.latest_bootstrap()[1])
     days = [s for s in status.get("status", []) if s.get("event") == gw]
-    return bool(days) and all(s.get("bonus_added") for s in days) and get_event(bootstrap["events"], gw)["data_checked"]
+    final = bool(days) and all(s.get("bonus_added") for s in days) and get_event(bootstrap["events"], gw)["data_checked"]
+    return final, bootstrap
 
 
 def fake_live(players: dict, gw: int) -> dict[int, LivePlayer]:
@@ -197,6 +240,42 @@ def fake_live(players: dict, gw: int) -> dict[int, LivePlayer]:
     return live
 
 
+CSV_FIELDS = ["team", "gw", "points", "hit_points", "net_points", "captain", "auto_subs", "bench_points", "chip"]
+
+
+def _team_row(team: Team, gw: int, decision: dict, state: TeamState, players: dict, positions: dict,
+              live: dict, rules) -> dict:
+    """One team's score, plus the details memory teams see next week."""
+    if not state.has_squad or state.lineup is None:
+        return {"team": team.id, "gw": gw, "points": 0, "hit_points": 0, "net_points": 0, "captain": None,
+                "auto_subs": 0, "bench_points": 0, "chip": None, "players": [], "transfers": [],
+                "auto_subs_detail": []}
+    result = score(state.lineup, decision["chip"], positions, live, rules)
+    name = lambda pid: players[pid].name if pid in players else str(pid)
+    pts = lambda pid: live[pid].points if pid in live else 0
+    lineup = state.lineup
+    roles = {pid: "starter" for pid in lineup.starting_xi}
+    roles.update({pid: f"bench {i}" for i, pid in enumerate(lineup.bench_order, start=1)})
+    # Always show the chosen captain and vice-captain, and who actually got the multiplier (if anyone).
+    roles[lineup.captain] += (f", captain x{result.multiplier}" if result.captain == lineup.captain
+                              else ", captain (didn't play)")
+    roles[lineup.vice_captain] += (f", vice-captain, took the armband x{result.multiplier}"
+                                   if result.captain == lineup.vice_captain else ", vice-captain")
+    for out, came_in in result.auto_subs:
+        roles[out] += ", subbed off (didn't play)"
+        roles[came_in] += ", came on as automatic sub"
+    transfers = [{"out": t["out"], "out_name": name(t["out"]), "out_points": pts(t["out"]),
+                  "in": t["in"], "in_name": name(t["in"]), "in_points": pts(t["in"])}
+                 for t in (decision["decision"] or {}).get("transfers", [])] if decision["outcome"] == "accepted" else []
+    return {"team": team.id, "gw": gw, "points": result.points, "hit_points": decision["hit_points"],
+            "net_points": result.points - decision["hit_points"], "captain": result.captain,
+            "auto_subs": len(result.auto_subs), "bench_points": result.bench_points, "chip": decision["chip"],
+            "players": [{"id": pid, "name": name(pid), "points": pts(pid), "role": roles[pid]}
+                        for pid in lineup.starting_xi + lineup.bench_order],
+            "transfers": transfers,
+            "auto_subs_detail": [f"{name(o)} off, {name(i)} on" for o, i in result.auto_subs]}
+
+
 def score_gameweek(gw: int, mock: bool) -> list[dict]:
     base = base_dir(mock)
     bootstrap, _, _ = gameweek_inputs(gw, mock)
@@ -204,31 +283,33 @@ def score_gameweek(gw: int, mock: bool) -> list[dict]:
     positions = {pid: p.position for pid, p in players.items()}
     rules = load_rules()
     if mock and not get_event(bootstrap["events"], gw)["finished"]:
-        live, source = fake_live(players, gw), "fake points (mock)"
+        live, source, average = fake_live(players, gw), "fake points (mock)", None
     else:
-        if not gameweek_is_final(gw):
+        final, fresh = gameweek_is_final(gw)
+        if not final:
             raise SystemExit(f"Gameweek {gw} is not final yet (bonus points or data checks pending). Try later.")
         live, source = live_from_api(fetch.get(f"event/{gw}/live/", gw)), "official points"
+        average = get_event(fresh["events"], gw).get("average_entry_score")
 
     rows = []
     for team in TEAMS:
         path = base / "decisions" / f"gw{gw}" / f"{team.id}.json"
         if not path.exists():
             continue
-        decision = read_json(path)
         state = TeamState.load(base / "teams" / team.id / f"gw{gw}.json")
-        if not state.has_squad or state.lineup is None:
-            rows.append({"team": team.id, "gw": gw, "points": 0, "hit_points": 0, "net_points": 0,
-                         "captain": None, "auto_subs": 0, "bench_points": 0, "chip": None})
-            continue
-        result = score(state.lineup, decision["chip"], positions, live, rules)
-        rows.append({"team": team.id, "gw": gw, "points": result.points, "hit_points": decision["hit_points"],
-                     "net_points": result.points - decision["hit_points"], "captain": result.captain,
-                     "auto_subs": len(result.auto_subs), "bench_points": result.bench_points,
-                     "chip": decision["chip"]})
-    write_json(base / "scores" / f"gw{gw}.json", {"gw": gw, "source": source, "teams": rows})
-    write_csv(base / "scores" / f"gw{gw}.csv", rows, list(rows[0]) if rows else ["team"])
-    print(f"Gameweek {gw} scores ({source}):")
+        rows.append(_team_row(team, gw, read_json(path), state, players, positions, live, rules))
+        if team.memory == "verified":
+            # Check the decisions that cited lessons this gameweek; remove lessons that fail the rule.
+            mem = memory.load_memory(base, team.id, "verified")
+            mem = memory.evaluate(mem, gw, {pid: lp.points for pid, lp in live.items()},
+                                  base / "memory" / team.id / "evaluations.csv")
+            memory.save_memory(base, team.id, mem)
+            for notice in mem["removed_notices"]:
+                print(f"  {team.id}: {notice}")
+
+    write_json(base / "scores" / f"gw{gw}.json", {"gw": gw, "source": source, "average": average, "teams": rows})
+    write_csv(base / "scores" / f"gw{gw}.csv", [{k: r[k] for k in CSV_FIELDS} for r in rows], CSV_FIELDS)
+    print(f"Gameweek {gw} scores ({source}" + (f", FPL average {average}" if average is not None else "") + "):")
     for row in sorted(rows, key=lambda r: -r["net_points"]):
         print(f"  {row['team']:<11} {row['net_points']:>4}" + (f"  (hit -{row['hit_points']})" if row["hit_points"] else ""))
     return rows

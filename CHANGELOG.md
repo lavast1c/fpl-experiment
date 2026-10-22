@@ -17,3 +17,5 @@
 - `run.py check-scorer`: one-off check against official scores of random public teams (passed exactly).
 - Official player points for GW1-7 (`event/{gw}/live/`).
 - Prompt v1, forced answer format, real and mock agents, `run.py decide` / `score` / `test-calls`.
+- Memory (`experiment/memory.py`): self-written notes and verified lessons with citations, lesson checks against expected points, removal of lessons that keep underperforming, and last week's results in memory teams' prompts.
+- Score files now include each player's points and role, transfers, automatic substitutions and FPL's average score.

@@ -63,6 +63,8 @@ class CallContext:
     rules: Rules
     gw: int
     is_retry: bool = False
+    memory_kind: str = "none"
+    memory: dict | None = None
 
 
 def _parse_answer(text: str):
@@ -153,7 +155,9 @@ class MockAgent:
     (fewer on retries), so retries, error logging and the no-change fallback all get exercised.
     """
 
-    MISTAKES = ("club_limit", "captain_not_in_xi", "unknown_player", "over_budget", "not_an_object")
+    MISTAKES = ("club_limit", "captain_not_in_xi", "unknown_player", "over_budget", "not_an_object",
+                "memory_too_long", "unknown_lesson")
+    WORDS = "form fixtures captain bench rotation price injury value differential template minutes".split()
 
     def __init__(self, model: str, seed: int, illegal_rate: float = 0.3, retry_illegal_rate: float = 0.1,
                  chip_rate: float = 0.15):
@@ -163,6 +167,8 @@ class MockAgent:
 
     def call(self, system: str, prompt: str, schema: dict, context: CallContext) -> CallRecord:
         answer = self._legal_answer(context)
+        if answer is not None and context.memory_kind != "none":
+            answer = self._add_memory(answer, context)
         rate = self.retry_illegal_rate if context.is_retry else self.illegal_rate
         if answer is None or self.rng.random() < rate:
             answer = self._break(answer or {}, context)
@@ -212,6 +218,22 @@ class MockAgent:
             chip = self.rng.choice(names) if names else None
         return {"transfers": transfers, **self._lineup(sorted(squad), ctx), "chip": chip, "reasoning": "mock"}
 
+    def _note(self) -> str:
+        return " ".join(self.rng.choice(self.WORDS) for _ in range(self.rng.randint(4, 15)))
+
+    def _add_memory(self, answer: dict, ctx: CallContext) -> dict:
+        """Random notes, or for verified memory: keep some lessons, add some, cite some."""
+        if ctx.memory_kind == "self":
+            return {**answer, "updated_notes": [self._note() for _ in range(self.rng.randint(0, config.MEMORY_MAX_LESSONS))]}
+        active = [l["id"] for l in ctx.memory["lessons"] if l["status"] == "active"]
+        keep = [i for i in active if self.rng.random() < 0.8]
+        new = [self._note() for _ in range(self.rng.randint(0, max(0, min(2, config.MEMORY_MAX_LESSONS - len(keep)))))]
+        cite = lambda: [i for i in active if self.rng.random() < 0.3]
+        answer = {**answer, "lessons": {"keep": keep, "new": new}, "captain_lesson_ids": cite()}
+        if "transfers" in answer:
+            answer["transfers"] = [{**t, "out_lesson_ids": cite(), "in_lesson_ids": cite()} for t in answer["transfers"]]
+        return answer
+
     def _lineup(self, squad: list[int], ctx: CallContext) -> dict:
         by_position = {pos.id: [pid for pid in squad if ctx.players[pid].position == pos.id]
                        for pos in ctx.rules.positions.values()}
@@ -229,7 +251,13 @@ class MockAgent:
         if mistake == "not_an_object" or not answer:
             return ["mock answer that is not an object"]
         answer = json.loads(json.dumps(answer))
-        if mistake == "captain_not_in_xi":
+        if mistake == "memory_too_long" and ctx.memory_kind == "self":
+            answer["updated_notes"] = [self._note() for _ in range(config.MEMORY_MAX_LESSONS + 1)]
+        elif mistake == "memory_too_long" and ctx.memory_kind == "verified":
+            answer["lessons"]["new"] = [" ".join(["word"] * 200)] * 2
+        elif mistake == "unknown_lesson" and ctx.memory_kind == "verified":
+            answer["captain_lesson_ids"] = ["L999"]
+        elif mistake == "captain_not_in_xi":
             answer["captain"] = answer["bench_order"][-1]
         elif mistake == "unknown_player":
             if "squad" in answer:

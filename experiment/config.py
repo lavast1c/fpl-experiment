@@ -69,3 +69,9 @@ DEADLINE_WARNING_HOURS = 3              # `decide` warns when the deadline is cl
 # Real runs write into DATA_DIR (committed: the open dataset). Mock runs write into MOCK_DIR
 # (git-ignored), so test data can never mix with real results.
 MOCK_DIR = DATA_DIR / "mock"
+
+# --- Memory (phase 5) -----------------------------------------------------
+MEMORY_MAX_LESSONS = 8          # notes / lessons a memory team may keep (brief: ~8)
+MEMORY_MAX_WORDS = 300          # total words across all notes / lessons (brief: ~300)
+LESSON_MIN_USES = 5             # verified memory: decisions needed before a lesson can be removed
+LESSON_REMOVE_BELOW = -1.0      # ... removed if its decisions averaged below this (points vs expected)

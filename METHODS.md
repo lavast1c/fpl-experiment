@@ -87,3 +87,28 @@ Saved in `data/checks/phase4_test_calls_2026-10-22/`. The account is on the Clau
   - Sonnet's answer broke the club limit (4 players from one club, despite its reasoning claiming "max 3"). In a real run it would get a retry.
   - Each call took 17–22 s.
 - **Tokens.** Each decision call reported about 64,800 input tokens and 1,400–4,000 output tokens (Haiku used the most). The forced answer format makes each call two model turns, and the input total counts both. So the prompt itself is probably about 32,000 tokens: the earlier estimate of characters ÷ 3.5 (~21,800) was too low, because the number-heavy table packs fewer characters into each token. From now on, cached and uncached input tokens are logged separately, to show how much of the second reading comes from the prompt cache.
+
+## 2026-10-22: Phase 5, memory systems
+
+Decided with the project owner. Code in `experiment/memory.py`. These rules stay fixed all season.
+
+- **What memory teams see.** Each memory team's prompt has a "Your memory" section, which is the only part of the prompt that differs between teams. It contains:
+  - Last gameweek's results: the team's net points, any transfer cost, FPL's average manager score (`average_entry_score`), the chip played, each transfer with both players' points, every player's points and role (including who took the captaincy), and the automatic substitutions.
+  - The team's notes (self-written) or lessons (verified).
+  - The brief's sentence: "Your notes are advice, not commitments. Re-evaluate every decision from scratch."
+  - In the first week, the results line says there are none yet.
+- **Limits.** At most 8 notes or lessons and 300 words in total, counting kept and new lessons together. Going over is a **rule break**: the answer is rejected and gets a retry, like an illegal transfer. We never cut or edit the text ourselves, so what the agent remembers is entirely its own choice.
+- **Self-written memory.** The answer has `updated_notes`, a list of texts that replaces the old notes completely.
+- **Verified memory: lesson format.** The answer has `lessons: {"keep": [ids], "new": [texts]}`. A kept lesson's text can't be changed; to reword one, the agent drops it and adds a new one. New lessons get the next free id (L1, L2, ...), and ids are never reused. Lessons not kept are marked `dropped_by_agent`.
+- **Verified memory: citations.** Every transfer has `out_lesson_ids` and `in_lesson_ids`, and the answer has `captain_lesson_ids`. Only lessons that existed before this week's answer can be cited, so a new lesson can be cited from the next week on. Citing a lesson that doesn't exist is a rule break and gets a retry.
+- **Formula.** Each cited decision is valued against FPL's `ep_next` for that player, taken from the same snapshot the agent saw at decision time:
+  - player bought: value = actual points − ep_next
+  - player sold: value = ep_next − actual points (selling someone who then disappoints is good)
+  - captain: value = actual points − ep_next (the player's own points, before doubling)
+
+  A lesson's record is the average value over every decision that cited it. Several decisions in one week each count once. Players not in the live data count as 0 points. Every valued decision is saved in `memory/{team}/evaluations.csv`.
+- **Removal rule (changed from the brief).** The brief said to remove a lesson after at least 3 uses if its decisions averaged below expectation. We use **at least 5 uses and an average below −1.0 point**. Reason: single FPL scores are very noisy, so with 3 uses and a threshold of 0, roughly half of all lessons would be removed by luck alone, even good ones. That would make the verified-memory teams test our noise rather than their lessons.
+- **Telling the agent.** A removed lesson disappears from the list. The next prompt says which lesson was removed, its text, how many decisions cited it and their average. Each notice is shown once.
+- **Track record shown.** Verified agents see each active lesson's record, for example "used 4 time(s), average +1.2 points vs expected" or "not used yet". This tells the agent how its lessons are doing. It is part of what makes the memory "verified".
+- **When lessons are checked.** Lessons are checked when the gameweek is scored (`run.py score`), so the results are ready before the next decision.
+- **Mock test.** Ten mock gameweeks (8–17, fake points) for all nine teams ran without errors. Two lessons were removed by the rule, and the removal notice appeared in the next prompt. 12 new tests cover the limits, citations, the formula, the removal rule, the prompt text and retries.
