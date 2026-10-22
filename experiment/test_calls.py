@@ -53,7 +53,9 @@ def _summary(record) -> dict:
         "model_requested": record.model_requested, "models_used": record.models_used,
         "model_mismatch": record.model_mismatch, "error": record.error,
         "num_turns": output.get("num_turns"), "permission_denials": output.get("permission_denials"),
-        "input_tokens": record.input_tokens, "output_tokens": record.output_tokens,
+        "input_tokens": record.input_tokens, "cache_read_tokens": record.cache_read_tokens,
+        "cache_creation_tokens": record.cache_creation_tokens, "output_tokens": record.output_tokens,
+        "usage": output.get("usage"), "model_usage": output.get("modelUsage"),
         "duration_ms": record.duration_ms, "api_equivalent_usd_not_billed": record.api_equivalent_usd,
         "answer": record.answer, "command": record.command, "stderr_tail": record.raw_stderr[-1000:],
     }

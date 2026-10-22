@@ -1,0 +1,80 @@
+{
+  "model_requested": "claude-haiku-5-5",
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "model_mismatch": false,
+  "error": null,
+  "num_turns": 2,
+  "permission_denials": [],
+  "input_tokens": 64763,
+  "output_tokens": 4017,
+  "duration_ms": 20009,
+  "api_equivalent_usd_not_billed": 0.014960900000000001,
+  "answer": {
+    "squad": [
+      384,
+      572,
+      115,
+      504,
+      8,
+      31,
+      87,
+      101,
+      400,
+      13,
+      129,
+      427,
+      411,
+      79,
+      165
+    ],
+    "starting_xi": [
+      384,
+      115,
+      504,
+      8,
+      31,
+      101,
+      400,
+      13,
+      129,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      427,
+      165,
+      87
+    ],
+    "captain": 411,
+    "vice_captain": 101,
+    "chip": null,
+    "reasoning": "Budget squad at £98.3m, max 3 per club. Picked the highest FPL expected points per price: Haaland (ep 9.5) captain, Henderson (ep 10.5) vice. Strong fixtures from Doku, Rice, Ayari, Vuskovic, De Cuyper and Calafiori, with Donnarumma in goal. Cheap bench keeps the squad balanced. No chip this week; I'm saving the bench boost and triple captain for later."
+  },
+  "command": [
+    "C:\\Users\\vihaa\\.local\\bin\\claude.EXE",
+    "-p",
+    "--model",
+    "claude-haiku-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<634 characters>"
+  ],
+  "stderr_tail": "",
+  "validator_errors": []
+}

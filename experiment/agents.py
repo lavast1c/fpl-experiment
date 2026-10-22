@@ -46,8 +46,11 @@ class CallRecord:
     error: str | None = None         # the call itself failed (timeout, CLI error, unreadable output)
     models_used: list[str] = field(default_factory=list)
     model_mismatch: bool = False
-    input_tokens: int = 0            # includes cached input
+    input_tokens: int = 0            # all input, including cached
+    cache_read_tokens: int = 0       # part of input_tokens re-read from the prompt cache (counts less)
+    cache_creation_tokens: int = 0   # part of input_tokens written to the prompt cache
     output_tokens: int = 0
+    num_turns: int = 0               # model turns in the call (the forced answer format adds one)
     api_equivalent_usd: float = 0.0  # what the CLI says the call would cost on the API; NOT billed
     mock: bool = False
 
@@ -118,9 +121,12 @@ class ClaudeAgent:
         record.models_used = sorted(usage)
         record.model_mismatch = record.models_used != [self.model]
         for numbers in usage.values():
+            record.cache_read_tokens += numbers.get("cacheReadInputTokens", 0)
+            record.cache_creation_tokens += numbers.get("cacheCreationInputTokens", 0)
             record.input_tokens += (numbers.get("inputTokens", 0) + numbers.get("cacheReadInputTokens", 0)
                                     + numbers.get("cacheCreationInputTokens", 0))
             record.output_tokens += numbers.get("outputTokens", 0)
+        record.num_turns = output.get("num_turns") or 0
         record.api_equivalent_usd = output.get("total_cost_usd") or 0.0
         if output.get("is_error"):
             record.error = f"CLI reported an error: {str(output.get('result'))[:500]}"

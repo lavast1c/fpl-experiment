@@ -74,3 +74,16 @@ Every methodological decision, with the date it was made. Once the season starts
 - **Logged per call:** the exact prompt, raw output, parsed answer, validator errors, stale picks, models used, input and output tokens, duration, and the CLI's API-equivalent cost figure (not billed; for information only). A token summary is printed after each run.
 - **Mock runs** use a fake agent (random legal answers, with deliberate mistakes on about 30% of first attempts) and are saved in `data/mock/`, which is git-ignored and never part of the dataset. A six-gameweek mock season (54 team-weeks) ran without problems. It covered retries, eight kinds of rule errors, stale picks, 45 transfers, 32 hit points and all four chips. Tests also cover the no-squad and no-change fallbacks and the free hit reverting.
 - **Scoring** (`run.py score`) only runs once FPL marks the gameweek final: bonus points added for every day of the gameweek, and the gameweek's data checked.
+
+## 2026-10-22: Phase 4 real test calls (6 calls, approved by the project owner)
+
+Saved in `data/checks/phase4_test_calls_2026-10-22/`. The account is on the Claude Pro plan.
+
+- **Models.** All three exact model IDs were accepted, and the CLI's `modelUsage` reported exactly the requested model every time (no mismatches). Opus is available on this plan. `--effort medium` was accepted by all three.
+- **No tools.** In the probe call, every model reported that its only tool was the structured-output tool used for the forced answer format. None could list files, read files or search the web, and none tried a workaround. No permission requests were made.
+- **Isolation.** Each call ran in a new empty temporary folder. The CLI still tells the model the working directory path and today's date. This is the same for every agent and reveals nothing about the project.
+- **Real decisions** (gameweek 8 first-week prompt; test only, not part of the experiment):
+  - Haiku and Opus gave legal squads first time.
+  - Sonnet's answer broke the club limit (4 players from one club, despite its reasoning claiming "max 3"). In a real run it would get a retry.
+  - Each call took 17–22 s.
+- **Tokens.** Each decision call reported about 64,800 input tokens and 1,400–4,000 output tokens (Haiku used the most). The forced answer format makes each call two model turns, and the input total counts both. So the prompt itself is probably about 32,000 tokens: the earlier estimate of characters ÷ 3.5 (~21,800) was too low, because the number-heavy table packs fewer characters into each token. From now on, cached and uncached input tokens are logged separately, to show how much of the second reading comes from the prompt cache.
