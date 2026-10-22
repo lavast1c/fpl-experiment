@@ -24,30 +24,59 @@ def first_week(bot, week):
     return answer, result, apply(answer, state, players, rules, 8, result) if result.ok else None
 
 
+def set_chance(elements, pid, status, chance):
+    """A copy of the player data with one player's fitness news changed."""
+    elements = copy.deepcopy(elements)
+    element = next(e for e in elements if e["id"] == pid)
+    element["status"], element["chance_of_playing_next_round"] = status, chance
+    return elements
+
+
+def test_score_is_weighed_by_chance_of_playing():
+    elements = [{"id": 1, "form": "8.0", "status": "a", "chance_of_playing_next_round": None},
+                {"id": 2, "form": "8.0", "status": "d", "chance_of_playing_next_round": 75},
+                {"id": 3, "form": "8.0", "status": "i", "chance_of_playing_next_round": 0},
+                {"id": 4, "form": "8.0", "status": "u", "chance_of_playing_next_round": None}]
+    rank = bots.ranking(bots.BOTS[0], elements)
+    assert [rank[pid][0] for pid in (1, 2, 3, 4)] == [8.0, 6.0, 0.0, 0.0]
+
+
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
-def test_first_squad_is_legal_and_captain_is_best_ranked(bot, week):
+def test_first_squad_is_legal_and_captain_is_best_scoring(bot, week):
     elements, players, _ = week
     answer, result, _ = first_week(bot, week)
     assert result.ok, result.errors
     assert answer["chip"] is None
     rank = bots.ranking(bot, elements)
-    available_starters = [pid for pid in answer["starting_xi"] if players[pid].status == "a"]
-    assert answer["captain"] == max(available_starters, key=lambda pid: rank[pid])
+    assert answer["captain"] == max(answer["starting_xi"], key=lambda pid: rank[pid])
+    assert all(bots.chance_of_playing(e) > 0 for e in elements if e["id"] in answer["squad"])
 
 
 @pytest.mark.parametrize("bot", bots.BOTS, ids=lambda b: b.id)
 def test_injured_player_is_sold_and_no_hits(bot, week):
-    elements, players, rules = week
+    _, players, rules = week
     _, _, state = first_week(bot, week)
     state.free_transfers = 1
-    players = copy.deepcopy(players)
-    injured = state.lineup.starting_xi[2]
-    players[injured].status = "i"
+    injured = state.lineup.captain
+    elements = set_chance(week[0], injured, "i", 0)
     answer = bots.decide(bot, state, elements, players, rules)
     result = validate(answer, state, players, rules, 9)
     assert result.ok, result.errors
     assert answer["transfers"][0]["out"] == injured
     assert len(answer["transfers"]) == 1 and result.hit_points == 0
+
+
+def test_slightly_doubtful_star_is_kept_but_benched_if_very_doubtful(week):
+    _, players, rules = week
+    bot = bots.BOTS[0]
+    _, _, state = first_week(bot, week)
+    state.free_transfers = 1
+    star = state.lineup.captain
+    answer = bots.decide(bot, state, set_chance(week[0], star, "d", 75), players, rules)
+    assert star not in {t["out"] for t in answer["transfers"]}   # 75% of a top score is still worth keeping
+    state.free_transfers = 0
+    answer = bots.decide(bot, state, set_chance(week[0], star, "d", 25), players, rules)
+    assert answer["captain"] != star
 
 
 def test_no_free_transfers_means_no_transfers(week):

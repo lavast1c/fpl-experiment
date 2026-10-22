@@ -118,9 +118,9 @@ Decided with the project owner. Code in `experiment/memory.py`. These rules stay
 Decided with the project owner. Code in `experiment/bots.py`, `experiment/metrics.py` and `experiment/supabase_sync.py`.
 
 - **Bots.** The form bot ranks players by FPL `form`. The crowd bot ranks them by `selected_by_percent` (ownership). Ties go to the higher `total_points`, then the lower id, so runs are repeatable. Both use the same snapshot data as the agents, follow the same rules below, and go through the same validator.
-  - *First squad:* go down the ranking and buy each available player (status `a`) who still fits the position counts and the 3-per-club limit. A player is only bought if enough money is left to fill every remaining place with the cheapest available players.
-  - *Transfers:* the bots never take a −4 hit and never play chips. First they sell players who can't play (status `i`, `s`, `u`, `n`, or gone from the game) for the best-ranked affordable player in the same position. Then, while free transfers are left, they make the single swap with the biggest ranking gain, as long as the gain is positive. Unused transfers are saved. Doubtful players (status `d`) are not sold.
-  - *Lineup:* available players first, then by ranking. The best goalkeeper starts, then the minimum of each outfield position, then the best remaining outfield players. The bench goalkeeper comes first. Captain and vice-captain are the two best-ranked starters.
+  - *First squad:* go down the ranking and buy each player with a chance of playing above 0% who still fits the position counts and the 3-per-club limit. A player is only bought if enough money is left to fill every remaining place with the cheapest such players. (Changed the same day, see below.)
+  - *Transfers:* the bots never take a −4 hit and never play chips. While free transfers are left, they make the single swap with the biggest ranking gain, as long as the gain is positive. Unused transfers are saved. (Changed the same day, see below.)
+  - *Lineup:* by ranking. The best goalkeeper starts, then the minimum of each outfield position, then the best remaining outfield players. The bench goalkeeper comes first. Captain and vice-captain are the two best-ranked starters. (Changed the same day, see below.)
   - *Fallback:* if a bot's answer breaks a rule (for example, a player left the game and no replacement is affordable), the bot keeps last week's team, the same rule the AI teams follow.
 - **Bot chips: never.** The brief doesn't mention them, so we keep the bots as pure baselines. This slightly handicaps them against the FPL average.
 - **Global average.** FPL's `average_entry_score` for each finished gameweek. It is shown in the results and the season table as the `fpl-average` row.
@@ -149,3 +149,14 @@ Decided with the project owner. Code in `experiment/bots.py`, `experiment/metric
 
   Only the project's secret key can write. The fetch log stays private. Raw prompts and agent replies stay in this repository only, because they are large (about 32,000 tokens per prompt). Only real runs are copied, never mock runs. Real `decide` and `score` runs sync automatically and only warn if Supabase fails. Migration: `20261022190000_phase6_results_and_public_read.sql`.
 - **Mock test.** Eight mock gameweeks (8–15) for all 11 teams ran with no errors. 12 new tests cover the bots, the expected-points formula, the results files and the database rows. 81 tests pass in total. In mock runs the bots make no transfers, because the same snapshot is reused every week, so the rankings never change.
+
+## 2026-10-22: Bots weigh fitness themselves
+
+Decided with the project owner, before the season starts. Code in `experiment/bots.py`.
+
+- **Rule.** Each bot's ranking number (form or ownership) is multiplied by FPL's `chance_of_playing_next_round` to give the player's score. FPL leaves that field empty when there is no news; we then use 100%, or 0% if the status is `i`, `s`, `u` or `n`. So a doubtful player at 75% keeps 75% of his score, and an injured, suspended or unavailable player scores 0.
+- **No forced sales.** Earlier the same day, the bots always sold injured, suspended and unavailable players and never sold doubtful ones. Now the normal "biggest positive gain" rule decides: a player is sold only when an affordable replacement scores higher than what is left of his score. So a star at 75% may be kept, while a cheap injured bench player may stay if there are better uses for the free transfer.
+- **The one exception.** A player missing from FPL's data altogether can't be scored or fielded, so he is replaced first. Players who leave their club usually stay in the data with a 0% chance, and the bots weigh those like anyone else.
+- **Buying.** Bots never buy a player with a 0% chance of playing. They may buy a doubtful player if his weighed score is high enough.
+- **Lineup and captain.** Chosen by the same score, so a 75% player in top form can start or captain, while a 25% player will almost always be benched.
+- **Why.** The bots stay simple, fully repeatable and limited to the same snapshot data as the AI teams (no web news, which the agents don't get either), but they no longer need a hand-picked list of which statuses to sell.

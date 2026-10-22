@@ -3,21 +3,23 @@
 Both follow the same simple rules and differ only in how they rank players:
     form bot:   FPL's `form` (average points over roughly the last 30 days)
     crowd bot:  `selected_by_percent` (share of real FPL managers who own the player)
+A player's score is that number times FPL's chance of playing next round: a doubtful player at
+75% keeps 75% of his score, and an injured, suspended or unavailable player scores 0. So the bot
+weighs fitness against quality itself; nobody is sold automatically, except a player missing from
+FPL's data altogether, who can't be fielded.
 Ties are broken by total points, then by the lower player id, so every run is repeatable.
 
 The rules (decided 2026-10-22, see METHODS.md):
 - First week: go down the ranking and buy each player who still fits the position counts, the
   club limit and the budget. A player is only bought if enough money is left to fill every
-  remaining place with the cheapest available players.
+  remaining place with the cheapest players who could play.
 - Later weeks, using at most the free transfers (never a -4 hit, never a chip):
-    1. sell players who can't play (injured, suspended, unavailable, or gone from the game)
-       for the best-ranked affordable player in the same position;
-    2. then make the swap that improves the ranking the most, again and again, while free
-       transfers are left and a swap is an improvement. Unused free transfers are saved.
-- Only available players (status "a") are bought.
-- Lineup: available players first, then by ranking. Best goalkeeper, then the minimum of each
-  outfield position, then the best remaining outfield players. Captain and vice-captain are the
-  two best-ranked starters.
+    1. replace any player missing from FPL's data (he can't be fielded);
+    2. then make the swap that raises the score the most, again and again, while free transfers
+       are left and a swap is an improvement. Unused free transfers are saved.
+- Players with a 0% chance of playing are never bought.
+- Lineup, by score: best goalkeeper, then the minimum of each outfield position, then the best
+  remaining outfield players. Captain and vice-captain are the two best-scoring starters.
 Each answer goes through the same validator as the AI teams' answers.
 """
 
@@ -42,20 +44,29 @@ BOTS = [
 ]
 
 
+def chance_of_playing(element: dict) -> int:
+    """FPL's chance of playing next round, 0-100. FPL leaves it empty when there is no news."""
+    chance = element.get("chance_of_playing_next_round")
+    if chance is None:
+        return 0 if element.get("status", "a") in CANT_PLAY else 100
+    return chance
+
+
 def ranking(bot: Bot, elements: list[dict]) -> dict[int, tuple]:
-    """A sort key per player id: higher is better."""
-    return {p["id"]: (float(p.get(bot.ranks_by) or 0), p.get("total_points") or 0, -p["id"]) for p in elements}
+    """A sort key per player id: higher is better. The first part is the player's score."""
+    return {p["id"]: (round(float(p.get(bot.ranks_by) or 0) * chance_of_playing(p) / 100, 3),
+                      p.get("total_points") or 0, -p["id"]) for p in elements}
 
 
 # --- first week: a full squad -----------------------------------------------------------------
 
-def build_squad(rank: dict, players: dict[int, Player], rules: Rules) -> list[int]:
-    buyable = sorted((p for p in players.values() if p.status == "a"), key=lambda p: rank[p.id], reverse=True)
+def build_squad(rank: dict, buyable_ids: set[int], players: dict[int, Player], rules: Rules) -> list[int]:
+    buyable = sorted((p for p in players.values() if p.id in buyable_ids), key=lambda p: rank[p.id], reverse=True)
     needed = {pos: position.squad_count for pos, position in rules.positions.items()}
     clubs, chosen, money = {}, [], rules.budget
 
     def cheapest_fill(still_needed: dict, taken: set) -> int:
-        """Money needed to fill every remaining place with the cheapest available players."""
+        """Money needed to fill every remaining place with the cheapest buyable players."""
         total = 0
         for pos, count in still_needed.items():
             prices = sorted(p.price for p in buyable if p.position == pos and p.id not in taken)
@@ -78,11 +89,11 @@ def build_squad(rank: dict, players: dict[int, Player], rules: Rules) -> list[in
 
 # --- later weeks: transfers ---------------------------------------------------------------------
 
-def choose_transfers(rank: dict, state: TeamState, players: dict[int, Player], rules: Rules) -> list[dict]:
+def choose_transfers(rank: dict, buyable_ids: set[int], state: TeamState, players: dict[int, Player],
+                     rules: Rules) -> list[dict]:
     squad = dict(state.squad)               # player id -> purchase price
     bank, left = state.bank, state.free_transfers
     bought, sold, transfers = set(), set(), []
-    worst = (float("-inf"),)
 
     def club_count(club: int) -> int:
         return sum(1 for pid in squad if pid in players and players[pid].club == club)
@@ -103,7 +114,7 @@ def choose_transfers(rank: dict, state: TeamState, players: dict[int, Player], r
         money = bank + sale_value(out)
         out_club = players[out].club if out in players else None
         options = [p for p in players.values()
-                   if p.status == "a" and p.id not in squad and p.id not in sold
+                   if p.id in buyable_ids and p.id not in squad and p.id not in sold
                    and p.position == position and p.price <= money
                    and club_count(p.club) - (1 if p.club == out_club else 0) < rules.club_limit
                    and rank[p.id] > must_beat]
@@ -119,16 +130,18 @@ def choose_transfers(rank: dict, state: TeamState, players: dict[int, Player], r
         transfers.append({"out": out, "in": new})
         left -= 1
 
-    # 1. Sell players who can't play.
-    for out in sorted(squad, key=lambda pid: rank.get(pid, worst)):
+    # 1. A player missing from FPL's data altogether can't be scored or fielded, so he must go.
+    #    (Players who left their club usually stay in the data with a 0% chance; the bot weighs
+    #    those itself in step 2.)
+    for out in [pid for pid in squad if pid not in players]:
         if left == 0:
             break
-        if out not in players or players[out].status in CANT_PLAY:
-            new = best_replacement(out, worst)
-            if new is not None:
-                swap(out, new)
+        new = best_replacement(out, (float("-inf"),))
+        if new is not None:
+            swap(out, new)
 
-    # 2. The biggest ranking improvements, one at a time.
+    # 2. The biggest score improvements, one at a time. An unfit player's score is already lowered,
+    #    so he is sold only if a replacement is worth more than what is left of his score.
     while left > 0:
         best = None
         for out in [pid for pid in squad if pid not in bought and pid in players]:
@@ -146,7 +159,7 @@ def choose_transfers(rank: dict, state: TeamState, players: dict[int, Player], r
 # --- lineup -------------------------------------------------------------------------------------
 
 def choose_lineup(squad: list[int], rank: dict, players: dict[int, Player], rules: Rules) -> dict:
-    order = sorted(squad, key=lambda pid: (players[pid].status == "a", rank[pid]), reverse=True)
+    order = sorted(squad, key=lambda pid: rank[pid], reverse=True)
     goalkeeper = next(pos for pos, p in rules.positions.items() if p.max_play == 1 and p.squad_count == 2)
     xi = [next(pid for pid in order if players[pid].position == goalkeeper)]
     for pos, position in rules.positions.items():
@@ -166,11 +179,13 @@ def choose_lineup(squad: list[int], rank: dict, players: dict[int, Player], rule
 def decide(bot: Bot, state: TeamState, elements: list[dict], players: dict[int, Player], rules: Rules) -> dict:
     """The bot's answer, in the same format as an AI team's answer."""
     rank = ranking(bot, elements)
+    chance = {p["id"]: chance_of_playing(p) for p in elements}
+    buyable = {pid for pid in players if chance.get(pid, 0) > 0}
     if not state.has_squad:
-        squad = build_squad(rank, players, rules)
+        squad = build_squad(rank, buyable, players, rules)
         answer = {"squad": squad}
     else:
-        transfers = choose_transfers(rank, state, players, rules)
+        transfers = choose_transfers(rank, buyable, state, players, rules)
         squad = [pid for pid in state.squad if pid not in {t["out"] for t in transfers}] + [t["in"] for t in transfers]
         answer = {"transfers": transfers}
     return {**answer, **choose_lineup(squad, rank, players, rules), "chip": None,

@@ -21,6 +21,8 @@ There are also three baselines, none of which uses AI:
 - **crowd-bot:** copies what most real managers own (the "template" team).
 - **FPL average:** the official average score of all real managers each gameweek.
 
+Both bots lower a player's score by FPL's chance of playing (a 75%-fit player counts for 75%), then pick transfers, the team and the captain by that score. They never take −4 hits or play chips.
+
 ### The three kinds of memory
 
 - **No memory.** Each week the agent sees only this week's player data and its own squad, bank, free transfers and chips.
