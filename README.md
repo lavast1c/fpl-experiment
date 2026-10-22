@@ -2,7 +2,7 @@
 
 A season-long experiment in Fantasy Premier League (2026/27). Nine Claude agents (three model sizes × three kinds of memory) and two simple rule-based bots each manage a **simulated** FPL team. Every team is scored by this project's own code, using public FPL data.
 
-> **Status:** all six build phases are done and tested with a fake agent. The real season starts at the next gameweek deadline. Every team then picks a fresh £100m squad.
+> **Status:** the real season has started. Every team picked a fresh £100m squad for gameweek 8.
 
 ## The question
 
@@ -120,6 +120,7 @@ python -m pytest                     # run the tests
 | `experiment/runner.py` | the weekly `decide` and `score` |
 | `experiment/metrics.py` | results, expected points and the season table |
 | `experiment/supabase_sync.py`, `supabase/migrations/` | the database copy |
+| `website/` | the public website (Next.js on Vercel), reading the database with the read-only key |
 
 ## What this project does not do
 

@@ -24,3 +24,5 @@
 - Metrics (`experiment/metrics.py`, `run.py metrics`): rank, expected points and luck, gap to the FPL average, hits, rule breaks, stale picks, transfers, captain changes, memory changes, and the season table.
 - Supabase tables for the website (teams, decisions, results, standings, notes, lessons), readable by anyone and writable only by the project. Real runs sync automatically.
 - Full README.
+- First real gameweek (8): all 9 AI teams and both bots picked their first squads.
+- Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.
