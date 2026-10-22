@@ -1,0 +1,68 @@
+{
+  "team": "form-bot",
+  "model": "rule-based",
+  "memory": "none",
+  "gw": 8,
+  "mock": false,
+  "decided_at": "2026-10-22T14:35:49+00:00",
+  "first_week": true,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 1,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "squad": [
+      115,
+      101,
+      156,
+      411,
+      504,
+      79,
+      400,
+      427,
+      13,
+      8,
+      109,
+      165,
+      304,
+      31,
+      384
+    ],
+    "starting_xi": [
+      109,
+      115,
+      504,
+      8,
+      101,
+      156,
+      411,
+      79,
+      400,
+      427,
+      13
+    ],
+    "bench_order": [
+      384,
+      165,
+      304,
+      31
+    ],
+    "captain": 115,
+    "vice_captain": 101,
+    "chip": null,
+    "reasoning": "Rule-based: ranks players by FPL form."
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "duration_ms": 0,
+  "expected_points": 110.0
+}

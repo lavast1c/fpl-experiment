@@ -54,7 +54,7 @@ CACHE_MAX_AGE_HOURS = {
 # --- Snapshot ------------------------------------------------------------
 FIXTURES_AHEAD = 3            # how many upcoming gameweeks of fixtures each player row shows
 CHARS_PER_TOKEN = 3.5         # rough token estimate (see METHODS.md); exact counts come from real calls
-SNAPSHOT_FILTER = "all"   # chosen 2026-10-21 for now; must be fixed before the first real gameweek
+SNAPSHOT_FILTER = "all"   # fixed for the season on 2026-10-22 (see METHODS.md)
 
 # --- Agents --------------------------------------------------------------
 # Exact model IDs only. Never Fable, never aliases like "opus" (they can change mid-season).

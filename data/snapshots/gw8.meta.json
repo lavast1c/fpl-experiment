@@ -1,16 +1,16 @@
 {
   "gw": 8,
   "season": "2026-27",
-  "built_at": "2026-10-21T18:10:52+00:00",
+  "built_at": "2026-10-22T14:32:18+00:00",
   "filter": "all",
   "players_in_game": 668,
   "players_in_snapshot": 668,
-  "chars": 76363,
-  "est_tokens": 21818,
+  "chars": 76333,
+  "est_tokens": 21810,
   "token_method": "characters / 3.5 (estimate)",
   "fixtures_ahead": 3,
   "sources": {
-    "bootstrap": "gw8/bootstrap-static_20261021T175537Z.json.gz",
-    "fixtures": "gw8/fixtures_20261021T175537Z.json.gz"
+    "bootstrap": "gw8/bootstrap-static_20261022T143206Z.json.gz",
+    "fixtures": "gw8/fixtures_20261022T143207Z.json.gz"
   }
 }

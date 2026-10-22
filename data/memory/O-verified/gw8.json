@@ -1,0 +1,22 @@
+{
+  "kind": "verified",
+  "next_id": 3,
+  "lessons": [
+    {
+      "id": "L1",
+      "text": "Value cheap, nailed defenders from teams that are scoring a lot in form (e.g. BHA): their ep is close to premium players' for half the price.",
+      "created_gw": 8,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L2",
+      "text": "Choose the starting formation by ep_next rank, not by player price; benching an expensive player for one week is fine.",
+      "created_gw": 8,
+      "status": "active",
+      "uses": []
+    }
+  ],
+  "pending": [],
+  "removed_notices": []
+}

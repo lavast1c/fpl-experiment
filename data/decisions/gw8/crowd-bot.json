@@ -1,0 +1,68 @@
+{
+  "team": "crowd-bot",
+  "model": "rule-based",
+  "memory": "none",
+  "gw": 8,
+  "mock": false,
+  "decided_at": "2026-10-22T14:35:49+00:00",
+  "first_week": true,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 1,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "squad": [
+      411,
+      165,
+      8,
+      40,
+      124,
+      1,
+      115,
+      399,
+      426,
+      109,
+      259,
+      175,
+      212,
+      272,
+      539
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      259,
+      40,
+      124,
+      411,
+      165,
+      399,
+      426,
+      175
+    ],
+    "bench_order": [
+      109,
+      212,
+      272,
+      539
+    ],
+    "captain": 411,
+    "vice_captain": 165,
+    "chip": null,
+    "reasoning": "Rule-based: ranks players by ownership (the template team)."
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "duration_ms": 0,
+  "expected_points": 73.0
+}

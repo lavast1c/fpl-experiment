@@ -1,0 +1,80 @@
+{
+  "team": "O-self",
+  "model": "claude-opus-5-5",
+  "memory": "self",
+  "gw": 8,
+  "prompt_version": "v1",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-22T14:35:27+00:00",
+  "first_week": true,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 6,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "squad": [
+      1,
+      497,
+      8,
+      115,
+      504,
+      31,
+      175,
+      124,
+      40,
+      427,
+      399,
+      101,
+      411,
+      165,
+      79
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      124,
+      40,
+      427,
+      399,
+      101,
+      411,
+      165
+    ],
+    "bench_order": [
+      497,
+      79,
+      31,
+      175
+    ],
+    "captain": 411,
+    "vice_captain": 165,
+    "chip": null,
+    "reasoning": "This squad is built around the players with the best form and expected points. Haaland is captain and João Pedro is vice-captain. Brighton's defenders and Groß are scoring heavily, so I picked 3 Brighton players, and Calafiori and Raya give Arsenal coverage. Chelsea have Tottenham at home, so I picked Rogers and Henderson. The team lines up 3-5-2 with Evanilson first off the bench. The squad costs £99.6m, leaving £0.4m in the bank.",
+    "updated_notes": [
+      "GW8: built a new squad costing £99.6m, with £0.4m in the bank. I'm holding 3 Brighton (De Cuyper, Vuskovic, Groß), 3 Chelsea (Rogers, Henderson, João Pedro) and 2 Arsenal (Raya, Calafiori). Konsa is also an Arsenal player, so the club limit is maxed.",
+      "Dubravka is a 0-minute backup goalkeeper and van Ewijk is a cheap bench filler; both are candidates to upgrade later.",
+      "Brighton have hard fixtures in GW8-9 (LIV away, MCI away), so consider benching or selling their defenders if clean sheets look unlikely.",
+      "Captain Haaland by default.",
+      "Save free transfers for injuries. The wildcard is still available for GW1-19.",
+      "Watch whether Henderson (Chelsea) keeps his starting place, and how Evanilson is doing in form."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 64948,
+  "output_tokens": 1898,
+  "duration_ms": 20260,
+  "expected_points": 94.0
+}

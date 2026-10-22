@@ -161,3 +161,7 @@ Decided with the project owner, before the season starts. Code in `experiment/bo
 - **Buying.** Bots never buy a player whose score is marked down to nothing (25% chance or less). They may buy a 50% or 75% player if his marked-down score is still high enough.
 - **Lineup and captain.** Fully fit players start ahead of doubtful ones, whatever the score; then players are ordered by score. A doubtful player starts only when no fit player can fill the place, and the captain and vice-captain are the first two starters in that order, so a doubtful player is never captain while fit players start.
 - **Why.** The bots stay simple, fully repeatable and limited to the same snapshot data as the AI teams (no web news, which the agents don't get either), but they no longer need a hand-picked list of which statuses to sell.
+
+## 2026-10-22: Snapshot filter fixed for the season
+
+- **All players.** Decided with the project owner before the first real gameweek: every agent sees every player in the game (`SNAPSHOT_FILTER = "all"`), as in the phase 4 test calls. Nothing is hidden from the agents (new signings included), at the cost of a larger prompt. This stays fixed all season.
