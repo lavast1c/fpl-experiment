@@ -67,7 +67,7 @@ For each decision we add up the predicted points of the starting XI at decision 
 
 **Luck** = actual points − expected points. A team that scores well with low expected points was lucky. A team with high expected points made good decisions, whatever the result.
 
-The predictions are our own (`experiment/xpoints.py`), not FPL's `ep_next`: FPL doesn't publish how `ep_next` is made, and for gameweek 8 the teams' `ep_next` totals were about double a normal score. For each player and fixture, ours adds appearance points (from recent minutes), goals and assists (his expected goals and assists per 90, scaled by his team's attack against the opponent's defence, home or away), clean-sheet and goals-conceded points, and his usual bonus, saves and defensive points. Point values come from the API, and nothing is tuned by hand. On gameweeks 4–7 it ranked players better than recent form or points per game, and its total predicted points were 3% below the real total across the four weeks (1–9% off in any single week; `data/checks/xpoints_backtest.json`). Agents see neither our predictions nor FPL's `ep_next`. The stats bot picks by it, so its expected points are high by design.
+The predictions are our own (`experiment/xpoints.py`), not FPL's `ep_next`: FPL doesn't publish how `ep_next` is made, and for gameweek 8 the teams' `ep_next` totals were about double a normal score. For each player and fixture, ours adds appearance points (from recent minutes), goals and assists (his expected goals and assists per 90, scaled by his team's attack against the opponent's defence, home or away), clean-sheet and goals-conceded points, and his usual bonus, saves and defensive points. Point values come from the API, and nothing is tuned by hand. On gameweeks 4–7 it ranked players better than recent form or points per game, and its total predicted points were 3% below the real total across the four weeks (1–9% off in any single week; `data/checks/xpoints_backtest.json`). On four past seasons (2022/23–2025/26, 125 test gameweeks, from a community copy of the FPL data) it also ranked players better than form (rank correlation 0.59 vs 0.55), and its average error was 0.06 points per player per gameweek (`data/checks/xpoints_past_seasons.json`). Agents see neither our predictions nor FPL's `ep_next`. The stats bot picks by it, so its expected points are high by design.
 
 ## The open dataset
 
@@ -127,7 +127,7 @@ python -m pytest                     # run the tests
 | `experiment/bots.py` | the form bot and the crowd bot |
 | `experiment/runner.py` | the weekly `decide` and `score` |
 | `experiment/metrics.py` | results, expected points and the season table |
-| `experiment/xpoints.py`, `xpoints_check.py` | this project's expected points, and its check on past gameweeks |
+| `experiment/xpoints.py`, `xpoints_check.py`, `xpoints_past.py` | this project's expected points, and its checks on this season's past gameweeks and on four past seasons |
 | `experiment/supabase_sync.py`, `supabase/migrations/` | the database copy |
 | `website/` | the public website (Next.js on Vercel), reading the database with the read-only key |
 

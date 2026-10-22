@@ -214,3 +214,34 @@ Decided with the project owner, before the gameweek 8 deadline and before any po
 - **Change.** Prompt `v2` is identical to `v1` except that the player table, and its description, no longer include `ep_next`. Everything else is unchanged: form, points per game, total points, minutes, xG, xA, ownership, status, chance of playing, news, and fixtures with difficulty. `ep_next` is still saved in the snapshot CSV, the database and `data/xpoints/` for comparison. `prompts/v1/` stays unchanged. This is a small loss of realism, because real managers can see `ep_next`.
 - **Gameweek 8 redone.** The nine AI teams' earlier picks (prompt v1) were archived unchanged in `data/archive/gw8_with_fpl_predictions/`. The three no-memory teams then picked again with prompt v2, and their memory teams copied those squads (shared start). The redo applies to every AI team because the input changed, not because of any particular pick. The player data was the same download as before (14:32 UTC, under the project's 6-hour cache limit, so not downloaded again). The three bots were not re-run: they never used `ep_next`, and their data had not changed.
 - **Tokens.** The table is about 3.5% shorter (estimate ~21,000 tokens instead of ~21,800).
+
+## 2026-10-23: Expected points tested on four past seasons
+
+Asked for by the project owner after a line-by-line review of the predictor. Code in `experiment/xpoints_past.py` (`python run.py check-xpoints --past`); results in `data/checks/xpoints_past_seasons.json`.
+
+- **Why.** The first check had only 4 test gameweeks (4-7 of this season), too few to tell real flaws from luck. The review of those weeks suggested several changes; this test decides which ones hold up.
+- **Data.** FPL's API only serves the current season. Past seasons come from Vaastav Anand's "FPL Historical Dataset" (https://github.com/vaastav/Fantasy-Premier-League), a community copy of the public FPL API with one row per player per match. It is pinned to commit `d7b05b5` (22 October 2026) so the test can be repeated. GitHub doesn't recognise its licence, so the files are downloaded into the git-ignored `data/past_seasons/` and not republished; only our summary numbers are committed. Seasons 2022/23 to 2025/26, the ones with xG and xA. FPL only published xG from gameweek 16 of 2022/23, so that season is treated as starting there. 125 test gameweeks in all.
+- **Method.** The dataset has no official point breakdowns, so the test rebuilds them from each match's stats in the API's format, using this season's point values from `game_config`. On about 93,000 matches where only appearance, goals, assists, clean sheets and goals conceded could score, these values gave the official total every time, in every season (0 mismatches). Each gameweek from 4 on is then predicted by the predictor's own code from the earlier gameweeks only. Every player who had already played and whose club played that week is included, predicted "if fit" because we have no past injury news. Scores: rank correlation; actual points of the 50 players rated highest; RMSE, which replaces MAE because MAE rewards predicting too low when most players score 1-2 and a few score a lot; and average bias (predicted minus actual) overall, for the top 50 and top 15, and by position.
+- **FPL's own predictions can't be used as a yardstick here.** The dataset's `xP` (FPL's `ep_this`) was saved after the matches: players who scored 10+ in a gameweek had that gameweek's `xP` about 3 points higher than the week before, while players who scored 1-2 had it 0.3-0.5 lower. The dataset's own documentation says its timing is uncertain. Recent form (average of the last 4 gameweeks) is the simple yardstick instead.
+- **Results, all four seasons (points per player per gameweek):**
+
+| Version | Correlation | Top-50 actual | RMSE | Bias | Top-50 bias | Top-15 bias | GKP bias | DEF bias |
+|---|---|---|---|---|---|---|---|---|
+| Fixed version (2026-10-22) | 0.593 | 4.30 | 2.452 | -0.06 | +0.21 | +0.26 | +0.02 | -0.05 |
+| Goals-conceded change only | 0.591 | 4.32 | 2.455 | -0.02 | +0.24 | +0.30 | +0.12 | +0.04 |
+| Assists-by-position change only | 0.593 | 4.31 | 2.454 | -0.01 | +0.34 | +0.41 | +0.02 | -0.03 |
+| Clean-sheet change only | 0.592 | 4.30 | 2.453 | -0.04 | +0.25 | +0.29 | +0.06 | -0.02 |
+| Stronger pull to average (900 minutes) only | 0.593 | 4.32 | 2.453 | -0.06 | +0.09 | +0.09 | +0.02 | -0.05 |
+| 25% whole-season minutes only | 0.594 | 4.32 | 2.439 | -0.04 | +0.07 | +0.06 | +0.03 | -0.04 |
+| Assists + pull 900 + season 25% | 0.595 | 4.32 | 2.442 | -0.00 | +0.10 | +0.06 | +0.03 | -0.03 |
+| Goals conceded + assists + pull 900 + season 25% | 0.593 | 4.34 | 2.444 | +0.04 | +0.14 | +0.10 | +0.13 | +0.06 |
+| Form (last 4 gameweeks) | 0.550 | 3.71 | 2.670 | -0.05 | +1.97 | +3.14 | -0.01 | -0.05 |
+
+- **What it shows.**
+  - The fixed version holds up: it ranks players clearly better than form in every season (0.58-0.61 against 0.53-0.57), its overall bias is -0.06 points per player per gameweek, and no position is off by more than 0.07.
+  - Two of the three "mistakes" found on this season's four weeks were mostly chance. Over four seasons clean sheets are not under-predicted (a team's predicted clean-sheet chance averaged 25.1%, actual 23.6%), so the clean-sheet change makes predictions worse. The goals-conceded deduction really is too large (keepers and defenders: -8.3k points predicted against -6.4k actual), but it cancels a similar-sized over-estimate of their clean sheets, goals and appearances, so correcting it on its own leaves keepers 0.12 too high.
+  - Assists are under-predicted because FPL awards more assists than expected-assist (xA) data counts, and by a stable amount per position: about 1.35 FPL assists per xA for midfielders, 2.1 for forwards and 1.1-1.3 for defenders in every season. Scaling each position's xA by its rate, measured each week from the season so far, removes the midfield and forward bias.
+  - Over-confidence about the highest-rated players is real in every season (+0.21 points for the top 50 each week, +0.26 for the top 15). Pulling each player's rates harder towards his position's average (as if he had also played 900 average minutes, not 450) and mixing 25% of his whole-season playing time into the last-4-match figure fix most of it. The season mix also has the lowest RMSE. Mixing in 50% lowers the ranking quality, so it is not proposed.
+  - No change improves the ranking much: every version's correlation is 0.592-0.595, and its top 50 scored 4.30-4.35 points.
+- **Decision.** Not yet made. The fixed version stays in use until the project owner chooses.
+

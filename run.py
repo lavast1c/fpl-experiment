@@ -4,6 +4,7 @@
     python run.py snapshot [--filter F]  build the player table agents receive (no network)
     python run.py sync                   copy local data files to Supabase
     python run.py check-scorer           one-off: compare our scorer with real teams' official scores
+    python run.py check-xpoints [--past] test our expected points on this season (or 4 past seasons)
     python run.py decide --gw N [--mock] all teams make their gameweek N decision
     python run.py score --gw N [--mock]  score gameweek N once it is final
     python run.py test-calls --gw N --yes-real-calls   phase 4 check: 2 real calls per model
@@ -67,6 +68,15 @@ def cmd_check_scorer(args) -> None:
         sys.exit(1)
 
 
+def cmd_check_xpoints(args) -> None:
+    # Imported here so the other commands don't load the past-season test.
+    from experiment import xpoints_check, xpoints_past
+    if args.past:
+        xpoints_past.run()
+    else:
+        xpoints_check.run()
+
+
 def _teams(names: str | None):
     """AI teams and bots named in --teams (default: all of them)."""
     if not names:
@@ -121,6 +131,11 @@ def main() -> None:
     p.add_argument("--teams", type=int, default=15, help="teams to check every finished gameweek for")
     p.add_argument("--keep", action="store_true", help="keep the test cache (for debugging)")
     p.set_defaults(func=cmd_check_scorer)
+
+    p = commands.add_parser("check-xpoints", help="test our expected points on gameweeks already played")
+    p.add_argument("--past", action="store_true",
+                   help="use 4 past seasons instead (downloads a community dataset, ~25 MB, git-ignored)")
+    p.set_defaults(func=cmd_check_xpoints)
 
     p = commands.add_parser("decide", help="all teams make their decision for a gameweek")
     p.add_argument("--gw", type=int, required=True)

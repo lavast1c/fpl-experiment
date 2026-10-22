@@ -31,12 +31,25 @@ from . import config
 from .files import read_json, read_json_gz, write_csv
 
 XPOINTS_DIR = config.DATA_DIR / "xpoints"
-PRIOR_MINUTES = 450        # a player's per-90 rates count as if he also played 450 average minutes
 TEAM_PRIOR_MATCHES = 4     # a team's attack and defence count as if it also played 4 average matches
 RECENT_MATCHES = 4         # expected minutes come from the team's last 4 matches
 HORIZON = 3                # gameweeks ahead for the 3-week total (used by the stats bot)
 POSITIONS = {1: "GKP", 2: "DEF", 3: "MID", 4: "FWD"}
 MAIN_STATS = {"minutes", "goals_scored", "assists", "clean_sheets", "goals_conceded"}
+ASSIST_PRIOR_XA = 10       # each position's assists per xA count as if it also had 10 xA at the all-positions rate
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Choices inside the predictor. The defaults are the version fixed on 2026-10-22; the other
+    options were added for the past-season test (xpoints_past.py) and are off unless chosen."""
+    prior_minutes: int = 450              # a player's per-90 rates count as if he also played this many average minutes
+    conceded_all_goals: bool = False      # points per goal conceded: divide by every goal conceded,
+                                          # not only goals in matches that cost points (breakdowns list only those)
+    scale_assists: bool = False           # scale xA by FPL assists per xA for his position this season
+                                          # (FPL awards assists more generously, forwards' most of all)
+    clean_sheet_on_pitch: bool = False    # clean-sheet chance only for the minutes a 60+ minute player is usually on
+    season_minutes_weight: float = 0.0    # blend the last 4 matches' playing time with the whole season's
 
 
 @dataclass
@@ -64,6 +77,9 @@ class History:
     conceded_points: dict[str, float]             # position -> points per goal conceded (measured)
     long_play: int                                # minutes needed for the full appearance points (measured)
     clean_sheet_minutes: int                      # minutes needed for a clean sheet (measured)
+    assists_per_xa: dict = field(default_factory=dict)  # position -> FPL assists per expected assist (measured)
+    long_play_average: float = 90.0               # average minutes of a 60+ minute appearance (measured)
+    settings: Settings = Settings()
 
 
 def live_file(gw: int, raw_dir: Path = config.RAW_DIR) -> Path | None:
@@ -71,7 +87,8 @@ def live_file(gw: int, raw_dir: Path = config.RAW_DIR) -> Path | None:
     return files[-1] if files else None
 
 
-def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR) -> History:
+def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
+                 settings: Settings = Settings()) -> History:
     scoring = bootstrap["game_config"]["scoring"]
     teams_of = {p["id"]: p["team"] for p in bootstrap["elements"]}
     position_of = {p["id"]: POSITIONS[p["element_type"]] for p in bootstrap["elements"]}
@@ -81,7 +98,8 @@ def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir:
 
     players: dict[int, PlayerHistory] = {}
     team_gw_xg = defaultdict(float)               # (team, gw) -> xG, all that gameweek's fixtures together
-    conceded = defaultdict(lambda: [0, 0])        # position -> [points, goals conceded]
+    conceded = defaultdict(lambda: [0, 0, 0])     # position -> [points, goals in matches that cost points, all goals]
+    fpl_assists = defaultdict(int)                # position -> official assists
     long_play_minutes, clean_sheet_minutes, missing = [], [], []
     for gw in range(1, before_gw):
         path = live_file(gw, raw_dir)
@@ -97,6 +115,8 @@ def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir:
             h.minutes += stats["minutes"]
             h.xg += float(stats["expected_goals"])
             h.xa += float(stats["expected_assists"])
+            fpl_assists[h.position] += stats["assists"]
+            conceded[h.position][2] += stats["goals_conceded"]
             team_gw_xg[(h.team, gw)] += float(stats["expected_goals"])
             for part in e["explain"]:
                 if part["fixture"] not in fixture_by_id:
@@ -143,13 +163,19 @@ def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir:
     prior = {pos: (t[1] / t[0] * 90, t[2] / t[0] * 90, t[3] / t[0] * 90) if t[0] else (0, 0, 0)
              for pos, t in totals.items()}
     rates = {}
+    prior_90s = settings.prior_minutes / 90
     for pid, h in players.items():
         px, pa, po = prior.get(h.position, (0, 0, 0))
-        denominator = (h.minutes + PRIOR_MINUTES) / 90
-        rates[pid] = ((h.xg + px * PRIOR_MINUTES / 90) / denominator,
-                      (h.xa + pa * PRIOR_MINUTES / 90) / denominator,
-                      (h.other_points + po * PRIOR_MINUTES / 90) / denominator)
+        denominator = h.minutes / 90 + prior_90s
+        rates[pid] = ((h.xg + px * prior_90s) / denominator,
+                      (h.xa + pa * prior_90s) / denominator,
+                      (h.other_points + po * prior_90s) / denominator)
 
+    goals_index = 2 if settings.conceded_all_goals else 1
+    # FPL assists per xA: each position's own rate, shrunk towards the rate over all positions.
+    all_rate = sum(fpl_assists.values()) / sum(t[2] for t in totals.values()) if totals else 1.0
+    assists_per_xa = {pos: (fpl_assists[pos] + all_rate * ASSIST_PRIOR_XA) / (t[2] + ASSIST_PRIOR_XA)
+                      for pos, t in totals.items()}
     return History(
         players=players, team_matches=team_matches,
         attack={t: shrink(xg_for[t]) for t in team_ids}, defence={t: shrink(xg_against[t]) for t in team_ids},
@@ -157,14 +183,18 @@ def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir:
         home_mult=(sum(home_xg) / len(home_xg)) / league_xg if home_xg else 1.0,
         away_mult=(sum(away_xg) / len(away_xg)) / league_xg if away_xg else 1.0,
         rates=rates,
-        conceded_points={pos: (p / g if g else 0.0) for pos, (p, g) in conceded.items()},
+        conceded_points={pos: (c[0] / c[goals_index] if c[goals_index] else 0.0) for pos, c in conceded.items()},
         long_play=min(long_play_minutes) if long_play_minutes else 60,
         clean_sheet_minutes=min(clean_sheet_minutes) if clean_sheet_minutes else 60,
+        assists_per_xa=assists_per_xa,
+        long_play_average=sum(long_play_minutes) / len(long_play_minutes) if long_play_minutes else 90.0,
+        settings=settings,
     )
 
 
 def playing_time(history: History, pid: int) -> tuple[float, float, float]:
-    """(chance of a long appearance, chance of a short one, expected minutes) from the team's last matches."""
+    """(chance of a long appearance, chance of a short one, expected minutes) from the team's last matches,
+    blended with every match he was listed for this season if Settings.season_minutes_weight is set."""
     h = history.players.get(pid)
     if h is None:
         return 0.0, 0.0, 0.0
@@ -173,9 +203,17 @@ def playing_time(history: History, pid: int) -> tuple[float, float, float]:
     recent = [minutes_by_match.get(order, 0) for order in recent_ids]
     if not recent:
         return 0.0, 0.0, 0.0
-    long_ = sum(m >= history.long_play for m in recent) / len(recent)
-    any_ = sum(m > 0 for m in recent) / len(recent)
-    return long_, any_ - long_, sum(recent) / len(recent)
+
+    def summary(minutes: list) -> tuple[float, float, float]:
+        long_ = sum(m >= history.long_play for m in minutes) / len(minutes)
+        any_ = sum(m > 0 for m in minutes) / len(minutes)
+        return long_, any_ - long_, sum(minutes) / len(minutes)
+
+    weight = history.settings.season_minutes_weight
+    if not weight:
+        return summary(recent)
+    season = summary([minutes for _, minutes in h.matches])
+    return tuple((1 - weight) * r + weight * s for r, s in zip(summary(recent), season))
 
 
 def fixture_points(history: History, scoring: dict, pid: int, opponent: int, home: bool) -> float:
@@ -193,12 +231,16 @@ def fixture_points(history: History, scoring: dict, pid: int, opponent: int, hom
     goals_against = mu * (history.attack[opponent] / mu) * (history.defence[h.team] / mu) * opp_venue
     fixture_factor = goals_for / history.attack[h.team]          # this fixture vs the team's average match
     share = minutes / 90
+    settings = history.settings
+    assist_scale = history.assists_per_xa.get(pos, 1.0) if settings.scale_assists else 1.0
+    # Goals against while he is on the pitch, for the clean sheet (a player subbed off at 70 needs only 70).
+    on_pitch = history.long_play_average / 90 if settings.clean_sheet_on_pitch else 1.0
 
     points = scoring["long_play"] * p_long + scoring["short_play"] * p_short
     points += xg90 * share * fixture_factor * scoring["goals_scored"][pos]
-    points += xa90 * share * fixture_factor * scoring["assists"]
+    points += xa90 * share * fixture_factor * assist_scale * scoring["assists"]
     p_clean_sheet_minutes = p_long if history.clean_sheet_minutes >= history.long_play else p_long + p_short
-    points += p_clean_sheet_minutes * math.exp(-goals_against) * scoring["clean_sheets"][pos]
+    points += p_clean_sheet_minutes * math.exp(-goals_against * on_pitch) * scoring["clean_sheets"][pos]
     points += history.conceded_points.get(pos, 0.0) * goals_against * share
     points += other90 * share
     return points
@@ -212,9 +254,10 @@ def chance_of_playing(element: dict) -> float:
     return chance / 100
 
 
-def predict(gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR) -> dict[int, dict]:
+def predict(gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
+            settings: Settings = Settings()) -> dict[int, dict]:
     """Per player: xp_if_fit for gameweek gw, xp (times FPL's chance of playing), and the 3-gameweek total if fit."""
-    history = load_history(gw, bootstrap, fixtures, raw_dir)
+    history = load_history(gw, bootstrap, fixtures, raw_dir, settings)
     scoring = bootstrap["game_config"]["scoring"]
     upcoming = defaultdict(list)                  # (team, gw) -> [(opponent, home)]
     for f in fixtures:

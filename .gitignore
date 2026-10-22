@@ -29,6 +29,9 @@ Thumbs.db
 # Phase 3 scorer test data (real public teams) - never commit
 data/test_cache/
 
+# Past seasons from a community dataset (xpoints_past.py) - used, never republished
+data/past_seasons/
+
 # Temporary files
 *.tmp
 

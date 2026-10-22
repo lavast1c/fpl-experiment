@@ -11,6 +11,7 @@ RAW_DIR = DATA_DIR / "raw"              # every API response, gzipped, one folde
 SNAPSHOT_DIR = DATA_DIR / "snapshots"   # the player table every agent receives
 RULES_DIR = DATA_DIR / "rules"          # rule settings read from the API
 TEST_CACHE_DIR = DATA_DIR / "test_cache"  # phase 3 scorer check only: git-ignored, deleted after use
+PAST_SEASONS_DIR = DATA_DIR / "past_seasons"  # community dataset for testing xP: git-ignored
 
 # --- FPL API -------------------------------------------------------------
 API_BASE = "https://fantasy.premierleague.com/api/"
