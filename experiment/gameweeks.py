@@ -32,6 +32,15 @@ def decision_gw(events: list[dict]) -> int:
     return gw
 
 
+def upcoming_gw(events: list[dict], now: datetime) -> int | None:
+    """The first gameweek whose deadline is after `now`, worked out from deadlines alone, so it is
+    right even when the saved data (and its is_next flag) is from before the last deadline."""
+    for event in events:
+        if parse_time(event["deadline_time"]) > now:
+            return event["id"]
+    return None
+
+
 def get_event(events: list[dict], gw: int) -> dict:
     for event in events:
         if event["id"] == gw:

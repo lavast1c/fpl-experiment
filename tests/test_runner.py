@@ -86,3 +86,26 @@ def test_free_hit_squad_returns_next_week(monkeypatch):
 def test_real_run_needs_confirmation():
     with pytest.raises(SystemExit):
         runner.decide(8, mock=False, teams=[TEAM])
+
+
+def test_missed_deadline_keeps_last_weeks_team(monkeypatch):
+    use_mock(monkeypatch, illegal_rate=0, chip_rate=0)
+    runner.decide(8, mock=True, teams=[TEAM], bot_list=[])
+    before = runner.load_state(config.MOCK_DIR, TEAM.id)
+    assert TEAM.id in runner.record_missed(9, mock=True)
+    d = decision(9)
+    assert d["outcome"] == "missed" and d["attempts"] == 0 and d["transfers_made"] == 0
+    after = runner.load_state(config.MOCK_DIR, TEAM.id)
+    assert after.squad == before.squad and after.lineup == before.lineup
+    assert after.free_transfers == min(before.free_transfers + 1, 5)
+    assert runner.record_missed(9, mock=True) == []   # nothing left to record
+    rows = runner.score_gameweek(9, mock=True)
+    assert any(r["team"] == TEAM.id for r in rows)
+    standing = next(s for s in read_json(config.MOCK_DIR / "results" / "standings.json") if s["team"] == TEAM.id)
+    assert standing["missed_weeks"] == 1 and standing["failed_weeks"] == 0
+
+
+def test_no_decision_starts_after_the_deadline(bootstrap):
+    events = bootstrap["events"]   # made-up data: gameweek 9's deadline was 24 Oct 2026
+    assert runner.deadline_passed(events, 9, mock=False)
+    assert not runner.deadline_passed(events, 9, mock=True)

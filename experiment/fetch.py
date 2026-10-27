@@ -20,7 +20,7 @@ import requests
 
 from . import config
 from .files import append_csv, read_json_gz, write_json_gz
-from .gameweeks import decision_gw
+from .gameweeks import decision_gw, upcoming_gw
 
 FETCH_LOG_FIELDS = ["fetched_at", "gw", "endpoint", "file", "sha256", "bytes", "forced"]
 TIME_FORMAT = "%Y%m%dT%H%M%SZ"
@@ -157,7 +157,10 @@ def get_bootstrap(*, force: bool = False, raw_dir: Path = config.RAW_DIR,
         data = read_json_gz(latest[0])
         return data, decision_gw(data["events"])
     if latest:
-        _check_cap(raw_dir, latest[1], endpoint, force)
+        # Count downloads in the folder the new copy will go into: after a deadline that is the next
+        # gameweek's folder, not the folder of the newest copy.
+        folder = upcoming_gw(read_json_gz(latest[0])["events"], now) or latest[1]
+        _check_cap(raw_dir, folder, endpoint, force)
     data = _download(endpoint, http_get, sleep)
     gw = decision_gw(data["events"])
     _save(raw_dir, gw, endpoint, data, now, force)

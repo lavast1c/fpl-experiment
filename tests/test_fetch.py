@@ -104,3 +104,17 @@ def test_bootstrap_filed_under_decision_gameweek(tmp_path, bootstrap):
     again, _ = fetch.get_bootstrap(raw_dir=tmp_path, http_get=http, sleep=lambda s: None,
                                    now=NOW + timedelta(hours=1))
     assert again == data and len(http.calls) == 1
+
+
+def test_bootstrap_limit_counts_the_next_folder_after_a_deadline(tmp_path, bootstrap):
+    # Gameweek 9's folder is full, but gameweek 9's deadline (24 Oct) has passed, so the next
+    # copy belongs to gameweek 10's folder and may be downloaded.
+    http = FakeHttp(bootstrap)
+    for i in range(config.MAX_FETCHES_PER_GAMEWEEK):
+        fetch.get_bootstrap(raw_dir=tmp_path, http_get=http, sleep=lambda s: None, now=NOW + timedelta(hours=7 * i))
+    with pytest.raises(fetch.FetchCapReached):
+        fetch.get_bootstrap(raw_dir=tmp_path, http_get=http, sleep=lambda s: None, now=NOW + timedelta(days=2))
+    later = {**bootstrap, "events": [{**e, "is_next": e["id"] == 10} for e in bootstrap["events"]]}
+    http.data = later
+    _, gw = fetch.get_bootstrap(raw_dir=tmp_path, http_get=http, sleep=lambda s: None, now=NOW + timedelta(days=4))
+    assert gw == 10 and len(fetch.cached_files(tmp_path, 10, "bootstrap-static/")) == 1

@@ -47,6 +47,20 @@ def save_state(base: Path, state: TeamState, gw: int) -> None:
 
 # --- inputs for a gameweek ---------------------------------------------------------------------
 
+def has_snapshot(gw: int, mock: bool = False) -> bool:
+    """Mock runs can always fall back to the latest real snapshot (see gameweek_inputs)."""
+    return mock or (config.SNAPSHOT_DIR / f"gw{gw}.meta.json").exists()
+
+
+def bootstrap_for(gw: int, mock: bool = False) -> dict:
+    """The bootstrap data the gameweek's snapshot was built from or, if none was built (a missed
+    week), the newest saved copy. Scoring and missed weeks only need players' names, clubs and
+    positions from it, which don't change during a season."""
+    if has_snapshot(gw, mock):
+        return gameweek_inputs(gw, mock)[0]
+    return read_json_gz(fetch.latest_bootstrap()[0])
+
+
 def gameweek_inputs(gw: int, mock: bool = False) -> tuple[dict, str, dict]:
     """The bootstrap data the snapshot was built from, the agents' player table, and its meta.
 
@@ -96,11 +110,14 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
     print(f"Gameweek {gw}: {'MOCK' if mock else 'REAL'} run for {len(teams)} AI teams and {len(bot_list)} bots "
           f"(prompt {config.PROMPT_VERSION}, effort {config.EFFORT}, snapshot filter '{meta['filter']}')")
 
-    summary = []
+    summary, late = [], False
     for team in teams:   # one at a time, never in parallel
         decision_path = base / "decisions" / f"gw{gw}" / f"{team.id}.json"
         if decision_path.exists():
             print(f"  {team.id}: already decided, skipped")
+            continue
+        if late or deadline_passed(events, gw, mock):
+            late = True   # never start a decision after the deadline
             continue
         outcome = run_team(team, week)
         if outcome is not None:
@@ -108,9 +125,18 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
     for bot in bot_list:
         if (base / "decisions" / f"gw{gw}" / f"{bot.id}.json").exists():
             print(f"  {bot.id}: already decided, skipped")
+        elif late or deadline_passed(events, gw, mock):
+            late = True
         else:
             run_bot(bot, week)
+    if late:
+        print("  WARNING: the deadline passed during the run. Teams not decided yet are recorded as missed.")
     print_token_summary(summary)
+
+
+def deadline_passed(events: list[dict], gw: int, mock: bool) -> bool:
+    """Real runs never start a team's decision after the deadline (mock runs ignore deadlines)."""
+    return not mock and hours_until_deadline(events, gw) <= 0
 
 
 @dataclass
@@ -320,6 +346,63 @@ def run_bot(bot: bots.Bot, week: Week) -> dict:
     return summary
 
 
+# --- missed deadlines --------------------------------------------------------------------------
+
+def undecided(gw: int, mock: bool = False) -> list[str]:
+    """Teams (AI teams and bots) with no decision saved for gameweek gw."""
+    folder = base_dir(mock) / "decisions" / f"gw{gw}"
+    return [t.id for t in TEAMS + bots.BOTS if not (folder / f"{t.id}.json").exists()]
+
+
+def record_missed(gw: int, mock: bool = False) -> list[str]:
+    """After a deadline, every team without a decision keeps last week's team (METHODS.md, 2026-10-27).
+
+    This happens when the computer running the experiment was off or offline, or Claude could not
+    be reached, until the deadline. It works like an FPL manager who misses a deadline: no
+    transfers, no chip, last week's lineup and captain, and the free transfer is saved. The outcome
+    is "missed", so it is never counted as the team's own failure. Returns the teams recorded.
+    """
+    base = base_dir(mock)
+    missing = undecided(gw, mock)
+    if not missing:
+        return []
+    # Expected points need the snapshot from before the deadline. Without one (the computer was off
+    # all week) they are left empty rather than worked out from data published after the deadline.
+    expected = None
+    if has_snapshot(gw, mock):
+        bootstrap, _, meta = gameweek_inputs(gw, mock)
+        expected = {pid: v["xp"] for pid, v in expected_points_for(gw, meta, bootstrap, base).items()}
+    players, rules = players_from_bootstrap(bootstrap_for(gw, mock)), load_rules()
+
+    for who in TEAMS + bots.BOTS:
+        if who.id not in missing:
+            continue
+        kind = getattr(who, "memory", "none")
+        state = start_gameweek(load_state(base, who.id))
+        first_week = not state.has_squad
+        decision = no_change_decision(state)
+        result = validate(decision, state, players, rules, gw) if decision else None
+        if result is not None and result.ok:
+            state = apply(decision, state, players, rules, gw, result)
+        else:
+            decision = None   # nothing legal to keep: the team scores 0 this week
+        save_state(base, state, gw)
+        if kind != "none":
+            memory.save_memory(base, who.id, memory.load_memory(base, who.id, kind), gw)   # unchanged
+        write_json(base / "decisions" / f"gw{gw}" / f"{who.id}.json", {
+            "team": who.id, "model": getattr(who, "model", "rule-based"), "memory": kind, "gw": gw,
+            "mock": mock, "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "first_week": first_week, "outcome": "missed", "attempts": 0, "max_attempts": 0,
+            "errors_by_attempt": [], "stale_picks": [], "decision": decision, "chip": None,
+            "transfers_made": 0, "hit_points": 0, "notes": [],
+            "model_mismatch": False, "models_used": [], "input_tokens": 0, "output_tokens": 0, "duration_ms": 0,
+            "expected_points": (metrics.expected_points(state.lineup if decision else None, None, 0, expected)
+                                if expected is not None else None),
+        })
+        print(f"  {who.id}: missed the gameweek {gw} deadline, kept last week's team")
+    return missing
+
+
 def print_token_summary(summaries: list[dict]) -> None:
     if not summaries:
         return
@@ -391,7 +474,7 @@ def _team_row(team_id: str, gw: int, decision: dict, state: TeamState, players: 
 
 def score_gameweek(gw: int, mock: bool) -> list[dict]:
     base = base_dir(mock)
-    bootstrap, _, _ = gameweek_inputs(gw, mock)
+    bootstrap = bootstrap_for(gw, mock)
     players = players_from_bootstrap(bootstrap)
     positions = {pid: p.position for pid, p in players.items()}
     rules = load_rules()

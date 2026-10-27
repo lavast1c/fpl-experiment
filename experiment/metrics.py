@@ -165,7 +165,9 @@ def _standings(rows: list[dict]) -> list[dict]:
             "luck": round(sum(r["luck"] or 0 for r in mine), 2),
             "hit_points": sum(r["hit_points"] for r in mine),
             "rule_breaks": sum(r["rule_breaks"] for r in mine),
-            "failed_weeks": sum(1 for r in mine if r["outcome"] != "accepted"),
+            # Missed deadlines (runner.record_missed) are the computer's fault, not the team's.
+            "failed_weeks": sum(1 for r in mine if r["outcome"] not in ("accepted", "missed")),
+            "missed_weeks": sum(1 for r in mine if r["outcome"] == "missed"),
             "stale_picks": sum(r["stale_picks"] for r in mine),
             "transfers": sum(r["transfers_made"] for r in mine),
             "captain_changes": sum(1 for r in mine if r["captain_changed"]),
