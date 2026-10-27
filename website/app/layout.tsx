@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barlow, Barlow_Condensed } from "next/font/google";
+import { AutomationStatus } from "@/components/AutomationStatus";
 import "./globals.css";
 
 const body = Barlow({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </div>
         </header>
+        <AutomationStatus />
         <main className="wrap">{children}</main>
         <footer className="site-footer wrap">
           <p>

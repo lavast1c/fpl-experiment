@@ -105,6 +105,19 @@ export type LessonRecord = {
 
 export type SnapshotPlayer = { id: number; name: string; club: string; pos: string; price: number };
 
+/** The automatic runs' status (one row, written by experiment/automation.py on the project's computer). */
+export type AutomationStatus = {
+  checked_at: string;
+  next_check_by: string | null;
+  every_hours: number | null;
+  upcoming: { step: string; from: string; note: string }[];
+  waiting: string[];
+  problems: string[];
+  last_result: string | null;
+  last_result_at: string | null;
+  last_result_ok: boolean | null;
+};
+
 /** One query to Supabase's REST API, e.g. table("results", "select=*&order=gw"). */
 async function table<T>(name: string, query: string): Promise<T[]> {
   const url = process.env.SUPABASE_URL;
@@ -127,6 +140,15 @@ export const getDecisions = (team?: string) =>
   table<Decision>("decisions", `select=*&order=gw.desc${team ? `&team=eq.${encodeURIComponent(team)}` : ""}`);
 export const getMemoryNotes = () => table<MemoryNotes>("memory_notes", "select=*&order=gw");
 export const getLessons = () => table<LessonRecord>("lessons", "select=team,id,text,created_gw,status,ended_gw,uses,average");
+
+/** The status row, or null if there is none yet (the panel is then left out rather than breaking the page). */
+export async function getAutomationStatus(): Promise<AutomationStatus | null> {
+  try {
+    return (await table<AutomationStatus>("automation_status", "select=*&id=eq.1"))[0] ?? null;
+  } catch {
+    return null;
+  }
+}
 
 /** Player names, clubs and positions from the snapshot each team decided with. */
 export async function getPlayers(gw: number, ids: number[]): Promise<Map<number, SnapshotPlayer>> {

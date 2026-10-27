@@ -39,6 +39,11 @@ export default function About() {
         <li>A rule checker enforces every FPL rule. An illegal answer goes back to the agent with the errors, up to two more times; after that the team keeps last week&apos;s side.</li>
         <li>After the gameweek, our own scorer works out the points, including automatic substitutions and chips. It was checked against official FPL scores and matched exactly.</li>
       </ol>
+      <p>
+        Since gameweek 9 this runs by itself on the project&apos;s computer: the picks about a day before each
+        deadline, and the scoring once FPL confirms the points. The strip under the header shows what it did last
+        and what comes next. If the computer is off until a deadline, every team keeps last week&apos;s team.
+      </p>
 
       <h2>Separating skill from luck</h2>
       <p>

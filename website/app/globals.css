@@ -86,6 +86,16 @@ p { margin: 0 0 1em; max-width: 68ch; }
 main { padding-top: 40px; padding-bottom: 56px; }
 .site-footer { border-top: 1px solid var(--rule); padding-top: 20px; padding-bottom: 40px; color: var(--muted); font-size: 0.9rem; }
 
+/* --- automatic runs status strip --------------------------------------------------------------- */
+.auto-bar { background: var(--card); border-bottom: 1px solid var(--rule); font-size: 0.9rem; }
+.auto-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; padding-top: 8px; padding-bottom: 8px; }
+.auto-title { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.auto-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--good); }
+.auto-dot.wait { background: var(--lamp); }
+.auto-dot.bad { background: var(--bad); }
+.auto-dot.off { background: var(--bot); }
+.auto-bar .problem { color: var(--bad); font-weight: 600; }
+
 /* --- the scoreboard ---------------------------------------------------------------------------- */
 .board {
   background-color: var(--board);

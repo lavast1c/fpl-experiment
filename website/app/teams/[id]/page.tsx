@@ -88,7 +88,8 @@ async function Week({ decision: d, result }: { decision: Decision; result?: Resu
             {breaks.length} rule {breaks.length === 1 ? "break" : "breaks"}: {[...new Set(breaks.flat())].join(", ")}
           </span>
         )}
-        {d.outcome !== "accepted" && <span className="tag warn">Kept last week&apos;s team</span>}
+        {d.outcome === "missed" && <span className="tag warn">Missed the deadline: kept last week&apos;s team</span>}
+        {d.outcome !== "accepted" && d.outcome !== "missed" && <span className="tag warn">Kept last week&apos;s team</span>}
       </div>
 
       {d.transfers.length > 0 && (
