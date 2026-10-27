@@ -37,3 +37,6 @@ data/past_seasons/
 
 # Mock (fake agent) runs - never part of the dataset
 data/mock/
+
+# Automatic runs: lock, status and log on this computer (automation.py)
+automation/

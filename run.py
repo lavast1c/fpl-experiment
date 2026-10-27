@@ -8,6 +8,7 @@
     python run.py decide --gw N [--mock] all teams make their gameweek N decision
     python run.py score --gw N [--mock]  score gameweek N once it is final
     python run.py test-calls --gw N --yes-real-calls   phase 4 check: 2 real calls per model
+    python run.py auto [--dry-run] [--log]   the automatic weekly routine (scheduler, every 3 hours)
 
 """
 
@@ -31,24 +32,8 @@ def cmd_fetch(args) -> None:
 
 
 def cmd_snapshot(args) -> None:
-    latest = fetch.latest_bootstrap()
-    if latest is None:
-        sys.exit("No saved data yet. Run `python run.py fetch` first.")
-    bootstrap_file, gw = latest
-    fixture_files = fetch.cached_files(config.RAW_DIR, gw, "fixtures/")
-    if not fixture_files:
-        sys.exit(f"No saved fixtures for gameweek {gw}. Run `python run.py fetch` first.")
-
-    bootstrap = read_json_gz(bootstrap_file)
-    fixtures = read_json_gz(fixture_files[-1])
-    rows = snapshot.build_rows(bootstrap, fixtures, gw)
-
-    sources = {"bootstrap": bootstrap_file.relative_to(config.RAW_DIR).as_posix(),
-               "fixtures": fixture_files[-1].relative_to(config.RAW_DIR).as_posix()}
-    meta = snapshot.save_snapshot(gw, rows, args.filter, sources)
-    rules_path = api_rules.save_rules(bootstrap, sources["bootstrap"])
-
-    print(f"Snapshot for gameweek {gw}: {meta['players_in_snapshot']} of {meta['players_in_game']} players "
+    meta, rows, rules_path = snapshot.build_from_saved(args.filter)
+    print(f"Snapshot for gameweek {meta['gw']}: {meta['players_in_snapshot']} of {meta['players_in_game']} players "
           f"(filter '{args.filter}'), ~{meta['est_tokens']:,} tokens (estimate)")
     print("\nCandidate filters:")
     for result in snapshot.compare_filters(rows):
@@ -105,6 +90,17 @@ def cmd_score(args) -> None:
         supabase_sync.sync()
 
 
+def cmd_auto(args) -> None:
+    # Imported here so the other commands don't load the scheduler's code.
+    from experiment import automation
+    if args.dry_run:
+        automation.describe()
+    elif args.log:
+        automation.run_logged()
+    else:
+        automation.run()
+
+
 def cmd_test_calls(args) -> None:
     if not args.yes_real_calls:
         sys.exit("This makes 6 real `claude -p` calls (2 per model). Add --yes-real-calls once agreed.")
@@ -152,6 +148,11 @@ def main() -> None:
     p = commands.add_parser("metrics", help="rebuild the results and metrics files from saved data")
     p.add_argument("--mock", action="store_true")
     p.set_defaults(func=cmd_metrics)
+
+    p = commands.add_parser("auto", help="the automatic weekly routine (run every 3 hours by the scheduler)")
+    p.add_argument("--dry-run", action="store_true", help="only say what is due, from saved files (no downloads or calls)")
+    p.add_argument("--log", action="store_true", help="write the output to automation/log.txt (the scheduler uses this)")
+    p.set_defaults(func=cmd_auto)
 
     p = commands.add_parser("test-calls", help="phase 4 check: one probe and one decision call per model")
     p.add_argument("--gw", type=int, required=True)

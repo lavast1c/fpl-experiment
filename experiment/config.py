@@ -67,6 +67,15 @@ PROMPTS_DIR = PROJECT_ROOT / "prompts"
 CLAUDE_TIMEOUT_SECONDS = 900            # give up on one call after 15 minutes
 DEADLINE_WARNING_HOURS = 3              # `decide` warns when the deadline is closer than this
 
+# --- Automatic runs (automation.py, decided 2026-10-27, METHODS.md) -------
+FIRST_GW = 8                          # the experiment's first gameweek
+AUTO_EVERY_HOURS = 3                  # the computer's scheduler runs `python run.py auto` this often, and at log-on
+AUTO_PICK_HOURS_BEFORE = 24           # the weekly picks start this long before a deadline...
+AUTO_PICK_LATEST_HOURS_BEFORE = 6     # ...but wait for last gameweek's scores until this long before it
+AUTO_SCORE_AFTER_HOURS = 18           # first check for final points this long after a gameweek's last kick-off
+AUTO_SCORE_EVERY_HOURS = 12           # then check at most this often (each check is one FPL download)
+AUTO_DIR = PROJECT_ROOT / "automation"  # lock, status and log of the automatic runs (git-ignored)
+
 # --- Where runs are saved -------------------------------------------------
 # Real runs write into DATA_DIR (committed: the open dataset). Mock runs write into MOCK_DIR
 # (git-ignored), so test data can never mix with real results.

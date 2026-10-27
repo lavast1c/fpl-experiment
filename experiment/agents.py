@@ -32,6 +32,9 @@ from .validator import find_chip, validate
 BLOCKED_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL", "CLAUDE_CODE_USE_BEDROCK",
                "CLAUDE_CODE_USE_VERTEX", "CLAUDE_CODE_USE_FOUNDRY", "ANTHROPIC_MODEL")
 
+# On Windows, don't flash a console window for each call when the scheduler runs us in the background.
+NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+
 
 @dataclass
 class CallRecord:
@@ -107,7 +110,8 @@ class ClaudeAgent:
         with tempfile.TemporaryDirectory(prefix="fpl-agent-") as empty_folder:
             try:
                 process = subprocess.run(command, input=prompt, capture_output=True, text=True, encoding="utf-8",
-                                         cwd=empty_folder, env=env, timeout=config.CLAUDE_TIMEOUT_SECONDS)
+                                         cwd=empty_folder, env=env, timeout=config.CLAUDE_TIMEOUT_SECONDS,
+                                         creationflags=NO_WINDOW)
             except subprocess.TimeoutExpired:
                 record.error = f"timed out after {config.CLAUDE_TIMEOUT_SECONDS} s"
                 return record

@@ -112,6 +112,21 @@ python -m pytest                     # run the tests
 
 `decide` refuses to run after the deadline and warns when the deadline is less than 3 hours away. `--teams H-none,form-bot` limits a run to some teams.
 
+### Automatic runs
+
+Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 in [`METHODS.md`](METHODS.md)). Windows Task Scheduler starts `python run.py auto` every 3 hours and at log-on. Each run checks the saved files and does whatever is due:
+- **Scoring:** from 18 hours after a gameweek's last match, it asks FPL at most every 12 hours whether the points are final, and scores the gameweek once they are.
+- **Picks:** from 24 hours before each deadline, it downloads the data and runs every team's decision. It waits for last week's scores until 6 hours before the deadline.
+- **Afterwards:** it pushes the new data to GitHub, copies it to Supabase, updates the status strip on the website and shows a pop-up.
+
+If the computer is off until a deadline, the teams keep last week's team (outcome `missed`).
+
+```
+powershell -ExecutionPolicy Bypass -File scripts\schedule_windows.ps1   # set up the schedule (once)
+python run.py auto --dry-run         # what is due now, from saved files only
+python run.py auto                   # one run by hand (real downloads and calls if due)
+```
+
 ## Code map
 
 | File | What it does |
@@ -128,6 +143,7 @@ python -m pytest                     # run the tests
 | `experiment/runner.py` | the weekly `decide` and `score` |
 | `experiment/metrics.py` | results, expected points and the season table |
 | `experiment/xpoints.py`, `xpoints_check.py`, `xpoints_past.py` | this project's expected points, and its checks on this season's past gameweeks and on four past seasons |
+| `experiment/automation.py`, `notify.py`, `scripts/schedule_windows.ps1` | the automatic weekly routine, its pop-ups and its schedule |
 | `experiment/supabase_sync.py`, `supabase/migrations/` | the database copy |
 | `website/` | the public website (Next.js on Vercel), reading the database with the read-only key |
 

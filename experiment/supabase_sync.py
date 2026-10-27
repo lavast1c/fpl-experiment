@@ -189,6 +189,19 @@ RESULT_COLUMNS = {
 }
 
 
+def push_status(status: dict) -> bool:
+    """Copy the automatic runs' status (one row, automation.py) for the website's status panel."""
+    try:
+        settings = _settings()
+        if settings is None:
+            raise RuntimeError("SUPABASE_URL / SUPABASE_SECRET_KEY not set in .env")
+        _upsert(*settings, "automation_status", [status], "id")
+    except Exception as error:  # noqa: BLE001 - the status must never stop a run
+        print(f"  WARNING: the status could not be copied to Supabase ({error}).")
+        return False
+    return True
+
+
 def sync() -> bool:
     """Push to Supabase, but only warn on failure so a run is never blocked."""
     try:

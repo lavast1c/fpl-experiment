@@ -8,8 +8,8 @@ import math
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import config
-from .files import write_csv, write_json
+from . import api_rules, config, fetch
+from .files import read_json_gz, write_csv, write_json
 
 # Column order of the CSV file (the open dataset).
 COLUMNS = [
@@ -159,3 +159,22 @@ def save_snapshot(gw: int, rows: list[dict], filter_name: str, sources: dict,
     }
     write_json(out_dir / f"gw{gw}.meta.json", meta)
     return meta
+
+
+def build_from_saved(filter_name: str = config.SNAPSHOT_FILTER) -> tuple[dict, list[dict], Path]:
+    """Build and save the snapshot from the newest saved bootstrap-static and fixtures (no network),
+    and save the API's rule settings next to it. Returns (meta, all rows, rules file)."""
+    latest = fetch.latest_bootstrap()
+    if latest is None:
+        raise SystemExit("No saved data yet. Run `python run.py fetch` first.")
+    bootstrap_file, gw = latest
+    fixture_files = fetch.cached_files(config.RAW_DIR, gw, "fixtures/")
+    if not fixture_files:
+        raise SystemExit(f"No saved fixtures for gameweek {gw}. Run `python run.py fetch` first.")
+
+    bootstrap = read_json_gz(bootstrap_file)
+    rows = build_rows(bootstrap, read_json_gz(fixture_files[-1]), gw)
+    sources = {"bootstrap": bootstrap_file.relative_to(config.RAW_DIR).as_posix(),
+               "fixtures": fixture_files[-1].relative_to(config.RAW_DIR).as_posix()}
+    meta = save_snapshot(gw, rows, filter_name, sources)
+    return meta, rows, api_rules.save_rules(bootstrap, sources["bootstrap"])
