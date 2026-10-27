@@ -263,7 +263,7 @@ Asked for by the project owner after a line-by-line review of the predictor. Cod
 
 ## 2026-10-27: Automatic weekly runs
 
-- **Decision (with the project owner).** From gameweek 9 the weekly routine runs by itself on the project owner's Windows computer: Task Scheduler starts `python run.py auto` every 3 hours and at log-on (`scripts/schedule_windows.ps1`, `experiment/automation.py`). The project owner gave standing approval for the weekly `claude -p` calls it makes; every other real call still needs asking (CLAUDE.md).
+- **Decision (with the project owner).** From gameweek 9 the weekly routine runs by itself on the project owner's Windows computer: Task Scheduler starts `python run.py auto` every hour and at log-on (`scripts/schedule_windows.ps1`, `experiment/automation.py`). The project owner gave standing approval for the weekly `claude -p` calls it makes; every other real call still needs asking (CLAUDE.md).
 - **What each run does.** It first looks only at saved files, and contacts FPL, Claude or GitHub only when a step is due:
   - **Scoring:** from 18 hours after a gameweek's last kick-off, it checks at most every 12 hours whether FPL has finished checking the points (the same test as before: bonus added for every day and `data_checked`), then scores the gameweek.
   - **Picks:** from 24 hours before each deadline it downloads the data, builds the snapshot and runs every team's decision. If last gameweek isn't scored yet, it waits until 6 hours before the deadline so the memory teams can see their results, and then picks anyway.

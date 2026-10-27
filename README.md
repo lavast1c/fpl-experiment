@@ -114,7 +114,7 @@ python -m pytest                     # run the tests
 
 ### Automatic runs
 
-Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 in [`METHODS.md`](METHODS.md)). Windows Task Scheduler starts `python run.py auto` every 3 hours and at log-on. Each run checks the saved files and does whatever is due:
+Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 in [`METHODS.md`](METHODS.md)). Windows Task Scheduler starts `python run.py auto` every hour and at log-on. Each run checks the saved files and does whatever is due:
 - **Scoring:** from 18 hours after a gameweek's last match, it asks FPL at most every 12 hours whether the points are final, and scores the gameweek once they are.
 - **Picks:** from 24 hours before each deadline, it downloads the data and runs every team's decision. It waits for last week's scores until 6 hours before the deadline.
 - **Afterwards:** it pushes the new data to GitHub, copies it to Supabase, updates the status strip on the website and shows a pop-up.

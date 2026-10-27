@@ -1,6 +1,6 @@
 """The automatic weekly routine: `python run.py auto` (decided 2026-10-27, METHODS.md).
 
-The computer's scheduler starts it every 3 hours and at log-on (scripts/schedule_windows.ps1).
+The computer's scheduler starts it every hour and at log-on (scripts/schedule_windows.ps1).
 Each run first looks only at saved files, and contacts FPL, Claude or GitHub only when a step is due:
 
 1. Missed deadlines. A gameweek whose deadline has passed without every team's decision is

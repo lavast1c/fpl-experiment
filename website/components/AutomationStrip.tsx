@@ -20,7 +20,7 @@ export function AutomationStrip({ status }: { status: AutomationStatus }) {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => setNow(Date.now()), []);
 
-  // The computer runs a check every few hours; an hour past the due time means it is probably off.
+  // The computer runs a check every hour; an hour past the due time means it is probably off.
   const off = now !== null && status.next_check_by !== null && now > new Date(status.next_check_by).getTime() + 3600_000;
   const state = status.problems.length ? "bad" : off ? "off" : status.waiting.length ? "wait" : "ok";
 

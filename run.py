@@ -8,7 +8,7 @@
     python run.py decide --gw N [--mock] all teams make their gameweek N decision
     python run.py score --gw N [--mock]  score gameweek N once it is final
     python run.py test-calls --gw N --yes-real-calls   phase 4 check: 2 real calls per model
-    python run.py auto [--dry-run] [--log]   the automatic weekly routine (scheduler, every 3 hours)
+    python run.py auto [--dry-run] [--log]   the automatic weekly routine (scheduler, every hour)
 
 """
 
@@ -149,7 +149,7 @@ def main() -> None:
     p.add_argument("--mock", action="store_true")
     p.set_defaults(func=cmd_metrics)
 
-    p = commands.add_parser("auto", help="the automatic weekly routine (run every 3 hours by the scheduler)")
+    p = commands.add_parser("auto", help="the automatic weekly routine (run every hour by the scheduler)")
     p.add_argument("--dry-run", action="store_true", help="only say what is due, from saved files (no downloads or calls)")
     p.add_argument("--log", action="store_true", help="write the output to automation/log.txt (the scheduler uses this)")
     p.set_defaults(func=cmd_auto)

@@ -69,7 +69,7 @@ DEADLINE_WARNING_HOURS = 3              # `decide` warns when the deadline is cl
 
 # --- Automatic runs (automation.py, decided 2026-10-27, METHODS.md) -------
 FIRST_GW = 8                          # the experiment's first gameweek
-AUTO_EVERY_HOURS = 3                  # the computer's scheduler runs `python run.py auto` this often, and at log-on
+AUTO_EVERY_HOURS = 1                  # the computer's scheduler runs `python run.py auto` this often, and at log-on
 AUTO_PICK_HOURS_BEFORE = 24           # the weekly picks start this long before a deadline...
 AUTO_PICK_LATEST_HOURS_BEFORE = 6     # ...but wait for last gameweek's scores until this long before it
 AUTO_SCORE_AFTER_HOURS = 18           # first check for final points this long after a gameweek's last kick-off

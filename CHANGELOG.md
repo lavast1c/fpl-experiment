@@ -32,7 +32,7 @@
 - Prompt v2: FPL's ep_next removed from the agents' player table; the nine AI teams picked their gameweek 8 squads again (earlier picks archived).
 - Expected points, season version: assists scaled per position, a stronger pull to the average, and 25% whole-season playing time, chosen on four past seasons. The stats bot picked its gameweek 8 squad again (earlier pick archived); all gameweek 8 expected points recalculated.
 - Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.
-- Automatic weekly runs (`run.py auto`, every 3 hours via Windows Task Scheduler): scoring once FPL confirms the points, the weekly picks 24 hours before each deadline, pushes to GitHub and Supabase, pop-ups, and a status strip on every page of the website.
+- Automatic weekly runs (`run.py auto`, every hour via Windows Task Scheduler): scoring once FPL confirms the points, the weekly picks 24 hours before each deadline, pushes to GitHub and Supabase, pop-ups, and a status strip on every page of the website.
 - Missed deadlines: teams without a decision keep last week's team (outcome `missed`, counted as `missed_weeks`, not as failed weeks). No decision starts after a deadline.
 
 ### Fixed
