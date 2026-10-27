@@ -1,0 +1,1289 @@
+{
+  "gw": 8,
+  "source": "official points",
+  "average": 45,
+  "teams": [
+    {
+      "team": "H-none",
+      "gw": 8,
+      "points": 36,
+      "hit_points": 0,
+      "net_points": 36,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 5,
+      "chip": null,
+      "players": [
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "bench 1"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 138,
+          "name": "Kostoulas",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 447,
+          "name": "Botman",
+          "points": 0,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Dewsbury-Hall on"
+      ]
+    },
+    {
+      "team": "H-self",
+      "gw": 8,
+      "points": 36,
+      "hit_points": 0,
+      "net_points": 36,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 5,
+      "chip": null,
+      "players": [
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "bench 1"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 138,
+          "name": "Kostoulas",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 447,
+          "name": "Botman",
+          "points": 0,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Dewsbury-Hall on"
+      ]
+    },
+    {
+      "team": "H-verified",
+      "gw": 8,
+      "points": 36,
+      "hit_points": 0,
+      "net_points": 36,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 5,
+      "chip": null,
+      "players": [
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "bench 1"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 138,
+          "name": "Kostoulas",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 447,
+          "name": "Botman",
+          "points": 0,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Dewsbury-Hall on"
+      ]
+    },
+    {
+      "team": "S-none",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 11,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 8,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "S-self",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 11,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 8,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "S-verified",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 11,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 8,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "O-none",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 3,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 7,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 2,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "O-self",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 3,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 7,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 2,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "O-verified",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 3,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 7,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 2,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, Evanilson on"
+      ]
+    },
+    {
+      "team": "form-bot",
+      "gw": 8,
+      "points": 32,
+      "hit_points": 0,
+      "net_points": 32,
+      "captain": 115,
+      "auto_subs": 0,
+      "bench_points": 17,
+      "chip": null,
+      "players": [
+        {
+          "id": 109,
+          "name": "Verbruggen",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 13,
+          "name": "Rice",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 1,
+          "role": "bench 1"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "bench 2"
+        },
+        {
+          "id": 304,
+          "name": "O'Shea",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 31,
+          "name": "Konsa",
+          "points": 14,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "crowd-bot",
+      "gw": 8,
+      "points": 38,
+      "hit_points": 0,
+      "net_points": 38,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 2,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 7,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 259,
+          "name": "Diop",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 165,
+          "name": "João Pedro",
+          "points": 0,
+          "role": "starter, vice-captain, subbed off (didn't play)"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 426,
+          "name": "B.Fernandes",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 109,
+          "name": "Verbruggen",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 212,
+          "name": "Hughes",
+          "points": 0,
+          "role": "bench 2"
+        },
+        {
+          "id": 272,
+          "name": "Kusi-Asare",
+          "points": 0,
+          "role": "bench 3"
+        },
+        {
+          "id": 539,
+          "name": "O'Nien",
+          "points": 9,
+          "role": "bench 4, came on as automatic sub"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "João Pedro off, O'Nien on"
+      ]
+    },
+    {
+      "team": "stats-bot",
+      "gw": 8,
+      "points": 73,
+      "hit_points": 0,
+      "net_points": 73,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 2,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 7,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 4,
+          "name": "Gabriel",
+          "points": 17,
+          "role": "starter"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 426,
+          "name": "B.Fernandes",
+          "points": 0,
+          "role": "starter, subbed off (didn't play)"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 8,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 10,
+          "role": "starter"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 249,
+          "name": "Barry",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 111,
+          "name": "Steele",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 566,
+          "name": "Silva",
+          "points": 8,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 176,
+          "name": "Dasilva",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 212,
+          "name": "Hughes",
+          "points": 0,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": [
+        "B.Fernandes off, Silva on"
+      ]
+    }
+  ]
+}

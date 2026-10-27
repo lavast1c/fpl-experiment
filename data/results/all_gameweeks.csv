@@ -1,0 +1,13 @@
+team,kind,model,memory,gw,points,hit_points,net_points,rank,fpl_average,vs_average,expected_points,luck,season_points,season_expected,season_rank,outcome,attempts,rule_breaks,error_codes,stale_picks,transfers_made,captain_changed,chip,auto_subs,bench_points,input_tokens,output_tokens,model_mismatch,notes,memory_words,notes_added,notes_removed,lessons_active,lessons_new,lessons_dropped,lessons_removed,lessons_proven
+H-none,ai,claude-haiku-5-5,none,8,36,0,36,9,45,-9,46.88,-10.88,36,46.88,9,accepted,1,0,,0,0,,,1,5,62053,3693,False,,,,,,,,,
+H-self,ai,claude-haiku-5-5,self,8,36,0,36,9,45,-9,46.88,-10.88,36,46.88,9,accepted,0,0,,0,0,,,1,5,0,0,False,0,0,0,0,,,,,
+H-verified,ai,claude-haiku-5-5,verified,8,36,0,36,9,45,-9,46.88,-10.88,36,46.88,9,accepted,0,0,,0,0,,,1,5,0,0,False,0,0,,,0,0,0,0,0
+S-none,ai,claude-sonnet-5-5,none,8,38,0,38,2,45,-7,49.9,-11.9,38,49.9,2,accepted,1,0,,0,0,,,1,11,62055,1212,False,,,,,,,,,
+S-self,ai,claude-sonnet-5-5,self,8,38,0,38,2,45,-7,49.9,-11.9,38,49.9,2,accepted,0,0,,0,0,,,1,11,0,0,False,0,0,0,0,,,,,
+S-verified,ai,claude-sonnet-5-5,verified,8,38,0,38,2,45,-7,49.9,-11.9,38,49.9,2,accepted,0,0,,0,0,,,1,11,0,0,False,0,0,,,0,0,0,0,0
+O-none,ai,claude-opus-5-5,none,8,38,0,38,2,45,-7,51.53,-13.53,38,51.53,2,accepted,1,0,,0,0,,,1,3,62051,1467,False,,,,,,,,,
+O-self,ai,claude-opus-5-5,self,8,38,0,38,2,45,-7,51.53,-13.53,38,51.53,2,accepted,0,0,,0,0,,,1,3,0,0,False,0,0,0,0,,,,,
+O-verified,ai,claude-opus-5-5,verified,8,38,0,38,2,45,-7,51.53,-13.53,38,51.53,2,accepted,0,0,,0,0,,,1,3,0,0,False,0,0,,,0,0,0,0,0
+form-bot,bot,rule-based,none,8,32,0,32,12,45,-13,45.57,-13.57,32,45.57,12,accepted,1,0,,0,0,,,0,17,0,0,False,,,,,,,,,
+crowd-bot,bot,rule-based,none,8,38,0,38,2,45,-7,48.96,-10.96,38,48.96,2,accepted,1,0,,0,0,,,1,2,0,0,False,,,,,,,,,
+stats-bot,bot,rule-based,none,8,73,0,73,1,45,28,54.93,18.07,73,54.93,1,accepted,1,0,,0,0,,,1,2,0,0,False,,,,,,,,,

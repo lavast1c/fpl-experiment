@@ -1,0 +1,14 @@
+team,kind,model,memory,gameweeks,points,expected_points,luck,hit_points,rule_breaks,failed_weeks,missed_weeks,stale_picks,transfers,captain_changes,chips,input_tokens,output_tokens
+stats-bot,bot,rule-based,none,1,73,54.93,18.07,0,0,0,0,0,0,0,,0,0
+fpl-average,reference,-,-,1,45,,,,,,,,,,,,
+S-none,ai,claude-sonnet-5-5,none,1,38,49.9,-11.9,0,0,0,0,0,0,0,,62055,1212
+S-self,ai,claude-sonnet-5-5,self,1,38,49.9,-11.9,0,0,0,0,0,0,0,,0,0
+S-verified,ai,claude-sonnet-5-5,verified,1,38,49.9,-11.9,0,0,0,0,0,0,0,,0,0
+O-none,ai,claude-opus-5-5,none,1,38,51.53,-13.53,0,0,0,0,0,0,0,,62051,1467
+O-self,ai,claude-opus-5-5,self,1,38,51.53,-13.53,0,0,0,0,0,0,0,,0,0
+O-verified,ai,claude-opus-5-5,verified,1,38,51.53,-13.53,0,0,0,0,0,0,0,,0,0
+crowd-bot,bot,rule-based,none,1,38,48.96,-10.96,0,0,0,0,0,0,0,,0,0
+H-none,ai,claude-haiku-5-5,none,1,36,46.88,-10.88,0,0,0,0,0,0,0,,62053,3693
+H-self,ai,claude-haiku-5-5,self,1,36,46.88,-10.88,0,0,0,0,0,0,0,,0,0
+H-verified,ai,claude-haiku-5-5,verified,1,36,46.88,-10.88,0,0,0,0,0,0,0,,0,0
+form-bot,bot,rule-based,none,1,32,45.57,-13.57,0,0,0,0,0,0,0,,0,0
