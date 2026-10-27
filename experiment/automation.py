@@ -13,7 +13,7 @@ Each run first looks only at saved files, and contacts FPL, Claude or GitHub onl
    again by the next run, until the deadline. The snapshot is built only once, so every team gets
    the same table even when some are picked in a later run.
 4. Then: save the new data to GitHub, copy it to Supabase, update the status panel on the website,
-   and show a pop-up for finished jobs and problems.
+   and send a phone alert for finished jobs and problems (notify.py).
 
 The `claude -p` calls in step 3 run without asking each week: the project owner gave standing
 approval for the weekly picks on 2026-10-27 (CLAUDE.md). Nothing else here makes Claude calls.
@@ -102,7 +102,7 @@ def downloads_left(gw_folder: int) -> int:
 
 @dataclass
 class Report:
-    """What one run did: for the log, the pop-up, the website's status panel and the commit message."""
+    """What one run did: for the log, the phone alert, the website's status panel and the commit message."""
     done: list[str] = field(default_factory=list)        # finished jobs
     problems: list[str] = field(default_factory=list)    # something went wrong (or a deadline was missed)
     waiting: list[str] = field(default_factory=list)     # normal waits, e.g. FPL is still checking points
@@ -217,7 +217,7 @@ def run(now: datetime | None = None) -> Report | None:
             print(f"  {line}")
         if report.done or report.problems:
             title = "FPL experiment: problem" if report.problems else "FPL experiment"
-            notify.popup(title, " ".join(report.problems + report.done))
+            notify.send(title, " ".join(report.problems + report.done), problem=bool(report.problems))
         return report
 
 
@@ -233,7 +233,7 @@ def run_logged() -> None:
             run()
         except Exception:  # noqa: BLE001 - make sure even an unexpected error reaches the log and the owner
             traceback.print_exc()
-            notify.popup("FPL experiment: problem", "The automatic run crashed. See automation/log.txt.")
+            notify.send("FPL experiment: problem", "The automatic run crashed. See automation/log.txt.", problem=True)
 
 
 @contextlib.contextmanager

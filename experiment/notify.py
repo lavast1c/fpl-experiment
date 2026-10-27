@@ -1,36 +1,34 @@
-"""Pop-up messages on the computer that runs the experiment (automation.py).
+"""Phone alerts about the automatic runs (automation.py), through the free ntfy service (ntfy.sh).
 
-Windows only: a standard Windows notification, shown through Windows PowerShell so nothing extra
-needs installing. On other systems, and if anything goes wrong, the message is only printed.
+The project owner's computer has Windows notifications switched off, so alerts go to the ntfy app on
+their phone instead (METHODS.md, 2026-10-27). Each alert is posted to https://ntfy.sh/<topic>, where
+the topic is a long random name kept in .env (NTFY_TOPIC). Anyone who knew the name could read the
+alerts, but they only say what the public repository shows anyway. Without a topic, or if anything
+goes wrong, the alert is only printed: an alert never stops a run.
 """
 
 import os
-import subprocess
-import sys
 
-NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+import requests
+from dotenv import load_dotenv
 
-# The text arrives in environment variables and is escaped before it goes into the notification's XML.
-TOAST_SCRIPT = r"""
-[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
-[Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
-$title = [Security.SecurityElement]::Escape($env:FPL_POPUP_TITLE)
-$text = [Security.SecurityElement]::Escape($env:FPL_POPUP_TEXT)
-$xml = New-Object Windows.Data.Xml.Dom.XmlDocument
-$xml.LoadXml("<toast><visual><binding template='ToastGeneric'><text>$title</text><text>$text</text></binding></visual></toast>")
-# Windows PowerShell's own app id, so the notification needs no registered app of its own.
-$app = '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe'
-[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app).Show((New-Object Windows.UI.Notifications.ToastNotification $xml))
-"""
+from . import config
+
+MAX_CHARS = 1000   # ntfy turns long messages into attachments; alerts are a sentence or two
 
 
-def popup(title: str, text: str) -> None:
-    print(f"  pop-up: {title}: {text}")
-    if sys.platform != "win32":
+def send(title: str, text: str, problem: bool = False) -> None:
+    print(f"  alert: {title}: {text}")
+    load_dotenv(config.PROJECT_ROOT / ".env")
+    topic = os.getenv("NTFY_TOPIC", "")
+    if not topic:
         return
-    env = {**os.environ, "FPL_POPUP_TITLE": title, "FPL_POPUP_TEXT": text}
+    headers = {"Title": title, "Click": config.WEBSITE_URL, "Tags": "warning" if problem else "soccer"}
+    if problem:
+        headers["Priority"] = "high"
     try:
-        subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", TOAST_SCRIPT],
-                       env=env, capture_output=True, timeout=60, creationflags=NO_WINDOW)
-    except (OSError, subprocess.SubprocessError) as error:
-        print(f"  (the pop-up could not be shown: {error})")
+        response = requests.post(f"{config.NTFY_SERVER}/{topic}", data=text[:MAX_CHARS].encode("utf-8"),
+                                 headers=headers, timeout=30)
+        response.raise_for_status()
+    except requests.RequestException as error:
+        print(f"  (the alert could not be sent: {error})")

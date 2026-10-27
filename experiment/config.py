@@ -75,6 +75,8 @@ AUTO_PICK_LATEST_HOURS_BEFORE = 6     # ...but wait for last gameweek's scores u
 AUTO_SCORE_AFTER_HOURS = 18           # first check for final points this long after a gameweek's last kick-off
 AUTO_SCORE_EVERY_HOURS = 12           # then check at most this often (each check is one FPL download)
 AUTO_DIR = PROJECT_ROOT / "automation"  # lock, status and log of the automatic runs (git-ignored)
+NTFY_SERVER = "https://ntfy.sh"       # phone alerts (notify.py); the topic name is private, in .env
+WEBSITE_URL = "https://fpl-experiment.vercel.app"   # tapping an alert opens the website
 
 # --- Where runs are saved -------------------------------------------------
 # Real runs write into DATA_DIR (committed: the open dataset). Mock runs write into MOCK_DIR
