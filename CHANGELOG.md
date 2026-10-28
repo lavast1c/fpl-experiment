@@ -34,6 +34,10 @@
 - Website (`website/`): season table, team pages with every decision, memory and lessons, and an About page.
 - Automatic weekly runs (`run.py auto`, every hour via Windows Task Scheduler): scoring once FPL confirms the points, the weekly picks 24 hours before each deadline, pushes to GitHub and Supabase, phone alerts (ntfy), and a status strip on every page of the website.
 - Missed deadlines: teams without a decision keep last week's team (outcome `missed`, counted as `missed_weeks`, not as failed weeks). No decision starts after a deadline.
+- `run.py cloud-check`: checks that a cloud session can reach everything the automatic runs need.
+
+### Changed
+- The automatic runs moved to a Claude Code scheduled cloud task, every 3 hours (`scripts/cloud_routine.md`), so they keep going while the PC is off. The Windows schedule is now the fallback.
 
 ### Fixed
 - After a deadline, the download limit for `bootstrap-static/` is counted in the new gameweek's folder.

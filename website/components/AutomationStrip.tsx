@@ -1,5 +1,5 @@
 "use client";
-// Runs in the browser, so "how long ago" and "is the computer off?" use the visitor's clock, not the
+// Runs in the browser, so "how long ago" and "have the runs stopped?" use the visitor's clock, not the
 // time the page was last rebuilt. Before that, the strip shows plain times.
 import { useEffect, useState } from "react";
 import type { AutomationStatus } from "@/lib/data";
@@ -20,7 +20,7 @@ export function AutomationStrip({ status }: { status: AutomationStatus }) {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => setNow(Date.now()), []);
 
-  // The computer runs a check every hour; an hour past the due time means it is probably off.
+  // A check runs every few hours; an hour past the due time means the runs have probably stopped.
   const off = now !== null && status.next_check_by !== null && now > new Date(status.next_check_by).getTime() + 3600_000;
   const state = status.problems.length ? "bad" : off ? "off" : status.waiting.length ? "wait" : "ok";
 
@@ -33,7 +33,7 @@ export function AutomationStrip({ status }: { status: AutomationStatus }) {
         </span>
         <span>
           Last check {now === null ? utc(status.checked_at) : ago(status.checked_at, now)}
-          {off ? ": the computer running the experiment seems to be off, and catches up when it is back on" : ""}
+          {off ? ": the automatic runs seem to have stopped, and catch up when they restart" : ""}
         </span>
         {status.upcoming.map((u) => (
           <span key={u.step}>

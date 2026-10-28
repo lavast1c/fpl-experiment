@@ -12,7 +12,7 @@ Work through the brief's phases one at a time and stop after each for review. Th
 
 - No paid API usage. Agents run only via `claude -p` on the user's subscription; no Anthropic API keys.
 - Exact model IDs only: `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5`. Never Fable, never aliases (`best`, `default`, `opus`, `sonnet`, `haiku`).
-- Ask the user before every real `claude -p` agent call. The one exception is the weekly picks made by the automatic routine (`python run.py auto`, run by Windows Task Scheduler every hour): the user gave standing approval for those on 2026-10-27. Any other real call (tests, re-runs, extra calls) still needs asking. Use the mock agent during development.
+- Ask the user before every real `claude -p` agent call. The one exception is the weekly picks made by the automatic routine (`python run.py auto`, run every 3 hours by a scheduled cloud task since 2026-10-28, see `scripts/cloud_routine.md`; Windows Task Scheduler is the fallback): the user gave standing approval for those on 2026-10-27, and for running them in the cloud on 2026-10-28. Any other real call (tests, re-runs, extra calls) still needs asking. Use the mock agent during development.
 - Never log in to, scrape, or control anything on the FPL website or any FPL account. Never use or show a real person's team (except the git-ignored scorer test cache in phase 3).
 - Read the public API minimally: only through `experiment/fetch.py` (cache, per-gameweek cap, delay, no cookies). Never poll in a loop.
 - Never hardcode FPL rules from memory. Read them from `bootstrap-static/` `game_settings`/`chips`, and list anything unverified for the user.

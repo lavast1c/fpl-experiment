@@ -114,19 +114,20 @@ python -m pytest                     # run the tests
 
 ### Automatic runs
 
-Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 in [`METHODS.md`](METHODS.md)). Windows Task Scheduler starts `python run.py auto` every hour and at log-on. Each run checks the saved files and does whatever is due:
+Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 and 2026-10-28 in [`METHODS.md`](METHODS.md)). A Claude Code scheduled cloud task starts `python run.py auto` every 3 hours on Anthropic's cloud computers, so it keeps running while the PC is off; [`scripts/cloud_routine.md`](scripts/cloud_routine.md) records its exact setup. Windows Task Scheduler (`scripts/schedule_windows.ps1`) is the fallback; never run both at once. Each run checks the saved files and does whatever is due:
 - **Scoring:** from 18 hours after a gameweek's last match, it asks FPL at most every 12 hours whether the points are final, and scores the gameweek once they are.
 - **Picks:** from 24 hours before each deadline, it downloads the data and runs every team's decision. It waits for last week's scores until 6 hours before the deadline.
 - **Afterwards:** it pushes the new data to GitHub, copies it to Supabase, updates the status strip on the website and sends an alert to your phone.
 
-If the computer is off until a deadline, the teams keep last week's team (outcome `missed`).
+If the runs fail until a deadline, the teams keep last week's team (outcome `missed`).
 
-Phone alerts use the free [ntfy](https://ntfy.sh) app: put a long random topic name in `.env` (`NTFY_TOPIC`, see `.env.example`) and subscribe to the same name in the app. Without one, alerts are only written to the log.
+Phone alerts use the free [ntfy](https://ntfy.sh) app: put a long random topic name in `.env` (`NTFY_TOPIC`, see `.env.example`) and subscribe to the same name in the app. Without one, alerts are only printed.
 
 ```
-powershell -ExecutionPolicy Bypass -File scripts\schedule_windows.ps1   # set up the schedule (once)
 python run.py auto --dry-run         # what is due now, from saved files only
 python run.py auto                   # one run by hand (real downloads and calls if due)
+python run.py cloud-check --yes-real-call   # in a cloud session: can it reach everything? (1 real call)
+powershell -ExecutionPolicy Bypass -File scripts\schedule_windows.ps1   # fallback: the hourly Windows schedule
 ```
 
 ## Code map
@@ -145,7 +146,8 @@ python run.py auto                   # one run by hand (real downloads and calls
 | `experiment/runner.py` | the weekly `decide` and `score` |
 | `experiment/metrics.py` | results, expected points and the season table |
 | `experiment/xpoints.py`, `xpoints_check.py`, `xpoints_past.py` | this project's expected points, and its checks on this season's past gameweeks and on four past seasons |
-| `experiment/automation.py`, `notify.py`, `scripts/schedule_windows.ps1` | the automatic weekly routine, its phone alerts and its schedule |
+| `experiment/automation.py`, `notify.py`, `cloud_check.py` | the automatic weekly routine, its phone alerts and the cloud check |
+| `scripts/cloud_routine.md`, `scripts/schedule_windows.ps1` | the routine's schedule: in the cloud, or the Windows fallback |
 | `experiment/supabase_sync.py`, `supabase/migrations/` | the database copy |
 | `website/` | the public website (Next.js on Vercel), reading the database with the read-only key |
 
