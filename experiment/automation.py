@@ -314,7 +314,11 @@ def update_status(now: datetime, report: Report) -> None:
                   every_hours=config.AUTO_EVERY_HOURS, upcoming=upcoming_steps(now),
                   waiting=report.waiting, problems=report.problems)
     write_json(path, status)
-    supabase_sync.push_status(status)
+    # Send the last result only when this run has one: a cloud run starts without status.json, and the
+    # database keeps its earlier values for the columns a row leaves out.
+    has_result = report.done or report.problems
+    supabase_sync.push_status(status if has_result else {k: v for k, v in status.items()
+                                                          if not k.startswith("last_result")})
 
 
 def describe(now: datetime | None = None) -> None:

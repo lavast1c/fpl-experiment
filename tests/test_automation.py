@@ -63,3 +63,14 @@ def test_only_one_run_at_a_time_unless_the_lock_is_stale():
     write_json(config.AUTO_DIR / "lock.json", {"started_at": (now - 7 * HOUR).isoformat()})
     with automation.lock(now) as after_crash:
         assert after_crash
+
+
+def test_a_quiet_run_keeps_the_last_result_on_the_website(monkeypatch):
+    # A cloud run starts without automation/status.json, so a quiet run must not send an empty last result.
+    sent = []
+    monkeypatch.setattr(automation, "upcoming_steps", lambda now: [])
+    monkeypatch.setattr(automation.supabase_sync, "push_status", sent.append)
+    automation.update_status(utc("2026-10-28T06:07"), automation.Report())
+    assert "last_result" not in sent[-1] and sent[-1]["checked_at"] == "2026-10-28T06:07+00:00"
+    automation.update_status(utc("2026-10-28T09:07"), automation.Report(done=["Gameweek 9 picks done."]))
+    assert sent[-1]["last_result"] == "Gameweek 9 picks done." and sent[-1]["last_result_ok"] is True
