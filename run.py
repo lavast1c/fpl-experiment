@@ -9,7 +9,7 @@
     python run.py score --gw N [--mock]  score gameweek N once it is final
     python run.py test-calls --gw N --yes-real-calls   phase 4 check: 2 real calls per model
     python run.py auto [--dry-run] [--log]   the automatic weekly routine (scheduler, every hour)
-    python run.py cloud-check --yes-real-call   can a cloud session do everything `auto` needs? (1 real call)
+    python run.py cloud-check [--yes-real-call]   can a cloud session do everything `auto` needs? (+1 real call)
 
 """
 
@@ -103,10 +103,8 @@ def cmd_auto(args) -> None:
 
 
 def cmd_cloud_check(args) -> None:
-    if not args.yes_real_call:
-        sys.exit("This makes 1 real `claude -p` call (claude-haiku-5-5). Add --yes-real-call once agreed.")
     from experiment import cloud_check
-    if not cloud_check.run():
+    if not cloud_check.run(real_call=args.yes_real_call):
         sys.exit(1)
 
 
@@ -163,8 +161,8 @@ def main() -> None:
     p.add_argument("--log", action="store_true", help="write the output to automation/log.txt (the scheduler uses this)")
     p.set_defaults(func=cmd_auto)
 
-    p = commands.add_parser("cloud-check", help="check a cloud session can reach everything `auto` needs (1 real call)")
-    p.add_argument("--yes-real-call", action="store_true")
+    p = commands.add_parser("cloud-check", help="check a cloud session can reach everything `auto` needs")
+    p.add_argument("--yes-real-call", action="store_true", help="also make one short real agent call (claude-haiku-5-5)")
     p.set_defaults(func=cmd_cloud_check)
 
     p = commands.add_parser("test-calls", help="phase 4 check: one probe and one decision call per model")

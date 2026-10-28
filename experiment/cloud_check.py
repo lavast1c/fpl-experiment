@@ -1,14 +1,14 @@
 """Check that a cloud session can do everything the automatic runs need (METHODS.md, 2026-10-28).
 
-`python run.py cloud-check --yes-real-call` changes nothing in data/ and reports:
-1. the Python and `claude` CLI versions, and how the CLI is signed in (variable names only, never values)
+`python run.py cloud-check` changes nothing in data/ and reports:
+1. the Python and `claude` CLI versions, and which sign-in variables agent calls remove (names only, never values)
 2. whether the private settings are present (yes or no only)
 3. one small FPL download (event-status/), saved in a temporary folder instead of data/
 4. one read of the website's status row in Supabase
 5. one test alert to the phone
 6. a push to a temporary branch on GitHub, which is deleted again straight away
-7. one very short real agent call (claude-haiku-5-5), made exactly the way the weekly picks make them.
-Step 7 is a real `claude -p` call, so it needs the project owner's approval each time (CLAUDE.md).
+7. only with --yes-real-call: one very short real agent call (claude-haiku-5-5), made exactly the way the
+   weekly picks make them. It is a real `claude -p` call, so it needs the project owner's approval (CLAUDE.md).
 """
 
 import os
@@ -34,11 +34,14 @@ def _command(*args: str) -> str:
     return done.stdout.strip()
 
 
+def claude_variables() -> list[str]:
+    return sorted(k for k in os.environ if "ANTHROPIC" in k or "CLAUDE" in k)
+
+
 def check_versions() -> str:
-    signed_in = sorted(k for k in os.environ if "ANTHROPIC" in k or "CLAUDE" in k)
-    removed = [k for k in signed_in if k in agents.BLOCKED_ENV]
+    removed = [k for k in claude_variables() if k in agents.BLOCKED_ENV]
     return (f"Python {platform.python_version()}, {_command('claude', '--version')}; "
-            f"Claude variables: {signed_in or 'none'}; removed for agent calls: {removed or 'none'}")
+            f"removed for agent calls: {removed or 'none'}")
 
 
 def check_settings() -> str:
@@ -95,16 +98,17 @@ def check_agent_call() -> str:
 
 CHECKS = [("Versions and sign-in", check_versions), ("Private settings", check_settings),
           ("FPL download", check_fpl), ("Supabase", check_supabase), ("Phone alert", check_alert),
-          ("GitHub push", check_git_push), ("Agent call", check_agent_call)]
+          ("GitHub push", check_git_push)]
 
 
-def run() -> bool:
+def run(real_call: bool = False) -> bool:
     failed = []
-    for name, check in CHECKS:
+    for name, check in CHECKS + ([("Agent call", check_agent_call)] if real_call else []):
         try:
             print(f"PASS  {name}: {check()}")
         except Exception as error:  # noqa: BLE001 - report every check, whatever goes wrong
             failed.append(name)
             print(f"FAIL  {name}: {error}")
     print("ALL CHECKS PASSED" if not failed else f"FAILED: {', '.join(failed)}")
+    print(f"(Claude variables here: {', '.join(claude_variables()) or 'none'})")
     return not failed
