@@ -6,7 +6,7 @@
 3. one small FPL download (event-status/), saved in a temporary folder instead of data/
 4. one read of the website's status row in Supabase
 5. one test alert to the phone
-6. a push to a temporary branch on GitHub, which is deleted again straight away
+6. a dry-run push to main (GitHub checks the permission; nothing is sent)
 7. only with --yes-real-call: one very short real agent call (claude-haiku-5-5), made exactly the way the
    weekly picks make them. It is a real `claude -p` call, so it needs the project owner's approval (CLAUDE.md).
 """
@@ -15,7 +15,6 @@ import os
 import platform
 import subprocess
 import tempfile
-from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
@@ -76,13 +75,12 @@ def check_alert() -> str:
 
 
 def check_git_push() -> str:
-    branch = f"claude/cloud-check-{datetime.now(timezone.utc):%Y%m%d%H%M%S}"
+    # A dry run asks GitHub for permission to push to main without sending anything. (Cloud sessions can push
+    # but not delete branches, so a real test push would leave a branch behind.)
+    _command("git", "push", "--dry-run", "origin", "HEAD:refs/heads/main")
     name, email = (subprocess.run(["git", "config", key], capture_output=True, text=True).stdout.strip() or "?"
                    for key in ("user.name", "user.email"))
-    who = f"{name} <{email}>"
-    _command("git", "push", "origin", f"HEAD:refs/heads/{branch}")
-    _command("git", "push", "origin", "--delete", branch)
-    return f"pushed and deleted {branch} (git identity here: {who})"
+    return f"GitHub accepts pushes to main (git identity here: {name} <{email}>)"
 
 
 def check_agent_call() -> str:
