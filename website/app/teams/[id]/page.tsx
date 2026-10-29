@@ -134,11 +134,14 @@ function Pitch({ xi, bench, captain, vice, players, scored }: {
       </div>
     );
   };
+  // A starter with no known position still shows, in a row of his own.
+  const unplaced = xi.filter((pid) => !LINES.includes(players.get(pid)?.pos ?? ""));
   return (
     <div className="pitch" aria-label="Starting eleven and bench">
       {LINES.map((pos) => (
         <div className="pitch-row" key={pos}>{xi.filter((pid) => players.get(pid)?.pos === pos).map(card)}</div>
       ))}
+      {unplaced.length > 0 && <div className="pitch-row">{unplaced.map(card)}</div>}
       <div className="bench">{bench.map(card)}</div>
     </div>
   );

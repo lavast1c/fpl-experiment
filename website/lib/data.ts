@@ -151,13 +151,23 @@ export async function getAutomationStatus(): Promise<AutomationStatus | null> {
 }
 
 /** Player names, clubs and positions from the snapshot each team decided with. */
+/**
+ * The players as that gameweek's snapshot showed them. A player it doesn't have (a missed week has
+ * no snapshot at all) comes from the nearest other snapshot, so the pitch can still place him.
+ */
 export async function getPlayers(gw: number, ids: number[]): Promise<Map<number, SnapshotPlayer>> {
   if (ids.length === 0) return new Map();
-  const rows = await table<SnapshotPlayer>(
+  const rows = await table<SnapshotPlayer & { gw: number }>(
     "snapshot_players",
-    `select=id,name,club,pos,price&gw=eq.${gw}&id=in.(${[...new Set(ids)].join(",")})`,
+    `select=id,name,club,pos,price,gw&id=in.(${[...new Set(ids)].join(",")})`,
   );
-  return new Map(rows.map((p) => [p.id, p]));
+  // That gameweek first, then earlier ones nearest first, then later ones.
+  const distance = (row: { gw: number }) => (row.gw <= gw ? gw - row.gw : 100 + row.gw - gw);
+  const players = new Map<number, SnapshotPlayer>();
+  for (const { id, name, club, pos, price } of rows.sort((a, b) => distance(a) - distance(b))) {
+    if (!players.has(id)) players.set(id, { id, name, club, pos, price });
+  }
+  return players;
 }
 
 /** The gameweek the next decisions are for, and the latest one with decisions. */
