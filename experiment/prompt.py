@@ -7,6 +7,7 @@ never disagree with the validator.
 """
 
 import json
+import re
 
 from . import config, memory
 from .rules import Rules
@@ -19,6 +20,7 @@ CHIP_TEXT = {
     "bboost": "bench boost: your 4 bench players' points also count this gameweek",
     "3xc": "triple captain: your captain scores triple instead of double this gameweek",
 }
+PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")   # {{name}} in prompts/{version}/decision.md
 
 
 def _money(tenths: int) -> str:
@@ -143,12 +145,13 @@ def build_prompt(state: TeamState, players: dict[int, Player], rules: Rules, gw:
         "players": players_table,
         "answer": answer_text(not state.has_squad, memory_kind),
     }
-    text = load_template("decision.md")
-    for key, value in replacements.items():
-        text = text.replace("{{" + key + "}}", value)
-    if "{{" in text.split("## Player data")[0]:
-        raise ValueError("A placeholder in the prompt template was not filled in.")
-    return text
+    template = load_template("decision.md")
+    unknown = set(PLACEHOLDER.findall(template)) - set(replacements)
+    if unknown:
+        raise ValueError(f"The prompt template has placeholders nothing fills in: {sorted(unknown)}")
+    # One pass over the template only: text put in (such as an agent's own notes) is never searched for
+    # placeholders, so a note containing "{{" can't break the prompt or pull in another section.
+    return PLACEHOLDER.sub(lambda match: replacements[match.group(1)], template)
 
 
 def retry_text(previous_answer: str, result: Result) -> str:
