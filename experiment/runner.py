@@ -282,7 +282,9 @@ def copy_first_squad(team: Team, source_id: str, state: TeamState, week: Week) -
     if source is None or source["outcome"] != "accepted":
         print(f"  WARNING {team.id}: {source_id} has no accepted squad to copy, so {team.id} picks its own.")
         return None
-    decision = source["decision"]
+    # Only the squad, lineup and captain are shared: a chip the no-memory team played is its own
+    # choice, so the memory teams keep theirs.
+    decision = {**source["decision"], "chip": None}
     result = validate(decision, state, week.players, week.rules, week.gw)
     if not result.ok:
         print(f"  WARNING {team.id}: {source_id}'s squad can't be copied ({', '.join(result.error_codes())}); "

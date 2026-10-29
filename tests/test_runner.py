@@ -68,6 +68,22 @@ def test_a_run_out_of_time_starts_no_new_team_but_saves_after_each(monkeypatch):
     assert all(t.id in runner.undecided(9, mock=True) for t in TEAMS[:2])   # left for the next run
 
 
+def test_a_memory_team_copies_the_first_squad_but_not_its_chip(monkeypatch):
+    from experiment.files import write_json
+    use_mock(monkeypatch, illegal_rate=0, chip_rate=0)
+    none, self_ = (next(t for t in TEAMS if t.id == i) for i in ("H-none", "H-self"))
+    runner.decide(8, mock=True, teams=[none])
+    path = config.MOCK_DIR / "decisions" / "gw8" / "H-none.json"
+    played = read_json(path)
+    played["decision"]["chip"] = "3xc"                         # as if the no-memory team played triple captain
+    write_json(path, played)
+    runner.decide(8, mock=True, teams=[self_])
+    copied = read_json(config.MOCK_DIR / "decisions" / "gw8" / "H-self.json")
+    assert copied["copied_from"] == "H-none" and copied["chip"] is None
+    assert copied["decision"]["squad"] == played["decision"]["squad"]
+    assert runner.load_state(config.MOCK_DIR, "H-self").chips_used == []
+
+
 def test_already_decided_teams_are_skipped(monkeypatch, capsys):
     use_mock(monkeypatch, illegal_rate=0, chip_rate=0)
     runner.decide(8, mock=True, teams=[TEAM])
