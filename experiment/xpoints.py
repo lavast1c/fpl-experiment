@@ -27,9 +27,11 @@ Rates are shrunk towards the position or league average, so a few early games do
 import math
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 
 from . import config
+from .fetch import saved_at
 from .files import read_json, read_json_gz, write_csv
 
 XPOINTS_DIR = config.DATA_DIR / "xpoints"
@@ -90,12 +92,7 @@ class History:
     settings: Settings = SEASON
 
 
-def saved_at(path: Path) -> str:
-    """When fetch.py saved a raw file, from its name: 'bootstrap-static_20261022T143206Z.json.gz' -> '20261022T143206Z'."""
-    return path.name.rsplit("_", 1)[1].split(".")[0]
-
-
-def live_file(gw: int, raw_dir: Path = config.RAW_DIR, as_of: str | None = None) -> Path | None:
+def live_file(gw: int, raw_dir: Path = config.RAW_DIR, as_of: datetime | None = None) -> Path | None:
     """The newest saved points for gameweek gw; with as_of, the newest saved by then (see predict)."""
     files = sorted((raw_dir / f"gw{gw}").glob(f"event-{gw}-live_*.json.gz"))
     if as_of is not None:
@@ -104,7 +101,7 @@ def live_file(gw: int, raw_dir: Path = config.RAW_DIR, as_of: str | None = None)
 
 
 def load_history(before_gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
-                 settings: Settings = SEASON, as_of: str | None = None) -> History:
+                 settings: Settings = SEASON, as_of: datetime | None = None) -> History:
     scoring = bootstrap["game_config"]["scoring"]
     teams_of = {p["id"]: p["team"] for p in bootstrap["elements"]}
     position_of = {p["id"]: POSITIONS[p["element_type"]] for p in bootstrap["elements"]}
@@ -271,10 +268,10 @@ def chance_of_playing(element: dict) -> float:
 
 
 def predict(gw: int, bootstrap: dict, fixtures: list[dict], raw_dir: Path = config.RAW_DIR,
-            settings: Settings = SEASON, as_of: str | None = None) -> dict[int, dict]:
+            settings: Settings = SEASON, as_of: datetime | None = None) -> dict[int, dict]:
     """Per player: xp_if_fit for gameweek gw, xp (times FPL's chance of playing), and the 3-gameweek total if fit.
 
-    as_of (a saved_at time) uses only the points saved by then, so a gameweek's predictions stay the
+    as_of uses only the points downloaded by then, so a gameweek's predictions stay the
     same however late they are worked out (see for_snapshot)."""
     history = load_history(gw, bootstrap, fixtures, raw_dir, settings, as_of)
     scoring = bootstrap["game_config"]["scoring"]
@@ -302,8 +299,8 @@ def for_snapshot(gw: int, raw_dir: Path = config.RAW_DIR) -> dict[int, dict]:
     return predict(meta["gw"], bootstrap, fixtures, raw_dir, as_of=snapshot_time(meta))
 
 
-def snapshot_time(meta: dict) -> str:
-    """When the snapshot's player list was saved (a saved_at time)."""
+def snapshot_time(meta: dict) -> datetime:
+    """When the snapshot's player list was downloaded."""
     return saved_at(Path(meta["sources"]["bootstrap"]))
 
 

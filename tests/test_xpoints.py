@@ -1,5 +1,7 @@
 """Our expected-points predictor, on the saved gameweek 1-8 data."""
 
+from datetime import datetime, timezone
+
 import pytest
 
 from experiment import config, xpoints
@@ -41,7 +43,7 @@ def test_points_saved_after_the_snapshot_are_left_out(inputs, tmp_path):
         source = xpoints.live_file(gw)
         (raw / f"gw{gw}").mkdir(parents=True)
         (raw / f"gw{gw}" / source.name).write_bytes(source.read_bytes())
-    as_of = "20261022T143206Z"
+    as_of = datetime(2026, 10, 22, 14, 32, 6, tzinfo=timezone.utc)
     pinned = xpoints.predict(8, bootstrap, fixtures, raw, as_of=as_of)
     assert pinned == xpoints.predict(8, bootstrap, fixtures)
     # Gameweek 7's points saved again after the snapshot (say, by a later scoring run) change nothing...
