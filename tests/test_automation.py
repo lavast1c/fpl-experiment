@@ -74,3 +74,75 @@ def test_a_quiet_run_keeps_the_last_result_on_the_website(monkeypatch):
     assert "last_result" not in sent[-1] and sent[-1]["checked_at"] == "2026-10-28T06:07+00:00"
     automation.update_status(utc("2026-10-28T09:07"), automation.Report(done=["Gameweek 9 picks done."]))
     assert sent[-1]["last_result"] == "Gameweek 9 picks done." and sent[-1]["last_result_ok"] is True
+
+
+# --- saving to GitHub (a real git repository in a temporary folder, with a second copy pushing too) ---
+
+def run_git(folder, *args):
+    import subprocess
+    return subprocess.run(["git", *args], cwd=folder, capture_output=True, text=True, check=True).stdout
+
+
+@pytest.fixture
+def copies(tmp_path, monkeypatch):
+    """'here' is the automatic run's copy; 'other' is another computer (or the cloud) pushing to the same GitHub."""
+    remote, here, other = tmp_path / "github.git", tmp_path / "here", tmp_path / "other"
+    run_git(tmp_path, "init", "-q", "--bare", "-b", "main", str(remote))
+    for folder in (here, other):
+        run_git(tmp_path, "clone", "-q", str(remote), str(folder))
+        run_git(folder, "config", "user.name", "Test")
+        run_git(folder, "config", "user.email", "test@example.com")
+        run_git(folder, "checkout", "-q", "-b", "main")
+    (here / "data").mkdir()
+    (here / "data" / "log.csv").write_text("a\n")
+    run_git(here, "add", "data")
+    run_git(here, "commit", "-q", "-m", "start")
+    run_git(here, "push", "-q", "origin", "main")
+    run_git(other, "pull", "-q", "origin", "main")
+    monkeypatch.setattr(config, "PROJECT_ROOT", here)
+    return here, other, remote
+
+
+def commit_line(folder, text, push):
+    with open(folder / "data" / "log.csv", "a") as f:
+        f.write(text + "\n")
+    run_git(folder, "commit", "-q", "-am", text)
+    if push:
+        run_git(folder, "push", "-q", "origin", "main")
+
+
+def test_a_run_starts_from_githubs_newest_data(copies):
+    here, other, _ = copies
+    commit_line(other, "from the cloud", push=True)
+    report = automation.Report()
+    assert automation.catch_up_with_github(report) and report.problems == []
+    assert "from the cloud" in (here / "data" / "log.csv").read_text()
+
+
+def test_a_clash_with_github_is_undone_not_left_half_way(copies):
+    here, other, remote = copies
+    commit_line(other, "pushed elsewhere", push=True)
+    commit_line(here, "made here", push=False)
+    report = automation.Report()
+    automation.push_to_github(report)
+    assert "clashes" in report.problems[0]
+    assert automation.branch() == "main"                      # not stuck mid-rebase
+    assert "<<<<<<<" not in (here / "data" / "log.csv").read_text()
+    assert "made here" in run_git(here, "log", "-1", "--format=%s")   # the commit is kept for sorting out
+
+
+def test_a_commit_an_earlier_run_could_not_push_is_pushed_next_time(copies, monkeypatch):
+    here, _, remote = copies
+    commit_line(here, "push failed last time", push=False)
+    monkeypatch.setattr(automation.supabase_sync, "sync", lambda: None)
+    report = automation.Report()
+    automation.save_and_copy(report)                          # nothing new in data/, but one commit to push
+    assert report.problems == []
+    assert "push failed last time" in run_git(remote, "log", "-1", "--format=%s", "main")
+
+
+def test_progress_is_committed_and_pushed(copies):
+    here, _, remote = copies
+    (here / "data" / "decision.json").write_text("{}")
+    automation.commit_and_push("Gameweek 9: picks so far (automatic run, still going)", automation.Report())
+    assert run_git(remote, "log", "-1", "--format=%s", "main").strip() == "Gameweek 9: picks so far (automatic run, still going)"

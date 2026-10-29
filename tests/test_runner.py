@@ -57,6 +57,17 @@ def test_every_attempt_illegal_later_means_no_changes(monkeypatch):
     assert after.free_transfers == min(before.free_transfers + 1, 5)
 
 
+def test_a_run_out_of_time_starts_no_new_team_but_saves_after_each(monkeypatch):
+    from datetime import datetime, timedelta, timezone
+    use_mock(monkeypatch, illegal_rate=0, chip_rate=0)
+    saves = []
+    runner.decide(8, mock=True, teams=TEAMS[:2], after_each=lambda: saves.append(1))
+    assert len(saves) == 2                                     # after each team, to push the work so far
+    past = datetime.now(timezone.utc) - timedelta(minutes=1)
+    runner.decide(9, mock=True, teams=TEAMS[:2], stop_at=past, bot_list=[])
+    assert all(t.id in runner.undecided(9, mock=True) for t in TEAMS[:2])   # left for the next run
+
+
 def test_already_decided_teams_are_skipped(monkeypatch, capsys):
     use_mock(monkeypatch, illegal_rate=0, chip_rate=0)
     runner.decide(8, mock=True, teams=[TEAM])

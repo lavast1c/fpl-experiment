@@ -92,7 +92,11 @@ def expected_points_for(gw: int, meta: dict, bootstrap: dict, base: Path) -> dic
 
 
 def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed: bool = False,
-           bot_list: list[bots.Bot] = bots.BOTS) -> None:
+           bot_list: list[bots.Bot] = bots.BOTS, stop_at: datetime | None = None, after_each=None) -> None:
+    """Decide every team and bot not decided yet for gameweek gw.
+
+    The automatic run passes stop_at (no AI team's decision starts after it; those teams are tried
+    again by the next run) and after_each (called after each team, to save the work so far)."""
     if teams and not mock and not real_calls_confirmed:
         raise SystemExit("Real runs use your Claude plan. Add --yes-real-calls once you have agreed to it.")
     base = base_dir(mock)
@@ -121,9 +125,14 @@ def decide(gw: int, mock: bool, teams: list[Team] = TEAMS, real_calls_confirmed:
         if late or deadline_passed(events, gw, mock):
             late = True   # never start a decision after the deadline
             continue
+        if stop_at is not None and datetime.now(timezone.utc) >= stop_at:
+            print(f"  {team.id}: not started, as this run is out of time; the next run tries again")
+            continue
         outcome = run_team(team, week)
         if outcome is not None:
             summary.append(outcome)
+        if after_each is not None:
+            after_each()
     for bot in bot_list:
         if (base / "decisions" / f"gw{gw}" / f"{bot.id}.json").exists():
             print(f"  {bot.id}: already decided, skipped")

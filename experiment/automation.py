@@ -2,7 +2,8 @@
 
 A scheduled cloud task starts it every 3 hours (scripts/cloud_routine.md); the Windows schedule
 (scripts/schedule_windows.ps1) is the fallback. Never run both at once.
-Each run first looks only at saved files, and contacts FPL, Claude or GitHub only when a step is due:
+Each run first brings its copy of the data up to date with GitHub (and does nothing else if it
+can't), then looks only at saved files, and contacts FPL or Claude only when a step is due:
 
 1. Missed deadlines. A gameweek whose deadline has passed without every team's decision is
    recorded as missed (runner.record_missed): those teams keep last week's team.
@@ -12,7 +13,9 @@ Each run first looks only at saved files, and contacts FPL, Claude or GitHub onl
    every team's decision. If last gameweek isn't scored yet, wait for it until 6 hours before the
    deadline, then pick anyway. A team whose call fails (no internet, Claude usage limit) is tried
    again by the next run, until the deadline. The snapshot is built only once, so every team gets
-   the same table even when some are picked in a later run.
+   the same table even when some are picked in a later run. A slow run pushes the teams picked so
+   far every few minutes and starts no new team after 40 minutes, so the cloud's 1-hour limit
+   never throws work away.
 4. Then: save the new data to GitHub, copy it to Supabase, update the status panel on the website,
    and send a phone alert for finished jobs and problems (notify.py).
 
@@ -33,6 +36,7 @@ from .files import read_json, read_json_gz, write_json
 from .gameweeks import deadline, parse_time, upcoming_gw
 
 HOUR = timedelta(hours=1)
+MINUTE = timedelta(minutes=1)
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 LOCK_STALE_HOURS = 6          # a lock this old was left by a crash or a shutdown
 LOG_MAX_BYTES = 5_000_000     # then the log starts again (the previous one is kept as log.old.txt)
@@ -183,11 +187,22 @@ def pick_if_due(now: datetime, report: Report) -> None:
         meta, _, _ = snapshot.build_from_saved()
         print(f"Snapshot for gameweek {gw}: {meta['players_in_snapshot']} players")
 
-    runner.decide(gw, mock=False, real_calls_confirmed=True)
+    started = last_save = datetime.now(timezone.utc)
+
+    def save_progress() -> None:
+        # Claude slow or failing: push what is done every few minutes, so a run cut off by the cloud
+        # task's time limit loses at most the team it was working on.
+        nonlocal last_save
+        if datetime.now(timezone.utc) - last_save >= config.AUTO_SAVE_EVERY_MINUTES * MINUTE:
+            commit_and_push(f"Gameweek {gw}: picks so far (automatic run, still going)", report)
+            last_save = datetime.now(timezone.utc)
+
+    runner.decide(gw, mock=False, real_calls_confirmed=True,
+                  stop_at=started + config.AUTO_PICK_STOP_MINUTES * MINUTE, after_each=save_progress)
     left = runner.undecided(gw)
     if left:
-        report.problems.append(f"Gameweek {gw}: {', '.join(left)} not picked yet (Claude could not be "
-                               f"reached); trying again at the next check, until the deadline.")
+        report.problems.append(f"Gameweek {gw}: {', '.join(left)} not picked yet (Claude could not be reached, "
+                               f"or the run ran out of time); trying again at the next check, until the deadline.")
     else:
         report.done.append(f"Gameweek {gw} picks done for all {len(runner.TEAMS) + len(bots.BOTS)} teams.")
 
@@ -209,10 +224,11 @@ def run(now: datetime | None = None) -> Report | None:
             print("Another automatic run is still busy, so this one stops.")
             return None
         report = Report()
-        attempt(report, "Recording missed deadlines", lambda: record_missed_weeks(now, saved_fpl_data()[0], report))
-        attempt(report, "Scoring", score_if_final, now, report)
-        attempt(report, "The picks", pick_if_due, now, report)
-        attempt(report, "Saving the data", save_and_copy, report)
+        if catch_up_with_github(report):
+            attempt(report, "Recording missed deadlines", lambda: record_missed_weeks(now, saved_fpl_data()[0], report))
+            attempt(report, "Scoring", score_if_final, now, report)
+            attempt(report, "The picks", pick_if_due, now, report)
+            attempt(report, "Saving the data", save_and_copy, report)
         attempt(report, "Updating the status", update_status, now, report)
         for line in report.done + report.problems + report.waiting:
             print(f"  {line}")
@@ -258,27 +274,75 @@ def git(*args: str) -> subprocess.CompletedProcess:
                           encoding="utf-8", creationflags=NO_WINDOW)
 
 
+def branch() -> str:
+    return git("rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+
+
+def has_new_data() -> bool:
+    return bool(git("status", "--porcelain", "--", "data").stdout.strip())
+
+
+def ahead_of_github() -> bool:
+    """True if this copy has commits GitHub hasn't got (say, an earlier push failed)."""
+    count = git("rev-list", "--count", "origin/main..HEAD")
+    return count.returncode != 0 or count.stdout.strip() != "0"
+
+
+def catch_up_with_github(report: Report) -> bool:
+    """Start from GitHub's newest data, so a run never works from an old copy (this computer after the
+    cloud task has been running, say). Commits not pushed yet go on top. If that can't be done, the
+    run changes nothing: returns False, with the problem reported."""
+    if branch() != "main":
+        report.problems.append(f"Nothing was done: git is on '{branch()}', not main.")
+        return False
+    if git("pull", "--rebase", "--autostash", "origin", "main").returncode != 0:
+        git("rebase", "--abort")   # never leave the folder half-way through
+        report.problems.append("Nothing was done: the newest data could not be fetched from GitHub "
+                               "(no internet, or it clashes with data saved here).")
+        return False
+    return True
+
+
+def push_to_github(report: Report) -> None:
+    """Push main to GitHub. If GitHub has newer commits, put ours on top of them first; if they clash,
+    undo that, so the folder is never left half-way (the commits stay here to be sorted out by hand)."""
+    if git("push", "origin", "main").returncode == 0:
+        return
+    if git("pull", "--rebase", "--autostash", "origin", "main").returncode != 0:
+        git("rebase", "--abort")
+        report.problems.append("The new data was not sent to GitHub: it clashes with newer data there, "
+                               "and needs sorting out by hand.")
+        return
+    pushed = git("push", "origin", "main")
+    if pushed.returncode != 0:
+        report.problems.append(f"The new data was not sent to GitHub ({pushed.stderr.strip()[:200]}).")
+
+
+def commit_and_push(message: str, report: Report) -> None:
+    """Commit the changed files in data/, if any, and push everything GitHub hasn't got yet."""
+    if branch() != "main":
+        report.problems.append(f"The new data was not sent to GitHub: git is on '{branch()}', not main.")
+        return
+    if has_new_data():
+        git("add", "--", "data")
+        committed = git("commit", "-m", message, "--", "data")
+        if committed.returncode != 0:
+            raise RuntimeError(f"git commit: {committed.stderr.strip() or committed.stdout.strip()}")
+    if ahead_of_github():
+        push_to_github(report)
+
+
 def save_and_copy(report: Report) -> None:
-    """Commit the changed files in data/ and push them to GitHub, then copy them to Supabase."""
-    if not git("status", "--porcelain", "--", "data").stdout.strip():
+    """Commit the changed files in data/ and push them to GitHub, then copy them to Supabase. Commits
+    an earlier run couldn't push are pushed now too."""
+    is_new = has_new_data()
+    if not is_new and not ahead_of_github():
         return
-    supabase_sync.sync()
-    branch = git("rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
-    if branch != "main":
-        report.problems.append(f"The data was saved on this computer but not pushed: git is on '{branch}', not main.")
-        return
+    if is_new:
+        supabase_sync.sync()
     lines = report.done + report.problems
     message = f"{lines[0] if lines else 'Download FPL data'} (automatic run)" + "".join(f"\n\n{l}" for l in lines[1:])
-    git("add", "--", "data")
-    committed = git("commit", "-m", message, "--", "data")
-    if committed.returncode != 0:
-        raise RuntimeError(f"git commit: {committed.stderr.strip() or committed.stdout.strip()}")
-    if git("push", "origin", "main").returncode != 0:
-        git("pull", "--rebase", "--autostash", "origin", "main")
-        pushed = git("push", "origin", "main")
-        if pushed.returncode != 0:
-            report.problems.append(f"The data was saved on this computer but not pushed to GitHub "
-                                   f"({pushed.stderr.strip()[:200]}).")
+    commit_and_push(message, report)
 
 
 def upcoming_steps(now: datetime) -> list[dict]:
