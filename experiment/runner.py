@@ -81,10 +81,12 @@ def gameweek_inputs(gw: int, mock: bool = False) -> tuple[dict, str, dict]:
 # --- decide ------------------------------------------------------------------------------------
 
 def expected_points_for(gw: int, meta: dict, bootstrap: dict, base: Path) -> dict[int, dict]:
-    """Our expected points for the gameweek, from the same data as the agents' snapshot.
+    """Our expected points for the gameweek, from the same data as the agents' snapshot, including
+    only the points saved before it: the same numbers however often or late they are worked out
+    (picks retried later, a missed week recorded after the deadline).
     Saved as xpoints/gw{N}.csv (real runs: data/xpoints/, the open dataset)."""
     fixtures = read_json_gz(config.RAW_DIR / meta["sources"]["fixtures"])
-    projections = xpoints.predict(gw, bootstrap, fixtures)
+    projections = xpoints.predict(gw, bootstrap, fixtures, as_of=xpoints.snapshot_time(meta))
     xpoints.save(gw, projections, bootstrap, base / "xpoints")
     return projections
 

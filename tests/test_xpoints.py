@@ -33,6 +33,25 @@ def test_predicted_totals_are_close_to_real_totals(inputs):
     assert abs(predicted_total - sum(actual.values())) / sum(actual.values()) < 0.15
 
 
+def test_points_saved_after_the_snapshot_are_left_out(inputs, tmp_path):
+    # The gameweek 1-7 points were saved on 2026-10-21, before the gameweek 8 snapshot (2026-10-22).
+    bootstrap, fixtures = inputs
+    raw = tmp_path / "raw"
+    for gw in range(1, 8):
+        source = xpoints.live_file(gw)
+        (raw / f"gw{gw}").mkdir(parents=True)
+        (raw / f"gw{gw}" / source.name).write_bytes(source.read_bytes())
+    as_of = "20261022T143206Z"
+    pinned = xpoints.predict(8, bootstrap, fixtures, raw, as_of=as_of)
+    assert pinned == xpoints.predict(8, bootstrap, fixtures)
+    # Gameweek 7's points saved again after the snapshot (say, by a later scoring run) change nothing...
+    late = raw / "gw7" / "event-7-live_20261023T090000Z.json.gz"
+    late.write_bytes(xpoints.live_file(6).read_bytes())    # different numbers, so a change would show
+    assert xpoints.predict(8, bootstrap, fixtures, raw, as_of=as_of) == pinned
+    # ...while without as_of the newest file is used.
+    assert xpoints.predict(8, bootstrap, fixtures, raw) != pinned
+
+
 def test_the_season_version_is_the_default(inputs):
     bootstrap, fixtures = inputs
     assert xpoints.predict(8, bootstrap, fixtures) == xpoints.predict(8, bootstrap, fixtures, settings=xpoints.SEASON)
