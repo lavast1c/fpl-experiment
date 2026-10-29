@@ -41,3 +41,9 @@
 
 ### Fixed
 - After a deadline, the download limit for `bootstrap-static/` is counted in the new gameweek's folder.
+- A gameweek's expected points use only data from before its snapshot, so teams picked in different runs are judged against the same numbers.
+- An agent's note or lesson containing `{{` no longer breaks its next prompt.
+- A team whose "keep last week's team" is itself illegal scores 0, as intended; a bot holding a player missing from FPL's data no longer crashes.
+- Memory teams copy the shared first squad without the no-memory team's chip.
+- Automatic runs pull GitHub's newest data first, undo a clashing pull instead of getting stuck, retry failed pushes, and save long picks runs every 10 minutes (no new team after 40 minutes).
+- Team pages place every starter on the pitch, even in a week without a snapshot.

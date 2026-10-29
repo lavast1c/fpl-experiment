@@ -114,9 +114,9 @@ python -m pytest                     # run the tests
 
 ### Automatic runs
 
-Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 and 2026-10-28 in [`METHODS.md`](METHODS.md)). A Claude Code scheduled cloud task starts `python run.py auto` every 3 hours on Anthropic's cloud computers, so it keeps running while the PC is off; [`scripts/cloud_routine.md`](scripts/cloud_routine.md) records its exact setup. Windows Task Scheduler (`scripts/schedule_windows.ps1`) is the fallback; never run both at once. Each run checks the saved files and does whatever is due:
+Since gameweek 9 the weekly routine runs by itself (`experiment/automation.py`, decided 2026-10-27 and 2026-10-28 in [`METHODS.md`](METHODS.md)). A Claude Code scheduled cloud task starts `python run.py auto` every 3 hours on Anthropic's cloud computers, so it keeps running while the PC is off; [`scripts/cloud_routine.md`](scripts/cloud_routine.md) records its exact setup. Windows Task Scheduler (`scripts/schedule_windows.ps1`) is the fallback; never run both at once. Each run first pulls GitHub's newest data (and does nothing else if it can't), then checks the saved files and does whatever is due:
 - **Scoring:** from 18 hours after a gameweek's last match, it asks FPL at most every 12 hours whether the points are final, and scores the gameweek once they are.
-- **Picks:** from 24 hours before each deadline, it downloads the data and runs every team's decision. It waits for last week's scores until 6 hours before the deadline.
+- **Picks:** from 24 hours before each deadline, it downloads the data and runs every team's decision. It waits for last week's scores until 6 hours before the deadline. A slow run pushes the teams picked so far every 10 minutes and starts no new team after 40 minutes; the next run picks the rest.
 - **Afterwards:** it pushes the new data to GitHub, copies it to Supabase, updates the status strip on the website and sends an alert to your phone.
 
 If the runs fail until a deadline, the teams keep last week's team (outcome `missed`).
