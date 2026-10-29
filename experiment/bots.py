@@ -182,7 +182,11 @@ def choose_transfers(rank: dict, buyable_ids: set[int], state: TeamState, player
 # --- lineup -------------------------------------------------------------------------------------
 
 def choose_lineup(squad: list[int], rank: dict, fit: set[int], players: dict[int, Player], rules: Rules) -> dict:
-    order = sorted(squad, key=lambda pid: (pid in fit, rank[pid]), reverse=True)
+    # A player missing from FPL's data (still in the squad because no replacement was affordable)
+    # has no position or rank: he goes last on the bench, and the rule checker then turns the
+    # answer down, so the bot keeps last week's team (runner.run_bot).
+    missing = [pid for pid in squad if pid not in players]
+    order = sorted((pid for pid in squad if pid in players), key=lambda pid: (pid in fit, rank[pid]), reverse=True)
     goalkeeper = next(pos for pos, p in rules.positions.items() if p.max_play == 1 and p.squad_count == 2)
     xi = [next(pid for pid in order if players[pid].position == goalkeeper)]
     for pos, position in rules.positions.items():
@@ -194,7 +198,7 @@ def choose_lineup(squad: list[int], rank: dict, fit: set[int], players: dict[int
         if len(xi) < rules.xi_size and pid not in xi and pos != goalkeeper and in_xi < rules.positions[pos].max_play:
             xi.append(pid)
     bench = [pid for pid in order if pid not in xi and players[pid].position == goalkeeper]
-    bench += [pid for pid in order if pid not in xi and players[pid].position != goalkeeper]
+    bench += [pid for pid in order if pid not in xi and players[pid].position != goalkeeper] + missing
     starters = [pid for pid in order if pid in xi]
     return {"starting_xi": xi, "bench_order": bench, "captain": starters[0], "vice_captain": starters[1]}
 

@@ -110,3 +110,23 @@ def test_bot_keeps_last_weeks_team_when_its_answer_is_illegal(tmp_path, monkeypa
     d = read_json(tmp_path / "decisions" / "gw9" / f"{bot.id}.json")
     assert d["outcome"] == "no_change" and d["errors_by_attempt"] != [[]]
     assert runner.load_state(tmp_path, bot.id).squad == before.squad
+
+
+def test_a_removed_player_who_cant_be_replaced_doesnt_crash_the_bot(week):
+    elements, players, rules, projections = week
+    _, _, state = first_week(bots.BOTS[1], week)
+    state.free_transfers = 0                   # so he can't be sold
+    players = copy.deepcopy(players)
+    gone = state.lineup.starting_xi[3]
+    del players[gone]
+    answer = bots.decide(bots.BOTS[1], state, elements, players, rules, projections)
+    assert answer["bench_order"][-1] == gone   # placed last, with no position to go by
+    assert not validate(answer, state, players, rules, 9).ok   # so run_bot keeps last week's team
+
+
+def test_a_team_with_no_decision_scores_zero_even_with_last_weeks_lineup_saved(week):
+    _, _, state = first_week(bots.BOTS[0], week)
+    assert state.lineup is not None
+    nothing = {"decision": None, "chip": None, "hit_points": 0, "outcome": "no_change_failed"}
+    row = runner._team_row(bots.BOTS[0].id, 9, nothing, state, {}, {}, {}, load_rules())
+    assert row["points"] == row["net_points"] == 0 and row["players"] == []

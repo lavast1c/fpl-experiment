@@ -349,8 +349,8 @@ def run_bot(bot: bots.Bot, week: Week) -> dict:
         "transfers_made": result.transfers_made if ok else 0, "hit_points": result.hit_points if ok else 0,
         "notes": result.notes if ok else [],
         "model_mismatch": False, "models_used": [], "input_tokens": 0, "output_tokens": 0, "duration_ms": 0,
-        "expected_points": metrics.expected_points(new_state.lineup, None, result.hit_points if ok else 0,
-                                                   week.expected),
+        "expected_points": metrics.expected_points(new_state.lineup if ok else None, None,
+                                                   result.hit_points if ok else 0, week.expected),
     }
     write_json(week.base / "decisions" / f"gw{week.gw}" / f"{bot.id}.json", summary)
     print(f"  {bot.id}: {outcome}, {summary['transfers_made']} transfer(s)" if state.has_squad else f"  {bot.id}: new squad")
@@ -452,8 +452,10 @@ CSV_FIELDS = ["team", "gw", "points", "hit_points", "net_points", "captain", "au
 
 def _team_row(team_id: str, gw: int, decision: dict, state: TeamState, players: dict, positions: dict,
               live: dict, rules) -> dict:
-    """One team's score, plus the details memory teams see next week."""
-    if not state.has_squad or state.lineup is None:
+    """One team's score, plus the details memory teams see next week. A team with no decision this week
+    (nothing legal to keep, say a squad player left FPL's data) scores 0, even though its saved
+    state still holds last week's lineup."""
+    if decision["decision"] is None or not state.has_squad or state.lineup is None:
         return {"team": team_id, "gw": gw, "points": 0, "hit_points": 0, "net_points": 0, "captain": None,
                 "auto_subs": 0, "bench_points": 0, "chip": None, "players": [], "transfers": [],
                 "auto_subs_detail": []}
