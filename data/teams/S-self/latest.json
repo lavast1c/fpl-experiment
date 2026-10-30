@@ -14,34 +14,34 @@
     "156": 65,
     "101": 49,
     "411": 157,
-    "165": 79,
-    "79": 61
+    "79": 61,
+    "379": 91
   },
-  "bank": 26,
+  "bank": 13,
   "free_transfers": 1,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
       572,
-      115,
-      504,
       8,
+      115,
       330,
-      124,
+      504,
+      156,
       399,
       427,
-      156,
       411,
-      165
+      379,
+      79
     ],
     "bench_order": [
       250,
-      79,
       101,
+      124,
       173
     ],
     "captain": 411,
-    "vice_captain": 165
+    "vice_captain": 379
   },
   "free_hit_backup": null,
   "has_squad": true

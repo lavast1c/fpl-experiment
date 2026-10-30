@@ -1,0 +1,77 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-haiku-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-haiku-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<730 characters>"
+  ],
+  "duration_ms": 11047,
+  "raw_stdout": "{\"duration_api_ms\":10315,\"stop_reason\":\"tool_use\",\"session_id\":\"dd60154a-a911-5d4b-a6c6-70f6560c3d1a\",\"total_cost_usd\":0.020002600000000002,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":63495,\"cache_read_input_tokens\":0,\"output_tokens\":2087,\"output_tokens_details\":{\"thinking_tokens\":1674},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":63495,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":2087,\"cache_read_input_tokens\":0,\"cache_creation_input_tokens\":63495,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":63495},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-haiku-5-5\":{\"inputTokens\":62481,\"outputTokens\":2111,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":63495,\"webSearchRequests\":0,\"costUSD\":0.020002600000000002,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":1674,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":63495,\"canonicalModel\":\"claude-haiku-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":2,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":165,\\\"in\\\":79}],\\\"starting_xi\\\":[384,8,115,504,330,400,427,156,101,411,79],\\\"bench_order\\\":[572,447,236,138],\\\"captain\\\":411,\\\"vice_captain\\\":79,\\\"chip\\\":null,\\\"reasoning\\\":\\\"João Pedro is injured with no return date, so he is replaced by Evanilson (form 8.3, 3 fixtures of difficulty 2-3). Haaland stays captain on form 9.0 with a home game vs BHA. Calafiori is only 75% fit but has Botman as the first outfield sub. Starting XI is 4-4-2 with the strongest in-form options. Team has £2.6m left after the swap. No chip used, since the squad is stable and we keep the chip for a better week.\\\"}\",\"structured_output\":{\"transfers\":[{\"out\":165,\"in\":79}],\"starting_xi\":[384,8,115,504,330,400,427,156,101,411,79],\"bench_order\":[572,447,236,138],\"captain\":411,\"vice_captain\":79,\"chip\":null,\"reasoning\":\"João Pedro is injured with no return date, so he is replaced by Evanilson (form 8.3, 3 fixtures of difficulty 2-3). Haaland stays captain on form 9.0 with a home game vs BHA. Calafiori is only 75% fit but has Botman as the first outfield sub. Starting XI is 4-4-2 with the strongest in-form options. Team has £2.6m left after the swap. No chip used, since the squad is stable and we keep the chip for a better week.\"},\"ttft_ms\":8151,\"type\":\"result\",\"duration_ms\":9671,\"uuid\":\"7efabe11-998b-45ce-9f34-e509a30eca61\",\"ttft_stream_ms\":723,\"time_to_request_ms\":136,\"time_to_request_phases_ms\":{\"other\":23,\"system_prompt\":1,\"resume_other\":0,\"process_user_input\":6,\"input_attachments\":11,\"input_hooks\":3,\"tool_pool_refresh\":2,\"init_message\":3,\"engine_pickup\":1,\"message_prep\":2,\"model_config_wait\":64,\"autocompact\":5,\"query_setup\":1,\"model_gates\":0,\"tool_schema_build\":2,\"message_normalization\":2,\"client_creation\":2,\"request_build\":8},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":35,\"time_to_request_cpu_ms\":112,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":206,\"process_anon_mib_turn_start\":134,\"process_rss_mib_result\":190,\"process_anon_mib_result\":113,\"process_peak_rss_mib\":220,\"process_cpu_ms_turn\":510,\"process_wall_ms_turn\":9671,\"process_cpu_ms_streaming\":216,\"process_wall_ms_streaming\":8940,\"main_stream_count\":1,\"main_stream_event_count\":76,\"main_stream_chunk_count\":68,\"input_attachments_detail\":{\"slowest_producer\":\"queued_commands\",\"slowest_producer_ms\":6,\"cpu_ms\":15,\"major_faults\":0},\"first_content_frame_ms\":723,\"time_to_request_from_spawn_ms\":27235,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1793362851231.9468,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 165, \"in\": 79}], \"starting_xi\": [384, 8, 115, 504, 330, 400, 427, 156, 101, 411, 79], \"bench_order\": [572, 447, 236, 138], \"captain\": 411, \"vice_captain\": 79, \"chip\": null, \"reasoning\": \"Jo\\u00e3o Pedro is injured with no return date, so he is replaced by Evanilson (form 8.3, 3 fixtures of difficulty 2-3). Haaland stays captain on form 9.0 with a home game vs BHA. Calafiori is only 75% fit but has Botman as the first outfield sub. Starting XI is 4-4-2 with the strongest in-form options. Team has \\u00a32.6m left after the swap. No chip used, since the squad is stable and we keep the chip for a better week.\"}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 79
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      504,
+      330,
+      400,
+      427,
+      156,
+      101,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      447,
+      236,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "João Pedro is injured with no return date, so he is replaced by Evanilson (form 8.3, 3 fixtures of difficulty 2-3). Haaland stays captain on form 9.0 with a home game vs BHA. Calafiori is only 75% fit but has Botman as the first outfield sub. Starting XI is 4-4-2 with the strongest in-form options. Team has £2.6m left after the swap. No chip used, since the squad is stable and we keep the chip for a better week."
+  },
+  "error": null,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "model_mismatch": false,
+  "input_tokens": 125976,
+  "cache_read_tokens": 0,
+  "cache_creation_tokens": 63495,
+  "output_tokens": 2111,
+  "num_turns": 2,
+  "api_equivalent_usd": 0.020002600000000002,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}

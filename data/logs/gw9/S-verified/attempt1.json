@@ -1,0 +1,85 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-sonnet-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<1217 characters>"
+  ],
+  "duration_ms": 14301,
+  "raw_stdout": "{\"duration_api_ms\":14132,\"stop_reason\":\"tool_use\",\"session_id\":\"dd60154a-a911-5d4b-a6c6-70f6560c3d1a\",\"total_cost_usd\":0.2796281,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":64479,\"cache_read_input_tokens\":0,\"output_tokens\":1537,\"output_tokens_details\":{\"thinking_tokens\":1134},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":64479,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":1537,\"cache_read_input_tokens\":0,\"cache_creation_input_tokens\":64479,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":64479},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-haiku-5-5\":{\"inputTokens\":63261,\"outputTokens\":24,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":0,\"webSearchRequests\":0,\"costUSD\":0.0063381,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":0,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":0,\"canonicalModel\":\"claude-haiku-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"},\"claude-sonnet-5-5\":{\"inputTokens\":2,\"outputTokens\":1537,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":64479,\"webSearchRequests\":0,\"costUSD\":0.27329,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":1134,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":64479,\"canonicalModel\":\"claude-sonnet-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":2,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":165,\\\"in\\\":166,\\\"out_lesson_ids\\\":[],\\\"in_lesson_ids\\\":[]}],\\\"starting_xi\\\":[572,8,115,330,504,124,156,399,427,411,79],\\\"bench_order\\\":[250,166,173,101],\\\"captain\\\":411,\\\"vice_captain\\\":399,\\\"chip\\\":null,\\\"reasoning\\\":\\\"João Pedro is injured, so I swapped him for Jackson, who has an easy home fixture against Fulham. Haaland stays captain. Calafiori is 75% to play, so Thomas and Henderson are on the bench as cover.\\\",\\\"lessons\\\":{\\\"keep\\\":[],\\\"new\\\":[]},\\\"captain_lesson_ids\\\":[]}\",\"structured_output\":{\"transfers\":[{\"out\":165,\"in\":166,\"out_lesson_ids\":[],\"in_lesson_ids\":[]}],\"starting_xi\":[572,8,115,330,504,124,156,399,427,411,79],\"bench_order\":[250,166,173,101],\"captain\":411,\"vice_captain\":399,\"chip\":null,\"reasoning\":\"João Pedro is injured, so I swapped him for Jackson, who has an easy home fixture against Fulham. Haaland stays captain. Calafiori is 75% to play, so Thomas and Henderson are on the bench as cover.\",\"lessons\":{\"keep\":[],\"new\":[]},\"captain_lesson_ids\":[]},\"ttft_ms\":11371,\"type\":\"result\",\"duration_ms\":13183,\"uuid\":\"9200aa29-0e67-4cbf-9b0f-aad57d2d5fd0\",\"ttft_stream_ms\":2127,\"time_to_request_ms\":131,\"time_to_request_phases_ms\":{\"other\":17,\"system_prompt\":1,\"resume_other\":0,\"process_user_input\":4,\"input_attachments\":8,\"input_hooks\":2,\"tool_pool_refresh\":1,\"init_message\":2,\"engine_pickup\":1,\"message_prep\":0,\"model_config_wait\":83,\"autocompact\":1,\"query_setup\":1,\"model_gates\":0,\"tool_schema_build\":2,\"message_normalization\":1,\"client_creation\":1,\"request_build\":6},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":31,\"time_to_request_cpu_ms\":70,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":205,\"process_anon_mib_turn_start\":134,\"process_rss_mib_result\":190,\"process_anon_mib_result\":113,\"process_peak_rss_mib\":218,\"process_cpu_ms_turn\":503,\"process_wall_ms_turn\":13183,\"process_cpu_ms_streaming\":203,\"process_wall_ms_streaming\":11050,\"main_stream_count\":1,\"main_stream_event_count\":52,\"main_stream_chunk_count\":44,\"input_attachments_detail\":{\"slowest_producer\":\"queued_commands\",\"slowest_producer_ms\":5,\"cpu_ms\":9,\"major_faults\":0},\"first_content_frame_ms\":2127,\"time_to_request_from_spawn_ms\":84710,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1793362909061.906,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 165, \"in\": 166, \"out_lesson_ids\": [], \"in_lesson_ids\": []}], \"starting_xi\": [572, 8, 115, 330, 504, 124, 156, 399, 427, 411, 79], \"bench_order\": [250, 166, 173, 101], \"captain\": 411, \"vice_captain\": 399, \"chip\": null, \"reasoning\": \"Jo\\u00e3o Pedro is injured, so I swapped him for Jackson, who has an easy home fixture against Fulham. Haaland stays captain. Calafiori is 75% to play, so Thomas and Henderson are on the bench as cover.\", \"lessons\": {\"keep\": [], \"new\": []}, \"captain_lesson_ids\": []}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 166,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      156,
+      399,
+      427,
+      411,
+      79
+    ],
+    "bench_order": [
+      250,
+      166,
+      173,
+      101
+    ],
+    "captain": 411,
+    "vice_captain": 399,
+    "chip": null,
+    "reasoning": "João Pedro is injured, so I swapped him for Jackson, who has an easy home fixture against Fulham. Haaland stays captain. Calafiori is 75% to play, so Thomas and Henderson are on the bench as cover.",
+    "lessons": {
+      "keep": [],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "error": null,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "model_mismatch": true,
+  "input_tokens": 127742,
+  "cache_read_tokens": 0,
+  "cache_creation_tokens": 64479,
+  "output_tokens": 1561,
+  "num_turns": 2,
+  "api_equivalent_usd": 0.2796281,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}

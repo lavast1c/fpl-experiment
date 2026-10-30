@@ -1,0 +1,65 @@
+{
+  "team": "S-self",
+  "model": "claude-sonnet-5-5",
+  "memory": "self",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:21:49+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 379
+      }
+    ],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      156,
+      399,
+      427,
+      411,
+      379,
+      79
+    ],
+    "bench_order": [
+      250,
+      101,
+      124,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 379,
+    "chip": null,
+    "reasoning": "João Pedro is injured, so I'm swapping him for Isak. Haaland captains. Groß sits out against Man City, and Henderson and Groß on the bench cover Calafiori's doubt.",
+    "updated_notes": [
+      "GW9: sold injured Joao Pedro for Isak. Calafiori 75%, Thomas 50% doubtful. No chips used yet. Henderson (CHE, 4.9) is in good form on the bench."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": true,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens": 126899,
+  "output_tokens": 1467,
+  "duration_ms": 17196,
+  "expected_points": 47.57
+}

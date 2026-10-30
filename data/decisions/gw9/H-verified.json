@@ -1,0 +1,70 @@
+{
+  "team": "H-verified",
+  "model": "claude-haiku-5-5",
+  "memory": "verified",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:21:23+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 79,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      330,
+      504,
+      101,
+      156,
+      400,
+      427,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      447,
+      236,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "João Pedro is injured (thigh, unknown return) and scored 0, so I sell him for Evanilson (form 8.3, 5.4 ppg, strong xG, playing three fixtures of difficulty 2-3). Calafiori is a 75% doubt, so I keep him starting with Botman as cover on the bench. Haaland captains at home to Brighton-style easy-ish MCI fixture, with Evanilson vice. One free transfer used, no hit. Bank £2.6m.",
+    "lessons": {
+      "keep": [],
+      "new": [
+        "Sell injured forwards with unknown return dates before the deadline, even when they are key."
+      ]
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 127809,
+  "output_tokens": 1716,
+  "duration_ms": 9435,
+  "expected_points": 46.25
+}

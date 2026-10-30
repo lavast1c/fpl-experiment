@@ -1,0 +1,22 @@
+{
+  "kind": "verified",
+  "next_id": 3,
+  "lessons": [
+    {
+      "id": "L1",
+      "text": "Sell players who are injured with no return date (status i) right away rather than waiting; a flagged starter who plays 0 minutes wastes points and the vice-captain slot.",
+      "created_gw": 9,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L2",
+      "text": "Don't make a doubtful (50%) player the vice-captain or a key starter when a fit, in-form alternative exists.",
+      "created_gw": 9,
+      "status": "active",
+      "uses": []
+    }
+  ],
+  "pending": [],
+  "removed_notices": []
+}

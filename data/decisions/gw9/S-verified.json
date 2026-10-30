@@ -1,0 +1,69 @@
+{
+  "team": "S-verified",
+  "model": "claude-sonnet-5-5",
+  "memory": "verified",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:22:03+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 166,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      156,
+      399,
+      427,
+      411,
+      79
+    ],
+    "bench_order": [
+      250,
+      166,
+      173,
+      101
+    ],
+    "captain": 411,
+    "vice_captain": 399,
+    "chip": null,
+    "reasoning": "João Pedro is injured, so I swapped him for Jackson, who has an easy home fixture against Fulham. Haaland stays captain. Calafiori is 75% to play, so Thomas and Henderson are on the bench as cover.",
+    "lessons": {
+      "keep": [],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": true,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens": 127742,
+  "output_tokens": 1561,
+  "duration_ms": 14301,
+  "expected_points": 48.02
+}

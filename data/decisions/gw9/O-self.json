@@ -1,0 +1,71 @@
+{
+  "team": "O-self",
+  "model": "claude-opus-5-5",
+  "memory": "self",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:22:36+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 166
+      }
+    ],
+    "starting_xi": [
+      1,
+      115,
+      504,
+      8,
+      40,
+      261,
+      399,
+      427,
+      411,
+      79,
+      166
+    ],
+    "bench_order": [
+      497,
+      124,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "João Pedro is injured with no return date, so I'm swapping him for N.Jackson (form 8.0, Fulham at home), which leaves £1.5m in the bank. Playing 3-4-3 with Evanilson in form. Groß is benched because Brighton go to Man City. Calafiori is 75% fit, so van Ewijk covers him. Haaland is captain at home to Brighton.",
+    "updated_notes": [
+      "GW9: sold João Pedro (injured, no return date) for N.Jackson. Bank £1.5m.",
+      "Calafiori 75% (hip) and Thomas 50% (calf). Check both before GW10.",
+      "Brighton's fixtures get easier from GW10 (BRE home, HUL away), so start the Brighton players again then.",
+      "Chips still unused. Consider a wildcard around GW10-12 if the squad gets weak. The first-half chips expire after GW19.",
+      "Haaland is the default captain. MCI play NFO away in GW10 and FUL at home in GW11.",
+      "Arsenal play HUL at home in GW10, which is good for Raya and Calafiori.",
+      "Man Utd have a tough run (CHE, AVL, LIV). Think about moving Mbeumo on after GW9."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": true,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 126899,
+  "output_tokens": 1361,
+  "duration_ms": 19549,
+  "expected_points": 49.88
+}

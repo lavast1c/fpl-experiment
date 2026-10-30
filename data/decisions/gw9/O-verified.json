@@ -1,0 +1,72 @@
+{
+  "team": "O-verified",
+  "model": "claude-opus-5-5",
+  "memory": "verified",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:22:49+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 166,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      261,
+      399,
+      427,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      124,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "João Pedro is injured with no return date, so I'm swapping him for N.Jackson (in form, Aston Villa at home to Fulham), which leaves £1.5m in the bank. I'm playing three forwards with Evanilson in form. Groß goes to the bench because Brighton are away at Man City and Iwobi starts instead. Haaland is captain at home to Brighton. I'm saving the chips.",
+    "lessons": {
+      "keep": [],
+      "new": [
+        "Sell players who are injured with no return date (status i) right away rather than waiting; a flagged starter who plays 0 minutes wastes points and the vice-captain slot.",
+        "Don't make a doubtful (50%) player the vice-captain or a key starter when a fit, in-form alternative exists."
+      ]
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": true,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 127745,
+  "output_tokens": 1098,
+  "duration_ms": 13650,
+  "expected_points": 49.88
+}

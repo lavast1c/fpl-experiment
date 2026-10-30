@@ -1,0 +1,61 @@
+{
+  "team": "H-none",
+  "model": "claude-haiku-5-5",
+  "memory": "none",
+  "gw": 9,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-10-30T12:21:02+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 79
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      504,
+      330,
+      400,
+      427,
+      156,
+      101,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      447,
+      236,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "João Pedro is injured with no return date, so he is replaced by Evanilson (form 8.3, 3 fixtures of difficulty 2-3). Haaland stays captain on form 9.0 with a home game vs BHA. Calafiori is only 75% fit but has Botman as the first outfield sub. Starting XI is 4-4-2 with the strongest in-form options. Team has £2.6m left after the swap. No chip used, since the squad is stable and we keep the chip for a better week."
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 125976,
+  "output_tokens": 2111,
+  "duration_ms": 11047,
+  "expected_points": 46.25
+}

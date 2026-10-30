@@ -2,7 +2,6 @@
   "team_id": "crowd-bot",
   "squad": {
     "411": 157,
-    "165": 79,
     "8": 60,
     "40": 80,
     "124": 62,
@@ -15,33 +14,34 @@
     "175": 39,
     "212": 43,
     "272": 44,
-    "539": 39
+    "539": 39,
+    "346": 61
   },
-  "bank": 0,
+  "bank": 17,
   "free_transfers": 1,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
       1,
-      8,
       115,
       259,
+      175,
       40,
       124,
       411,
-      165,
       399,
       426,
-      175
+      346,
+      212
     ],
     "bench_order": [
       109,
-      212,
       272,
-      539
+      539,
+      8
     ],
     "captain": 411,
-    "vice_captain": 165
+    "vice_captain": 40
   },
   "free_hit_backup": null,
   "has_squad": true

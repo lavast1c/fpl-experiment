@@ -1,0 +1,78 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-sonnet-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-sonnet-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<730 characters>"
+  ],
+  "duration_ms": 8505,
+  "raw_stdout": "{\"duration_api_ms\":8462,\"stop_reason\":\"tool_use\",\"session_id\":\"dd60154a-a911-5d4b-a6c6-70f6560c3d1a\",\"total_cost_usd\":0.2679449,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":63468,\"cache_read_input_tokens\":0,\"output_tokens\":781,\"output_tokens_details\":{\"thinking_tokens\":456},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":63468,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":781,\"cache_read_input_tokens\":0,\"cache_creation_input_tokens\":63468,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":63468},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-haiku-5-5\":{\"inputTokens\":62469,\"outputTokens\":24,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":0,\"webSearchRequests\":0,\"costUSD\":0.0062588999999999995,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":0,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":0,\"canonicalModel\":\"claude-haiku-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"},\"claude-sonnet-5-5\":{\"inputTokens\":2,\"outputTokens\":781,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":63468,\"webSearchRequests\":0,\"costUSD\":0.261686,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":456,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":63468,\"canonicalModel\":\"claude-sonnet-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":2,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":165,\\\"in\\\":379}],\\\"starting_xi\\\":[572,8,115,330,504,124,156,399,427,411,379],\\\"bench_order\\\":[250,101,79,173],\\\"captain\\\":411,\\\"vice_captain\\\":379,\\\"chip\\\":null,\\\"reasoning\\\":\\\"João Pedro is injured with no return date, so I'm swapping him for in-form Isak (£9.1m, affordable with the bank). Haaland stays captain at home to Brighton, with Isak as vice. The bench is ordered to cover the doubtful Calafiori.\\\"}\",\"structured_output\":{\"transfers\":[{\"out\":165,\"in\":379}],\"starting_xi\":[572,8,115,330,504,124,156,399,427,411,379],\"bench_order\":[250,101,79,173],\"captain\":411,\"vice_captain\":379,\"chip\":null,\"reasoning\":\"João Pedro is injured with no return date, so I'm swapping him for in-form Isak (£9.1m, affordable with the bank). Haaland stays captain at home to Brighton, with Isak as vice. The bench is ordered to cover the doubtful Calafiori.\"},\"ttft_ms\":5863,\"type\":\"result\",\"duration_ms\":7608,\"uuid\":\"21f7e14c-dedc-47b3-884d-38051fe0ed13\",\"ttft_stream_ms\":2411,\"time_to_request_ms\":124,\"time_to_request_phases_ms\":{\"other\":15,\"system_prompt\":1,\"resume_other\":0,\"process_user_input\":4,\"input_attachments\":6,\"input_hooks\":3,\"tool_pool_refresh\":1,\"init_message\":1,\"engine_pickup\":1,\"message_prep\":1,\"model_config_wait\":79,\"autocompact\":2,\"query_setup\":0,\"model_gates\":0,\"tool_schema_build\":2,\"message_normalization\":1,\"client_creation\":1,\"request_build\":6},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":23,\"time_to_request_cpu_ms\":68,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":204,\"process_anon_mib_turn_start\":133,\"process_rss_mib_result\":188,\"process_anon_mib_result\":111,\"process_peak_rss_mib\":217,\"process_cpu_ms_turn\":392,\"process_wall_ms_turn\":7607,\"process_cpu_ms_streaming\":83,\"process_wall_ms_streaming\":5189,\"main_stream_count\":1,\"main_stream_event_count\":50,\"main_stream_chunk_count\":42,\"input_attachments_detail\":{\"slowest_producer\":\"queued_commands\",\"slowest_producer_ms\":4,\"cpu_ms\":8,\"major_faults\":0},\"first_content_frame_ms\":2411,\"time_to_request_from_spawn_ms\":58989,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1793362883342.6216,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 165, \"in\": 379}], \"starting_xi\": [572, 8, 115, 330, 504, 124, 156, 399, 427, 411, 379], \"bench_order\": [250, 101, 79, 173], \"captain\": 411, \"vice_captain\": 379, \"chip\": null, \"reasoning\": \"Jo\\u00e3o Pedro is injured with no return date, so I'm swapping him for in-form Isak (\\u00a39.1m, affordable with the bank). Haaland stays captain at home to Brighton, with Isak as vice. The bench is ordered to cover the doubtful Calafiori.\"}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 165,
+        "in": 379
+      }
+    ],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      156,
+      399,
+      427,
+      411,
+      379
+    ],
+    "bench_order": [
+      250,
+      101,
+      79,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 379,
+    "chip": null,
+    "reasoning": "João Pedro is injured with no return date, so I'm swapping him for in-form Isak (£9.1m, affordable with the bank). Haaland stays captain at home to Brighton, with Isak as vice. The bench is ordered to cover the doubtful Calafiori."
+  },
+  "error": null,
+  "models_used": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "model_mismatch": true,
+  "input_tokens": 125939,
+  "cache_read_tokens": 0,
+  "cache_creation_tokens": 63468,
+  "output_tokens": 805,
+  "num_turns": 2,
+  "api_equivalent_usd": 0.2679449,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}

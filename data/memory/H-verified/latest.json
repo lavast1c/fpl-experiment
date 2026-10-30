@@ -1,7 +1,15 @@
 {
   "kind": "verified",
-  "next_id": 1,
-  "lessons": [],
+  "next_id": 2,
+  "lessons": [
+    {
+      "id": "L1",
+      "text": "Sell injured forwards with unknown return dates before the deadline, even when they are key.",
+      "created_gw": 9,
+      "status": "active",
+      "uses": []
+    }
+  ],
   "pending": [],
   "removed_notices": []
 }
