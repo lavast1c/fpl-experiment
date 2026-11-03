@@ -24,3 +24,5 @@ fetched_at,gw,endpoint,file,sha256,bytes,forced
 2026-10-30T12:20:47+00:00,9,event-status/,gw9/event-status_20261030T122047Z.json.gz,7cdfa78c459d5779ba5347fde58d16083a184d2ba358e7bed96034693ca49cd7,250,False
 2026-11-03T06:21:28+00:00,10,bootstrap-static/,gw10/bootstrap-static_20261103T062128Z.json.gz,f4ed4fe090d890376e6dc7eb3052f037779336c21a6f5ae263a09ef56eff0f8a,1952933,False
 2026-11-03T06:21:29+00:00,10,event-status/,gw10/event-status_20261103T062129Z.json.gz,a2d9646334b75ecfc23a987554379cd6e1525eb60f2d011eeea227f0e70aeaad,246,False
+2026-11-03T15:10:32+00:00,10,bootstrap-static/,gw10/bootstrap-static_20261103T151032Z.json.gz,b383a2305b4c80c0e718bcc6a589ad5320e38b0f64b2576e4d4fdafe9a2106ef,1953163,False
+2026-11-03T15:10:32+00:00,10,event-status/,gw10/event-status_20261103T151032Z.json.gz,34201b2d75fa807e2ae81db1adf8de78e3b84ff25bb0a02cf0abd7201f44266b,251,False
