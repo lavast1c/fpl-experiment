@@ -108,7 +108,15 @@
       "lessons_dropped": 0,
       "lessons_removed": 0,
       "lessons_proven": 0,
-      "lessons_detail": [],
+      "lessons_detail": [
+        {
+          "id": "L1",
+          "text": "Sell injured forwards with unknown return dates before the deadline, even when they are key.",
+          "status": "active",
+          "uses": 0,
+          "average": null
+        }
+      ],
       "rank": 9,
       "season_rank": 9
     },
@@ -328,7 +336,22 @@
       "lessons_dropped": 0,
       "lessons_removed": 0,
       "lessons_proven": 0,
-      "lessons_detail": [],
+      "lessons_detail": [
+        {
+          "id": "L1",
+          "text": "Sell players who are injured with no return date (status i) right away rather than waiting; a flagged starter who plays 0 minutes wastes points and the vice-captain slot.",
+          "status": "active",
+          "uses": 0,
+          "average": null
+        },
+        {
+          "id": "L2",
+          "text": "Don't make a doubtful (50%) player the vice-captain or a key starter when a fit, in-form alternative exists.",
+          "status": "active",
+          "uses": 0,
+          "average": null
+        }
+      ],
       "rank": 2,
       "season_rank": 2
     },
