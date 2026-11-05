@@ -1,6 +1,6 @@
 {
   "kind": "verified",
-  "next_id": 3,
+  "next_id": 4,
   "lessons": [
     {
       "id": "L1",
@@ -13,6 +13,13 @@
       "id": "L2",
       "text": "Don't make a doubtful (50%) player the vice-captain or a key starter when a fit, in-form alternative exists.",
       "created_gw": 9,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L3",
+      "text": "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders.",
+      "created_gw": 10,
       "status": "active",
       "uses": []
     }

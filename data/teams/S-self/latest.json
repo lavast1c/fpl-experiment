@@ -18,7 +18,7 @@
     "379": 91
   },
   "bank": 13,
-  "free_transfers": 1,
+  "free_transfers": 2,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
@@ -27,17 +27,17 @@
       115,
       330,
       504,
-      156,
+      124,
       399,
       427,
-      411,
+      79,
       379,
-      79
+      411
     ],
     "bench_order": [
       250,
+      156,
       101,
-      124,
       173
     ],
     "captain": 411,

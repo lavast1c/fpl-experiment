@@ -1,0 +1,59 @@
+{
+  "team": "S-self",
+  "model": "claude-sonnet-5-5",
+  "memory": "self",
+  "gw": 10,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-05T21:09:22+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      399,
+      427,
+      79,
+      379,
+      411
+    ],
+    "bench_order": [
+      250,
+      156,
+      101,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 379,
+    "chip": null,
+    "reasoning": "Squad is fit and in decent form, so I'm saving the free transfer. Groß replaces Neto in a 4-3-3 on form. Haaland captain at Forest (difficulty 2), Isak vice.",
+    "updated_notes": [
+      "GW10: no transfer, saved FT (2 next GW). No chips used yet. Thomas (COV) 50% doubtful and Henderson (CHE) 75% doubtful, both on bench. Groß starts over Neto on form. Consider bench boost or wildcard later."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens": 64029,
+  "output_tokens": 941,
+  "duration_ms": 11062,
+  "expected_points": 49.86
+}

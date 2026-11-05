@@ -1,0 +1,69 @@
+{
+  "team": "H-self",
+  "model": "claude-haiku-5-5",
+  "memory": "self",
+  "gw": 10,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-05T21:08:41+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 447,
+        "in": 60
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      504,
+      330,
+      101,
+      156,
+      400,
+      427,
+      79,
+      411
+    ],
+    "bench_order": [
+      572,
+      60,
+      236,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Swap 0-point Botman for Hill (BOU, form 6.5, strong fixtures IPS, NFO, FUL) using the free transfer; £2.1m left in bank. Keep the rest. Haaland captain vs NFO (A,2), Evanilson vice (form 8.5). Henderson is 75% (illness) but stays in the XI; Dewsbury-Hall covers as the first outfield sub. No chip this week.",
+    "updated_notes": [
+      "GW10: Botman (0 pts, NEW) sold for Hill (BOU, form 6.5). Bank ~£2.1m.",
+      "Haaland captain, Evanilson vice. Both have strong form and fixtures.",
+      "Henderson 75% fit (illness): if out, Dewsbury-Hall covers as MID.",
+      "Calafiori fit (100%). Bogle (form 2.2) is now the weakest starter; consider upgrading next GW with a free transfer.",
+      "Donnarumma (form 3.2) remains GK starter; Tzolakis on bench.",
+      "Watch Mbeumo/Doku form and Kostoulas for FWD cover."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 64236,
+  "output_tokens": 2168,
+  "duration_ms": 11142,
+  "expected_points": 47.69
+}

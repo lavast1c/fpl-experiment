@@ -1,0 +1,76 @@
+{
+  "team": "H-verified",
+  "model": "claude-haiku-5-5",
+  "memory": "verified",
+  "gw": 10,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-05T21:09:02+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 2,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    [
+      "TRANSFER_OUT_NOT_IN_SQUAD",
+      "UNKNOWN_PLAYER"
+    ],
+    []
+  ],
+  "stale_picks": [
+    0
+  ],
+  "decision": {
+    "transfers": [
+      {
+        "out": 447,
+        "in": 60,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      115,
+      504,
+      60,
+      156,
+      400,
+      427,
+      101,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      330,
+      236,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Botman (NEW, tough fixtures FUL, ARS, BHA, form 2.8) is sold for Hill (BOU, form 6.5, 4.2 ppg, 0.92 xA, easy fixtures IPS, NFO, FUL), costing £0.5m from the bank. Hill starts; Bogle (ppg 5.7, xG 1.65) drops to the bench as first outfield sub. Henderson (75%) keeps his place with Bogle covering. Haaland captains against NFO, Evanilson vice-captain. No injured players in the squad, so no lesson applies.",
+    "lessons": {
+      "keep": [
+        "L1"
+      ],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 129653,
+  "output_tokens": 4276,
+  "duration_ms": 20917,
+  "expected_points": 47.77
+}

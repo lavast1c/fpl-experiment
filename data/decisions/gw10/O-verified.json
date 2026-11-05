@@ -1,0 +1,73 @@
+{
+  "team": "O-verified",
+  "model": "claude-opus-5-5",
+  "memory": "verified",
+  "gw": 10,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-05T21:10:16+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 399,
+        "in": 68,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      124,
+      68,
+      427,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      261,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Cherki is being rotated (472 minutes) and is out of form, so he goes for Tavernier: a nailed starter in form with good xG who plays Ipswich away, and the swap saves £1.3m. I start 3-4-3 so all three in-form forwards play. Groß starts ahead of Iwobi because his season output is higher. Thomas (50%) goes to the bench. Haaland is captain for Forest away, with Evanilson as vice-captain.",
+    "lessons": {
+      "keep": [
+        "L1",
+        "L2"
+      ],
+      "new": [
+        "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders."
+      ]
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 64588,
+  "output_tokens": 1134,
+  "duration_ms": 13793,
+  "expected_points": 54.61
+}

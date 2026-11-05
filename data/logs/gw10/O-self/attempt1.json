@@ -1,0 +1,86 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-opus-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-opus-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<812 characters>"
+  ],
+  "duration_ms": 18068,
+  "raw_stdout": "{\"duration_api_ms\":16842,\"stop_reason\":\"tool_use\",\"session_id\":\"3aa8c450-1edc-4ebe-a3f7-bca8010e5aaa\",\"total_cost_usd\":0.538496,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":64231,\"cache_read_input_tokens\":0,\"output_tokens\":1232,\"output_tokens_details\":{\"thinking_tokens\":522},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":64231,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":1232,\"cache_read_input_tokens\":0,\"cache_creation_input_tokens\":64231,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":64231},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-opus-5-5\":{\"inputTokens\":2,\"outputTokens\":1232,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":64231,\"webSearchRequests\":0,\"costUSD\":0.538496,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":522,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":64231,\"canonicalModel\":\"claude-opus-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":2,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":427,\\\"in\\\":68}],\\\"starting_xi\\\":[1,8,115,504,40,399,68,261,411,166,79],\\\"bench_order\\\":[497,124,175,173],\\\"captain\\\":411,\\\"vice_captain\\\":166,\\\"chip\\\":null,\\\"reasoning\\\":\\\"Mbeumo has a hard run (AVL, LIV, BRE), so I swapped him for Tavernier: in form, on penalties, with IPS away next. That leaves £2.7m in the bank. Calafiori is back to 100%. Starting 3-4-3 with all three in-form forwards. Haaland is captain against NFO away, with N.Jackson as vice-captain. Groß is first on the bench. Saving the chips.\\\",\\\"updated_notes\\\":[\\\"GW10: sold Mbeumo for Tavernier (6.6). Bank £2.7m.\\\",\\\"Thomas 50% (calf). If he stays doubtful, consider swapping him for a cheap starting defender.\\\",\\\"We have 3 Brighton players (De Cuyper, Vuskovic, Groß). Their fixtures: HUL away GW11, NEW home GW12.\\\",\\\"Haaland is the default captain. FUL at home in GW11 is a possible triple-captain week. GW12 is ARS away, which is hard.\\\",\\\"Chips unused. Plan a wildcard around GW12-16. First-half chips expire after GW19.\\\",\\\"Arsenal play NEW away GW11 and MCI home GW12, so Raya and Calafiori clean sheets get less likely.\\\",\\\"Cherki form only 2.8. Watch him; Fulham at home in GW11 is good, then ARS away.\\\"]}\",\"structured_output\":{\"transfers\":[{\"out\":427,\"in\":68}],\"starting_xi\":[1,8,115,504,40,399,68,261,411,166,79],\"bench_order\":[497,124,175,173],\"captain\":411,\"vice_captain\":166,\"chip\":null,\"reasoning\":\"Mbeumo has a hard run (AVL, LIV, BRE), so I swapped him for Tavernier: in form, on penalties, with IPS away next. That leaves £2.7m in the bank. Calafiori is back to 100%. Starting 3-4-3 with all three in-form forwards. Haaland is captain against NFO away, with N.Jackson as vice-captain. Groß is first on the bench. Saving the chips.\",\"updated_notes\":[\"GW10: sold Mbeumo for Tavernier (6.6). Bank £2.7m.\",\"Thomas 50% (calf). If he stays doubtful, consider swapping him for a cheap starting defender.\",\"We have 3 Brighton players (De Cuyper, Vuskovic, Groß). Their fixtures: HUL away GW11, NEW home GW12.\",\"Haaland is the default captain. FUL at home in GW11 is a possible triple-captain week. GW12 is ARS away, which is hard.\",\"Chips unused. Plan a wildcard around GW12-16. First-half chips expire after GW19.\",\"Arsenal play NEW away GW11 and MCI home GW12, so Raya and Calafiori clean sheets get less likely.\",\"Cherki form only 2.8. Watch him; Fulham at home in GW11 is good, then ARS away.\"]},\"ttft_ms\":10775,\"type\":\"result\",\"duration_ms\":17031,\"uuid\":\"a65a249b-d5d7-48b4-a5ee-983676460924\",\"ttft_stream_ms\":5792,\"time_to_request_ms\":188,\"time_to_request_phases_ms\":{\"other\":4,\"system_prompt\":1,\"resume_other\":0,\"process_user_input\":3,\"input_attachments\":5,\"input_hooks\":2,\"conversation_append\":0,\"tool_pool_refresh\":1,\"init_message\":1,\"init_frame_send\":1,\"engine_pickup\":1,\"loop_entry\":2,\"message_prep\":0,\"model_config_wait\":152,\"autocompact\":1,\"request_announcements\":5,\"query_setup\":0,\"model_gates\":0,\"tool_schema_build\":2,\"message_normalization\":2,\"client_creation\":1,\"request_build\":4},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":37,\"time_to_request_cpu_ms\":46,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":196,\"process_anon_mib_turn_start\":124,\"process_rss_mib_result\":192,\"process_anon_mib_result\":113,\"process_peak_rss_mib\":212,\"process_cpu_ms_turn\":415,\"process_wall_ms_turn\":17031,\"process_cpu_ms_streaming\":177,\"process_wall_ms_streaming\":11233,\"main_stream_count\":1,\"main_stream_event_count\":119,\"main_stream_chunk_count\":112,\"process_turn_states\":{\"main_stream\":{\"cpu_ms\":177,\"wall_ms\":11233,\"entries\":1},\"first_event_wait\":{\"cpu_ms\":185,\"wall_ms\":5604,\"entries\":1},\"before_first_request\":{\"cpu_ms\":47,\"wall_ms\":187,\"entries\":1},\"after_last_request\":{\"cpu_ms\":6,\"wall_ms\":7,\"entries\":1}},\"input_attachments_detail\":{\"slowest_producer\":\"model\",\"slowest_producer_ms\":1,\"cpu_ms\":6,\"major_faults\":0,\"setup_ms\":0,\"prompt_producers_ms\":0,\"ambient_start_ms\":2,\"ambient_wait_ms\":0,\"render_ms\":0,\"producers\":43,\"token_counts\":0},\"tool_schema_build_detail\":{\"betas_ms\":0,\"waits_ms\":1,\"placement_ms\":0,\"render_ms\":1,\"after_ms\":0,\"other_ms\":0,\"tools\":1,\"new_schemas\":1},\"message_normalization_detail\":{\"before_ms\":0,\"normalize_ms\":1,\"images_ms\":0,\"post_process_ms\":0,\"after_ms\":0,\"other_ms\":1,\"messages\":8,\"wire_messages\":2},\"request_build_detail\":{\"records_ms\":0,\"system_ms\":1,\"headers_ms\":0,\"cache_break_record_ms\":1,\"plans_ms\":0,\"retry_setup_ms\":0,\"sent_build_ms\":1,\"record_attempt_ms\":1,\"other_ms\":0,\"sent_build_safety_context_ms\":0,\"sent_build_cache_breakpoints_ms\":0,\"sent_build_surrogate_scan_ms\":0},\"first_content_frame_ms\":5793,\"time_to_request_from_spawn_ms\":118280,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1793912985057.437,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 427, \"in\": 68}], \"starting_xi\": [1, 8, 115, 504, 40, 399, 68, 261, 411, 166, 79], \"bench_order\": [497, 124, 175, 173], \"captain\": 411, \"vice_captain\": 166, \"chip\": null, \"reasoning\": \"Mbeumo has a hard run (AVL, LIV, BRE), so I swapped him for Tavernier: in form, on penalties, with IPS away next. That leaves \\u00a32.7m in the bank. Calafiori is back to 100%. Starting 3-4-3 with all three in-form forwards. Haaland is captain against NFO away, with N.Jackson as vice-captain. Gro\\u00df is first on the bench. Saving the chips.\", \"updated_notes\": [\"GW10: sold Mbeumo for Tavernier (6.6). Bank \\u00a32.7m.\", \"Thomas 50% (calf). If he stays doubtful, consider swapping him for a cheap starting defender.\", \"We have 3 Brighton players (De Cuyper, Vuskovic, Gro\\u00df). Their fixtures: HUL away GW11, NEW home GW12.\", \"Haaland is the default captain. FUL at home in GW11 is a possible triple-captain week. GW12 is ARS away, which is hard.\", \"Chips unused. Plan a wildcard around GW12-16. First-half chips expire after GW19.\", \"Arsenal play NEW away GW11 and MCI home GW12, so Raya and Calafiori clean sheets get less likely.\", \"Cherki form only 2.8. Watch him; Fulham at home in GW11 is good, then ARS away.\"]}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 427,
+        "in": 68
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      399,
+      68,
+      261,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      124,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "Mbeumo has a hard run (AVL, LIV, BRE), so I swapped him for Tavernier: in form, on penalties, with IPS away next. That leaves £2.7m in the bank. Calafiori is back to 100%. Starting 3-4-3 with all three in-form forwards. Haaland is captain against NFO away, with N.Jackson as vice-captain. Groß is first on the bench. Saving the chips.",
+    "updated_notes": [
+      "GW10: sold Mbeumo for Tavernier (6.6). Bank £2.7m.",
+      "Thomas 50% (calf). If he stays doubtful, consider swapping him for a cheap starting defender.",
+      "We have 3 Brighton players (De Cuyper, Vuskovic, Groß). Their fixtures: HUL away GW11, NEW home GW12.",
+      "Haaland is the default captain. FUL at home in GW11 is a possible triple-captain week. GW12 is ARS away, which is hard.",
+      "Chips unused. Plan a wildcard around GW12-16. First-half chips expire after GW19.",
+      "Arsenal play NEW away GW11 and MCI home GW12, so Raya and Calafiori clean sheets get less likely.",
+      "Cherki form only 2.8. Watch him; Fulham at home in GW11 is good, then ARS away."
+    ]
+  },
+  "error": null,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "model_mismatch": false,
+  "input_tokens": 64233,
+  "cache_read_tokens": 0,
+  "cache_creation_tokens": 64231,
+  "output_tokens": 1232,
+  "num_turns": 2,
+  "api_equivalent_usd": 0.538496,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}

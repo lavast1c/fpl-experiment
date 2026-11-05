@@ -2,7 +2,6 @@
   "team_id": "form-bot",
   "squad": {
     "115": 53,
-    "101": 49,
     "156": 65,
     "411": 157,
     "504": 51,
@@ -15,33 +14,34 @@
     "304": 40,
     "31": 46,
     "384": 55,
-    "166": 68
+    "166": 68,
+    "68": 66
   },
-  "bank": 22,
+  "bank": 5,
   "free_transfers": 1,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
       109,
-      31,
       115,
       504,
+      8,
+      13,
       156,
-      101,
-      411,
       79,
       166,
-      400,
-      427
+      411,
+      68,
+      400
     ],
     "bench_order": [
       384,
+      427,
       304,
-      13,
-      8
+      31
     ],
-    "captain": 411,
-    "vice_captain": 31
+    "captain": 79,
+    "vice_captain": 166
   },
   "free_hit_backup": null,
   "has_squad": true

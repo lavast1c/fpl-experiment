@@ -1,0 +1,70 @@
+{
+  "team": "O-self",
+  "model": "claude-opus-5-5",
+  "memory": "self",
+  "gw": 10,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-05T21:10:03+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 427,
+        "in": 68
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      399,
+      68,
+      261,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      124,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "Mbeumo has a hard run (AVL, LIV, BRE), so I swapped him for Tavernier: in form, on penalties, with IPS away next. That leaves £2.7m in the bank. Calafiori is back to 100%. Starting 3-4-3 with all three in-form forwards. Haaland is captain against NFO away, with N.Jackson as vice-captain. Groß is first on the bench. Saving the chips.",
+    "updated_notes": [
+      "GW10: sold Mbeumo for Tavernier (6.6). Bank £2.7m.",
+      "Thomas 50% (calf). If he stays doubtful, consider swapping him for a cheap starting defender.",
+      "We have 3 Brighton players (De Cuyper, Vuskovic, Groß). Their fixtures: HUL away GW11, NEW home GW12.",
+      "Haaland is the default captain. FUL at home in GW11 is a possible triple-captain week. GW12 is ARS away, which is hard.",
+      "Chips unused. Plan a wildcard around GW12-16. First-half chips expire after GW19.",
+      "Arsenal play NEW away GW11 and MCI home GW12, so Raya and Calafiori clean sheets get less likely.",
+      "Cherki form only 2.8. Watch him; Fulham at home in GW11 is good, then ARS away."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 64233,
+  "output_tokens": 1232,
+  "duration_ms": 18068,
+  "expected_points": 52.27
+}
