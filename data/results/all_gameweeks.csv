@@ -23,3 +23,15 @@ O-verified,ai,claude-opus-5-5,verified,9,65,0,65,1,47,18,49.88,15.12,103,101.41,
 form-bot,bot,rule-based,none,9,65,0,65,1,47,18,48.52,16.48,97,94.09,5,accepted,1,0,,0,1,True,,1,16,0,0,False,,,,,,,,,
 crowd-bot,bot,rule-based,none,9,41,0,41,11,47,-6,43.81,-2.81,79,92.77,11,accepted,1,0,,0,1,False,,0,21,0,0,False,,,,,,,,,
 stats-bot,bot,rule-based,none,9,63,0,63,4,47,16,55.42,7.58,136,110.35,1,accepted,1,0,,0,1,False,,0,3,0,0,False,,,,,,,,,
+H-none,ai,claude-haiku-5-5,none,10,59,0,59,9,55,4,50.02,8.98,142,143.15,8,accepted,1,0,,0,0,False,,0,10,63508,4366,False,,,,,,,,,
+H-self,ai,claude-haiku-5-5,self,10,52,0,52,11,55,-3,47.69,4.31,135,140.82,11,accepted,1,0,,0,1,False,,0,21,64236,2168,False,6,69,6,5,,,,,
+H-verified,ai,claude-haiku-5-5,verified,10,49,0,49,12,55,-6,47.77,1.23,132,140.9,12,accepted,2,1,TRANSFER_OUT_NOT_IN_SQUAD:1;UNKNOWN_PLAYER:1,1,1,False,,0,24,129653,4276,False,1,15,,,1,0,0,0,0
+S-none,ai,claude-sonnet-5-5,none,10,68,0,68,8,55,13,49.28,18.72,142,146.09,8,accepted,1,0,,0,0,False,,0,17,63474,884,False,,,,,,,,,
+S-self,ai,claude-sonnet-5-5,self,10,79,0,79,2,55,24,49.86,29.14,160,147.33,7,accepted,1,0,,0,0,False,,0,6,64029,941,False,1,36,1,1,,,,,
+S-verified,ai,claude-sonnet-5-5,verified,10,82,0,82,1,55,27,50.09,31.91,163,148.01,6,accepted,1,0,,0,0,False,,0,6,64481,962,False,0,0,,,0,0,0,0,0
+O-none,ai,claude-opus-5-5,none,10,71,0,71,3,55,16,54.61,16.39,170,155.81,4,accepted,1,0,,0,1,False,,0,3,63480,1030,False,,,,,,,,,
+O-self,ai,claude-opus-5-5,self,10,70,0,70,5,55,15,52.27,17.73,173,153.68,3,accepted,1,0,,0,1,False,,0,11,64233,1232,False,7,108,7,7,,,,,
+O-verified,ai,claude-opus-5-5,verified,10,71,0,71,3,55,16,54.61,16.39,174,156.02,2,accepted,1,0,,0,1,False,,0,3,64588,1134,False,3,63,,,3,1,0,0,0
+form-bot,bot,rule-based,none,10,70,0,70,5,55,15,51.04,18.96,167,145.13,5,accepted,1,0,,0,1,True,,0,12,0,0,False,,,,,,,,,
+crowd-bot,bot,rule-based,none,10,59,0,59,9,55,4,46.14,12.86,138,138.91,10,accepted,1,0,,0,1,False,,0,8,0,0,False,,,,,,,,,
+stats-bot,bot,rule-based,none,10,70,0,70,5,55,15,56.34,13.66,206,166.69,1,accepted,1,0,,0,1,True,,0,18,0,0,False,,,,,,,,,

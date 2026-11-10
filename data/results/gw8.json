@@ -350,6 +350,13 @@
           "status": "active",
           "uses": 0,
           "average": null
+        },
+        {
+          "id": "L3",
+          "text": "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders.",
+          "status": "active",
+          "uses": 0,
+          "average": null
         }
       ],
       "rank": 2,
