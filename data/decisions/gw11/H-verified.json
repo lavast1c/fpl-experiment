@@ -1,0 +1,70 @@
+{
+  "team": "H-verified",
+  "model": "claude-haiku-5-5",
+  "memory": "verified",
+  "gw": 11,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-20T12:11:47+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 101,
+        "in": 45,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      60,
+      115,
+      504,
+      45,
+      236,
+      156,
+      427,
+      79,
+      411
+    ],
+    "bench_order": [
+      572,
+      330,
+      400,
+      138
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Henderson (form 1.3, low xG) out for McGinn (form 5.3, xG 3.22, good fixtures SUN, IPS, EVE) using the free transfer, leaving £1.5m in the bank. Haaland captained: highest xG (7.06) and a home game vs FUL. Evanilson (form 8.0) vice. Dewsbury-Hall (form 5.0) starts over Doku (form 2.0). Doku and Kostoulas on the bench; Bogle covers defence.",
+    "lessons": {
+      "keep": [
+        "L1"
+      ],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 64831,
+  "output_tokens": 3988,
+  "duration_ms": 18280,
+  "expected_points": 51.77
+}

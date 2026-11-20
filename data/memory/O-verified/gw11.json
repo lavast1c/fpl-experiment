@@ -1,0 +1,44 @@
+{
+  "kind": "verified",
+  "next_id": 5,
+  "lessons": [
+    {
+      "id": "L1",
+      "text": "Sell players who are injured with no return date (status i) right away rather than waiting; a flagged starter who plays 0 minutes wastes points and the vice-captain slot.",
+      "created_gw": 9,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L2",
+      "text": "Don't make a doubtful (50%) player the vice-captain or a key starter when a fit, in-form alternative exists.",
+      "created_gw": 9,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L3",
+      "text": "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders.",
+      "created_gw": 10,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L4",
+      "text": "When a midfielder's form falls well below his ppg and he has a tough fixture next, swap him for an in-form, nailed player with easier fixtures rather than waiting for him to recover.",
+      "created_gw": 11,
+      "status": "active",
+      "uses": []
+    }
+  ],
+  "pending": [
+    {
+      "gw": 11,
+      "lesson": "L3",
+      "decision": "bought",
+      "player": 366,
+      "expected": 4.08
+    }
+  ],
+  "removed_notices": []
+}

@@ -1,0 +1,61 @@
+{
+  "team": "O-none",
+  "model": "claude-opus-5-5",
+  "memory": "none",
+  "gw": 11,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-20T12:12:15+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 427,
+        "in": 366
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      68,
+      124,
+      366,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      261,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "Mbeumo is out of form (1.7) and Man Utd go to Liverpool, so I'm swapping him for Wirtz (form 7.0), whose Liverpool play Man Utd at home, then Everton and Sunderland. The free transfer covers it, so no points hit. Haaland is captain for Fulham at home and in-form Jackson is vice. I'm playing 3-4-3 so all three strikers start. Iwobi (Man City away) and Thomas (75% fit) go on the bench. No chips this week."
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "input_tokens": 63758,
+  "output_tokens": 895,
+  "duration_ms": 11245,
+  "expected_points": 55.46
+}

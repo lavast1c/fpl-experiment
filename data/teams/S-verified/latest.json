@@ -18,7 +18,7 @@
     "166": 68
   },
   "bank": 36,
-  "free_transfers": 2,
+  "free_transfers": 3,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
@@ -30,9 +30,9 @@
       124,
       399,
       427,
-      411,
       79,
-      166
+      166,
+      411
     ],
     "bench_order": [
       250,

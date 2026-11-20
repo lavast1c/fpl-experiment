@@ -1,0 +1,61 @@
+{
+  "team": "S-verified",
+  "model": "claude-sonnet-5-5",
+  "memory": "verified",
+  "gw": 11,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-20T12:12:04+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      399,
+      427,
+      79,
+      166,
+      411
+    ],
+    "bench_order": [
+      250,
+      156,
+      101,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 399,
+    "chip": null,
+    "reasoning": "Squad is performing well. Haaland is at home to Fulham, so he is captain with Cherki as vice-captain. No transfers; the free transfers are banked.",
+    "lessons": {
+      "keep": [],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens": 64740,
+  "output_tokens": 499,
+  "duration_ms": 4385,
+  "expected_points": 52.1
+}

@@ -1,0 +1,77 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-opus-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-opus-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<730 characters>"
+  ],
+  "duration_ms": 11245,
+  "raw_stdout": "{\"duration_api_ms\":9975,\"stop_reason\":\"tool_use\",\"session_id\":\"5847da27-0625-4199-a4fd-123fa434564a\",\"total_cost_usd\":0.527956,\"usage\":{\"input_tokens\":2,\"cache_creation_input_tokens\":63756,\"cache_read_input_tokens\":0,\"output_tokens\":895,\"output_tokens_details\":{\"thinking_tokens\":471},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":63756,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":895,\"cache_read_input_tokens\":0,\"cache_creation_input_tokens\":63756,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":63756},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-opus-5-5\":{\"inputTokens\":2,\"outputTokens\":895,\"cacheReadInputTokens\":0,\"cacheCreationInputTokens\":63756,\"webSearchRequests\":0,\"costUSD\":0.527956,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":471,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":63756,\"canonicalModel\":\"claude-opus-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":2,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":427,\\\"in\\\":366}],\\\"starting_xi\\\":[1,8,115,504,40,68,124,366,411,166,79],\\\"bench_order\\\":[497,261,175,173],\\\"captain\\\":411,\\\"vice_captain\\\":166,\\\"chip\\\":null,\\\"reasoning\\\":\\\"Mbeumo is out of form (1.7) and Man Utd go to Liverpool, so I'm swapping him for Wirtz (form 7.0), whose Liverpool play Man Utd at home, then Everton and Sunderland. The free transfer covers it, so no points hit. Haaland is captain for Fulham at home and in-form Jackson is vice. I'm playing 3-4-3 so all three strikers start. Iwobi (Man City away) and Thomas (75% fit) go on the bench. No chips this week.\\\"}\",\"structured_output\":{\"transfers\":[{\"out\":427,\"in\":366}],\"starting_xi\":[1,8,115,504,40,68,124,366,411,166,79],\"bench_order\":[497,261,175,173],\"captain\":411,\"vice_captain\":166,\"chip\":null,\"reasoning\":\"Mbeumo is out of form (1.7) and Man Utd go to Liverpool, so I'm swapping him for Wirtz (form 7.0), whose Liverpool play Man Utd at home, then Everton and Sunderland. The free transfer covers it, so no points hit. Haaland is captain for Fulham at home and in-form Jackson is vice. I'm playing 3-4-3 so all three strikers start. Iwobi (Man City away) and Thomas (75% fit) go on the bench. No chips this week.\"},\"ttft_ms\":6939,\"type\":\"result\",\"duration_ms\":10121,\"uuid\":\"d6041dd0-408e-400e-b472-83df2b9bf930\",\"ttft_stream_ms\":2532,\"time_to_request_ms\":149,\"time_to_request_phases_ms\":{\"other\":7,\"system_prompt\":1,\"resume_other\":1,\"process_user_input\":4,\"input_attachments\":10,\"input_hooks\":3,\"conversation_append\":0,\"tool_pool_refresh\":2,\"init_message\":2,\"init_frame_send\":1,\"engine_pickup\":2,\"loop_entry\":4,\"message_prep\":1,\"model_config_wait\":75,\"autocompact\":2,\"request_announcements\":9,\"query_setup\":1,\"model_gates\":1,\"tool_schema_build\":6,\"message_normalization\":2,\"client_creation\":4,\"request_build\":11},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":48,\"time_to_request_cpu_ms\":83,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":217,\"process_anon_mib_turn_start\":137,\"process_rss_mib_result\":215,\"process_anon_mib_result\":128,\"process_peak_rss_mib\":236,\"process_cpu_ms_turn\":472,\"process_wall_ms_turn\":10120,\"tool_pool_build_count\":3,\"tool_pool_build_lapsed_count\":0,\"tool_pool_moved_at_lapse_count\":0,\"tool_pool_limit_ms\":30000,\"process_cpu_ms_streaming\":134,\"process_wall_ms_streaming\":7580,\"main_stream_count\":1,\"main_stream_event_count\":61,\"main_stream_chunk_count\":53,\"process_turn_states\":{\"main_stream\":{\"cpu_ms\":134,\"wall_ms\":7580,\"entries\":1},\"first_event_wait\":{\"cpu_ms\":245,\"wall_ms\":2382,\"entries\":1},\"before_first_request\":{\"cpu_ms\":82,\"wall_ms\":148,\"entries\":1},\"after_last_request\":{\"cpu_ms\":11,\"wall_ms\":10,\"entries\":1}},\"input_attachments_detail\":{\"slowest_producer\":\"deferred_tools_delta\",\"slowest_producer_ms\":2,\"cpu_ms\":10,\"major_faults\":0,\"setup_ms\":0,\"prompt_producers_ms\":0,\"ambient_start_ms\":3,\"ambient_wait_ms\":2,\"render_ms\":1,\"producers\":44,\"token_counts\":0},\"tool_schema_build_detail\":{\"betas_ms\":0,\"waits_ms\":1,\"placement_ms\":1,\"render_ms\":4,\"after_ms\":0,\"other_ms\":0,\"tools\":1,\"new_schemas\":1},\"message_normalization_detail\":{\"before_ms\":0,\"normalize_ms\":2,\"images_ms\":0,\"post_process_ms\":0,\"after_ms\":0,\"other_ms\":0,\"messages\":8,\"wire_messages\":2},\"request_build_detail\":{\"records_ms\":1,\"system_ms\":1,\"headers_ms\":1,\"cache_break_record_ms\":0,\"plans_ms\":1,\"retry_setup_ms\":1,\"sent_build_ms\":5,\"record_attempt_ms\":1,\"other_ms\":0,\"sent_build_safety_context_ms\":0,\"sent_build_cache_breakpoints_ms\":1,\"sent_build_surrogate_scan_ms\":0},\"first_content_frame_ms\":2532,\"time_to_request_from_spawn_ms\":125797,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1795176724198.2246,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 427, \"in\": 366}], \"starting_xi\": [1, 8, 115, 504, 40, 68, 124, 366, 411, 166, 79], \"bench_order\": [497, 261, 175, 173], \"captain\": 411, \"vice_captain\": 166, \"chip\": null, \"reasoning\": \"Mbeumo is out of form (1.7) and Man Utd go to Liverpool, so I'm swapping him for Wirtz (form 7.0), whose Liverpool play Man Utd at home, then Everton and Sunderland. The free transfer covers it, so no points hit. Haaland is captain for Fulham at home and in-form Jackson is vice. I'm playing 3-4-3 so all three strikers start. Iwobi (Man City away) and Thomas (75% fit) go on the bench. No chips this week.\"}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 427,
+        "in": 366
+      }
+    ],
+    "starting_xi": [
+      1,
+      8,
+      115,
+      504,
+      40,
+      68,
+      124,
+      366,
+      411,
+      166,
+      79
+    ],
+    "bench_order": [
+      497,
+      261,
+      175,
+      173
+    ],
+    "captain": 411,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "Mbeumo is out of form (1.7) and Man Utd go to Liverpool, so I'm swapping him for Wirtz (form 7.0), whose Liverpool play Man Utd at home, then Everton and Sunderland. The free transfer covers it, so no points hit. Haaland is captain for Fulham at home and in-form Jackson is vice. I'm playing 3-4-3 so all three strikers start. Iwobi (Man City away) and Thomas (75% fit) go on the bench. No chips this week."
+  },
+  "error": null,
+  "models_used": [
+    "claude-opus-5-5"
+  ],
+  "model_mismatch": false,
+  "input_tokens": 63758,
+  "cache_read_tokens": 0,
+  "cache_creation_tokens": 63756,
+  "output_tokens": 895,
+  "num_turns": 2,
+  "api_equivalent_usd": 0.527956,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}
