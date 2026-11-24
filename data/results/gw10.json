@@ -405,6 +405,13 @@
           "id": "L3",
           "text": "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders.",
           "status": "active",
+          "uses": 1,
+          "average": 9.92
+        },
+        {
+          "id": "L4",
+          "text": "When a midfielder's form falls well below his ppg and he has a tough fixture next, swap him for an in-form, nailed player with easier fixtures rather than waiting for him to recover.",
+          "status": "active",
           "uses": 0,
           "average": null
         }

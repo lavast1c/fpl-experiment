@@ -1,0 +1,1358 @@
+{
+  "gw": 11,
+  "source": "official points",
+  "average": 35,
+  "teams": [
+    {
+      "team": "H-none",
+      "gw": 11,
+      "points": 22,
+      "hit_points": 0,
+      "net_points": 22,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 17,
+      "chip": null,
+      "players": [
+        {
+          "id": 385,
+          "name": "Trafford",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "bench 1"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "bench 2"
+        },
+        {
+          "id": 447,
+          "name": "Botman",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 384,
+          "out_name": "Donnarumma",
+          "out_points": 2,
+          "in": 385,
+          "in_name": "Trafford",
+          "in_points": 2
+        },
+        {
+          "out": 138,
+          "out_name": "Kostoulas",
+          "out_points": 1,
+          "in": 166,
+          "in_name": "N.Jackson",
+          "in_points": 2
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "H-self",
+      "gw": 11,
+      "points": 52,
+      "hit_points": 0,
+      "net_points": 52,
+      "captain": 79,
+      "auto_subs": 0,
+      "bench_points": 7,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 60,
+          "name": "Hill",
+          "points": 14,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 15,
+          "name": "Ødegaard",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "bench 2"
+        },
+        {
+          "id": 138,
+          "name": "Kostoulas",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 427,
+          "out_name": "Mbeumo",
+          "out_points": 1,
+          "in": 15,
+          "in_name": "Ødegaard",
+          "in_points": 5
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "H-verified",
+      "gw": 11,
+      "points": 33,
+      "hit_points": 0,
+      "net_points": 33,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 17,
+      "chip": null,
+      "players": [
+        {
+          "id": 384,
+          "name": "Donnarumma",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 60,
+          "name": "Hill",
+          "points": 14,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 45,
+          "name": "McGinn",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 236,
+          "name": "Dewsbury-Hall",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "bench 1"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "bench 2"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 138,
+          "name": "Kostoulas",
+          "points": 1,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 101,
+          "out_name": "Henderson",
+          "out_points": 2,
+          "in": 45,
+          "in_name": "McGinn",
+          "in_points": 1
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "S-none",
+      "gw": 11,
+      "points": 29,
+      "hit_points": 0,
+      "net_points": 29,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 16,
+      "chip": null,
+      "players": [
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 379,
+          "name": "Isak",
+          "points": 5,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "bench 1"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "S-self",
+      "gw": 11,
+      "points": 37,
+      "hit_points": 0,
+      "net_points": 37,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 8,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 379,
+          "name": "Isak",
+          "points": 5,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "S-verified",
+      "gw": 11,
+      "points": 34,
+      "hit_points": 0,
+      "net_points": 34,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 8,
+      "chip": null,
+      "players": [
+        {
+          "id": 572,
+          "name": "Tzolakis",
+          "points": 10,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 330,
+          "name": "Bogle",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 1,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 250,
+          "name": "Leno",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 101,
+          "name": "Henderson",
+          "points": 2,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "O-none",
+      "gw": 11,
+      "points": 46,
+      "hit_points": 0,
+      "net_points": 46,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 5,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 366,
+          "name": "Wirtz",
+          "points": 14,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 427,
+          "out_name": "Mbeumo",
+          "out_points": 1,
+          "in": 366,
+          "in_name": "Wirtz",
+          "in_points": 14
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "O-self",
+      "gw": 11,
+      "points": 44,
+      "hit_points": 0,
+      "net_points": 44,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 9,
+      "chip": "3xc",
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 366,
+          "name": "Wirtz",
+          "points": 14,
+          "role": "starter"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x3"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 5,
+          "role": "bench 2"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 261,
+          "out_name": "Iwobi",
+          "out_points": 1,
+          "in": 366,
+          "in_name": "Wirtz",
+          "in_points": 14
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "O-verified",
+      "gw": 11,
+      "points": 46,
+      "hit_points": 0,
+      "net_points": 46,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 5,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 5,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 366,
+          "name": "Wirtz",
+          "points": 14,
+          "role": "starter"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 497,
+          "name": "Dubravka",
+          "points": 0,
+          "role": "bench 1"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 427,
+          "out_name": "Mbeumo",
+          "out_points": 1,
+          "in": 366,
+          "in_name": "Wirtz",
+          "in_points": 14
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "form-bot",
+      "gw": 11,
+      "points": 29,
+      "hit_points": 0,
+      "net_points": 29,
+      "captain": 166,
+      "auto_subs": 0,
+      "bench_points": 8,
+      "chip": null,
+      "players": [
+        {
+          "id": 385,
+          "name": "Trafford",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 31,
+          "name": "Konsa",
+          "points": 1,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 504,
+          "name": "Vuskovic",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 13,
+          "name": "Rice",
+          "points": 3,
+          "role": "starter"
+        },
+        {
+          "id": 166,
+          "name": "N.Jackson",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter"
+        },
+        {
+          "id": 156,
+          "name": "Neto",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 109,
+          "name": "Verbruggen",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 400,
+          "name": "Doku",
+          "points": 2,
+          "role": "bench 2"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "bench 3"
+        },
+        {
+          "id": 304,
+          "name": "O'Shea",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 384,
+          "out_name": "Donnarumma",
+          "out_points": 2,
+          "in": 385,
+          "in_name": "Trafford",
+          "in_points": 2
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "crowd-bot",
+      "gw": 11,
+      "points": 35,
+      "hit_points": 0,
+      "net_points": 35,
+      "captain": 411,
+      "auto_subs": 0,
+      "bench_points": 3,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 8,
+          "name": "Calafiori",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 115,
+          "name": "De Cuyper",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 449,
+          "name": "Hall",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 40,
+          "name": "Rogers",
+          "points": 5,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 124,
+          "name": "Groß",
+          "points": 4,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 399,
+          "name": "Cherki",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 346,
+          "name": "Calvert-Lewin",
+          "points": 9,
+          "role": "starter"
+        },
+        {
+          "id": 259,
+          "name": "Diop",
+          "points": 0,
+          "role": "starter"
+        },
+        {
+          "id": 109,
+          "name": "Verbruggen",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 175,
+          "name": "van Ewijk",
+          "points": 1,
+          "role": "bench 2"
+        },
+        {
+          "id": 212,
+          "name": "Hughes",
+          "points": 0,
+          "role": "bench 3"
+        },
+        {
+          "id": 272,
+          "name": "Kusi-Asare",
+          "points": 0,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 426,
+          "out_name": "B.Fernandes",
+          "out_points": 2,
+          "in": 68,
+          "in_name": "Tavernier",
+          "in_points": 8
+        }
+      ],
+      "auto_subs_detail": []
+    },
+    {
+      "team": "stats-bot",
+      "gw": 11,
+      "points": 35,
+      "hit_points": 0,
+      "net_points": 35,
+      "captain": 411,
+      "auto_subs": 1,
+      "bench_points": 8,
+      "chip": null,
+      "players": [
+        {
+          "id": 1,
+          "name": "Raya",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 4,
+          "name": "Gabriel",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 31,
+          "name": "Konsa",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 566,
+          "name": "Silva",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 68,
+          "name": "Tavernier",
+          "points": 8,
+          "role": "starter"
+        },
+        {
+          "id": 427,
+          "name": "Mbeumo",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "points": 2,
+          "role": "starter, captain x2"
+        },
+        {
+          "id": 249,
+          "name": "Barry",
+          "points": 2,
+          "role": "starter, vice-captain"
+        },
+        {
+          "id": 79,
+          "name": "Evanilson",
+          "points": 6,
+          "role": "starter"
+        },
+        {
+          "id": 261,
+          "name": "Iwobi",
+          "points": 1,
+          "role": "starter"
+        },
+        {
+          "id": 176,
+          "name": "Dasilva",
+          "points": 0,
+          "role": "starter, subbed off (didn't play)"
+        },
+        {
+          "id": 385,
+          "name": "Trafford",
+          "points": 2,
+          "role": "bench 1"
+        },
+        {
+          "id": 426,
+          "name": "B.Fernandes",
+          "points": 2,
+          "role": "bench 2, came on as automatic sub"
+        },
+        {
+          "id": 290,
+          "name": "Slater",
+          "points": 3,
+          "role": "bench 3"
+        },
+        {
+          "id": 173,
+          "name": "Thomas",
+          "points": 3,
+          "role": "bench 4"
+        }
+      ],
+      "transfers": [
+        {
+          "out": 212,
+          "out_name": "Hughes",
+          "out_points": 0,
+          "in": 290,
+          "in_name": "Slater",
+          "in_points": 3
+        }
+      ],
+      "auto_subs_detail": [
+        "Dasilva off, B.Fernandes on"
+      ]
+    }
+  ]
+}

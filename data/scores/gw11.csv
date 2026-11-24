@@ -1,0 +1,13 @@
+team,gw,points,hit_points,net_points,captain,auto_subs,bench_points,chip
+H-none,11,22,0,22,411,0,17,
+H-self,11,52,0,52,79,0,7,
+H-verified,11,33,0,33,411,0,17,
+S-none,11,29,0,29,411,0,16,
+S-self,11,37,0,37,411,0,8,
+S-verified,11,34,0,34,411,0,8,
+O-none,11,46,0,46,411,0,5,
+O-self,11,44,0,44,411,0,9,3xc
+O-verified,11,46,0,46,411,0,5,
+form-bot,11,29,0,29,166,0,8,
+crowd-bot,11,35,0,35,411,0,3,
+stats-bot,11,35,0,35,411,1,8,

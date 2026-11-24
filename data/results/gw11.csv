@@ -1,0 +1,13 @@
+team,kind,model,memory,gw,points,hit_points,net_points,rank,fpl_average,vs_average,expected_points,luck,season_points,season_expected,season_rank,outcome,attempts,rule_breaks,error_codes,stale_picks,transfers_made,captain_changed,chip,auto_subs,bench_points,input_tokens,output_tokens,model_mismatch,notes,memory_words,notes_added,notes_removed,lessons_active,lessons_new,lessons_dropped,lessons_removed,lessons_proven
+H-none,ai,claude-haiku-5-5,none,11,22,0,22,12,35,-13,53.38,-31.38,164,196.53,12,accepted,1,0,,0,2,False,,0,17,132819,5556,False,,,,,,,,,
+H-self,ai,claude-haiku-5-5,self,11,52,0,52,1,35,17,51.47,0.53,187,192.29,8,accepted,1,0,,0,1,True,,0,7,64503,5198,False,5,62,5,6,,,,,
+H-verified,ai,claude-haiku-5-5,verified,11,33,0,33,9,35,-2,51.77,-18.77,165,192.67,11,accepted,1,0,,0,1,False,,0,17,64831,3988,False,1,15,,,1,0,0,0,0
+S-none,ai,claude-sonnet-5-5,none,11,29,0,29,10,35,-6,51.69,-22.69,171,197.78,10,accepted,1,0,,0,0,False,,0,16,63764,691,False,,,,,,,,,
+S-self,ai,claude-sonnet-5-5,self,11,37,0,37,5,35,2,52.53,-15.53,197,199.86,5,accepted,1,0,,0,0,False,,0,8,64305,622,False,1,24,1,1,,,,,
+S-verified,ai,claude-sonnet-5-5,verified,11,34,0,34,8,35,-1,52.1,-18.1,197,200.11,5,accepted,1,0,,0,0,False,,0,8,64740,499,False,0,0,,,0,0,0,0,0
+O-none,ai,claude-opus-5-5,none,11,46,0,46,2,35,11,55.46,-9.46,216,211.27,4,accepted,1,0,,0,1,False,,0,5,63758,895,False,,,,,,,,,
+O-self,ai,claude-opus-5-5,self,11,44,0,44,4,35,9,59.5,-15.5,217,213.18,3,accepted,1,0,,0,1,False,3xc,0,9,64537,1523,False,7,103,7,7,,,,,
+O-verified,ai,claude-opus-5-5,verified,11,46,0,46,2,35,11,55.46,-9.46,220,211.48,2,accepted,1,0,,0,1,False,,0,5,64932,1102,False,4,96,,,4,1,0,0,0
+form-bot,bot,rule-based,none,11,29,0,29,10,35,-6,54.12,-25.12,196,199.25,7,accepted,1,0,,0,1,True,,0,8,0,0,False,,,,,,,,,
+crowd-bot,bot,rule-based,none,11,35,0,35,6,35,0,50.63,-15.63,173,189.54,9,accepted,1,0,,0,1,False,,0,3,0,0,False,,,,,,,,,
+stats-bot,bot,rule-based,none,11,35,0,35,6,35,0,55.78,-20.78,241,222.47,1,accepted,1,0,,0,1,True,,1,8,0,0,False,,,,,,,,,

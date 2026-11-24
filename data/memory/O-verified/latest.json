@@ -21,7 +21,17 @@
       "text": "Prefer nailed 90-minute players over rotation-prone stars (low minutes per game) when choosing similarly priced midfielders.",
       "created_gw": 10,
       "status": "active",
-      "uses": []
+      "uses": [
+        {
+          "gw": 11,
+          "lesson": "L3",
+          "decision": "bought",
+          "player": 366,
+          "expected": 4.08,
+          "actual": 14,
+          "value": 9.92
+        }
+      ]
     },
     {
       "id": "L4",
@@ -31,14 +41,6 @@
       "uses": []
     }
   ],
-  "pending": [
-    {
-      "gw": 11,
-      "lesson": "L3",
-      "decision": "bought",
-      "player": 366,
-      "expected": 4.08
-    }
-  ],
+  "pending": [],
   "removed_notices": []
 }
