@@ -1,0 +1,61 @@
+{
+  "team": "H-none",
+  "model": "claude-haiku-5-5",
+  "memory": "none",
+  "gw": 12,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-26T21:09:09+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 447,
+        "in": 31
+      }
+    ],
+    "starting_xi": [
+      385,
+      8,
+      115,
+      504,
+      156,
+      236,
+      400,
+      427,
+      166,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      330,
+      31,
+      101
+    ],
+    "captain": 166,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Botman (0.3 form, NEW) sold for Konsa (6.3 form, ARS home vs MCI, £4.9m), who sits on the bench as cover. About £1.6m stays in the bank. Captain N.Jackson (7.3 form, AVL vs IPS, easy fixture); vice Evanilson (8.0 form, FUL away). Bogle is the first outfield sub. No chips this week."
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 130468,
+  "output_tokens": 2944,
+  "duration_ms": 13443,
+  "expected_points": 50.45
+}

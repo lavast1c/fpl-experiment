@@ -1,0 +1,16 @@
+{
+  "gw": 12,
+  "season": "2026-27",
+  "built_at": "2026-11-26T21:08:56+00:00",
+  "filter": "all",
+  "players_in_game": 674,
+  "players_in_snapshot": 674,
+  "chars": 75473,
+  "est_tokens": 21564,
+  "token_method": "characters / 3.5 (estimate)",
+  "fixtures_ahead": 3,
+  "sources": {
+    "bootstrap": "gw12/bootstrap-static_20261126T210849Z.json.gz",
+    "fixtures": "gw12/fixtures_20261126T210850Z.json.gz"
+  }
+}

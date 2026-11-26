@@ -1,0 +1,77 @@
+{
+  "attempt": 1,
+  "retry_text": "",
+  "model_requested": "claude-haiku-5-5",
+  "command": [
+    "/opt/node22/bin/claude",
+    "-p",
+    "--model",
+    "claude-haiku-5-5",
+    "--effort",
+    "medium",
+    "--output-format",
+    "json",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--disable-slash-commands",
+    "--permission-mode",
+    "dontAsk",
+    "--system-prompt",
+    "<358 characters>",
+    "--json-schema",
+    "<730 characters>"
+  ],
+  "duration_ms": 13443,
+  "raw_stdout": "{\"duration_api_ms\":12311,\"stop_reason\":\"tool_use\",\"session_id\":\"ddf9a680-9971-4043-939f-f8982d8e0cdd\",\"total_cost_usd\":0.01543009,\"usage\":{\"input_tokens\":4,\"cache_creation_input_tokens\":66595,\"cache_read_input_tokens\":63869,\"output_tokens\":2944,\"output_tokens_details\":{\"thinking_tokens\":2123},\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":66595,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"global\",\"iterations\":[{\"input_tokens\":2,\"output_tokens\":495,\"cache_read_input_tokens\":63869,\"cache_creation_input_tokens\":2726,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":2726},\"type\":\"message\"}],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{\"claude-haiku-5-5\":{\"inputTokens\":4,\"outputTokens\":2944,\"cacheReadInputTokens\":63869,\"cacheCreationInputTokens\":66595,\"webSearchRequests\":0,\"costUSD\":0.01543009,\"contextWindow\":1000000,\"maxOutputTokens\":128000,\"thinkingTokens\":2123,\"cacheCreationEphemeral5mInputTokens\":0,\"cacheCreationEphemeral1hInputTokens\":66595,\"canonicalModel\":\"claude-haiku-5-5\",\"provider\":\"firstParty\",\"costBasis\":\"list\"}},\"permission_denials\":[],\"terminal_reason\":\"completed\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":false,\"num_turns\":3,\"subtype\":\"success\",\"api_error_status\":null,\"result\":\"{\\\"transfers\\\":[{\\\"out\\\":447,\\\"in\\\":31}],\\\"starting_xi\\\":[385,8,115,504,156,236,400,427,166,411,79],\\\"bench_order\\\":[572,330,31,101],\\\"captain\\\":166,\\\"vice_captain\\\":79,\\\"chip\\\":null,\\\"reasoning\\\":\\\"Botman (0.3 form, NEW) sold for Konsa (6.3 form, ARS home vs MCI, £4.9m), who sits on the bench as cover. About £1.6m stays in the bank. Captain N.Jackson (7.3 form, AVL vs IPS, easy fixture); vice Evanilson (8.0 form, FUL away). Bogle is the first outfield sub. No chips this week.\\\"}\",\"structured_output\":{\"transfers\":[{\"out\":447,\"in\":31}],\"starting_xi\":[385,8,115,504,156,236,400,427,166,411,79],\"bench_order\":[572,330,31,101],\"captain\":166,\"vice_captain\":79,\"chip\":null,\"reasoning\":\"Botman (0.3 form, NEW) sold for Konsa (6.3 form, ARS home vs MCI, £4.9m), who sits on the bench as cover. About £1.6m stays in the bank. Captain N.Jackson (7.3 form, AVL vs IPS, easy fixture); vice Evanilson (8.0 form, FUL away). Bogle is the first outfield sub. No chips this week.\"},\"ttft_ms\":8898,\"type\":\"result\",\"duration_ms\":12447,\"uuid\":\"b0809bfa-c3f4-4a00-8048-530ff52092df\",\"ttft_stream_ms\":652,\"time_to_request_ms\":115,\"time_to_request_phases_ms\":{\"other\":9,\"system_prompt\":2,\"resume_other\":0,\"process_user_input\":5,\"input_attachments\":10,\"input_hooks\":3,\"conversation_append\":1,\"tool_pool_refresh\":1,\"init_message\":3,\"init_frame_send\":1,\"engine_pickup\":2,\"loop_entry\":5,\"message_prep\":1,\"model_config_wait\":41,\"autocompact\":2,\"request_announcements\":8,\"query_setup\":1,\"model_gates\":1,\"tool_schema_build\":3,\"message_normalization\":4,\"client_creation\":4,\"request_build\":8},\"turn_start_resume_kind\":\"none\",\"process_turn_index\":0,\"time_to_request_loop_lag_ms\":65,\"time_to_request_cpu_ms\":94,\"time_to_request_major_faults\":0,\"process_rss_mib_turn_start\":208,\"process_anon_mib_turn_start\":129,\"process_rss_mib_result\":210,\"process_anon_mib_result\":123,\"process_peak_rss_mib\":227,\"process_cpu_ms_turn\":692,\"process_wall_ms_turn\":12446,\"tool_pool_build_count\":3,\"tool_pool_build_lapsed_count\":0,\"tool_pool_moved_at_lapse_count\":0,\"tool_pool_limit_ms\":30000,\"process_cpu_ms_streaming\":438,\"process_wall_ms_streaming\":11378,\"main_stream_count\":2,\"main_stream_event_count\":127,\"main_stream_chunk_count\":110,\"process_turn_states\":{\"main_stream\":{\"cpu_ms\":438,\"wall_ms\":11378,\"entries\":2},\"first_event_wait\":{\"cpu_ms\":121,\"wall_ms\":916,\"entries\":2},\"before_first_request\":{\"cpu_ms\":94,\"wall_ms\":115,\"entries\":1},\"between_requests\":{\"cpu_ms\":33,\"wall_ms\":31,\"entries\":1},\"after_last_request\":{\"cpu_ms\":6,\"wall_ms\":6,\"entries\":1}},\"input_attachments_detail\":{\"slowest_producer\":\"deferred_tools_delta\",\"slowest_producer_ms\":3,\"cpu_ms\":11,\"major_faults\":0,\"setup_ms\":0,\"prompt_producers_ms\":0,\"ambient_start_ms\":3,\"ambient_wait_ms\":2,\"render_ms\":1,\"producers\":44,\"token_counts\":0},\"tool_schema_build_detail\":{\"betas_ms\":0,\"waits_ms\":1,\"placement_ms\":1,\"render_ms\":1,\"after_ms\":0,\"other_ms\":0,\"tools\":1,\"new_schemas\":1},\"message_normalization_detail\":{\"before_ms\":0,\"normalize_ms\":2,\"images_ms\":0,\"post_process_ms\":1,\"after_ms\":0,\"other_ms\":1,\"messages\":9,\"wire_messages\":2},\"request_build_detail\":{\"records_ms\":1,\"system_ms\":1,\"headers_ms\":1,\"cache_break_record_ms\":1,\"plans_ms\":1,\"retry_setup_ms\":1,\"sent_build_ms\":2,\"record_attempt_ms\":0,\"other_ms\":0,\"sent_build_safety_context_ms\":0,\"sent_build_cache_breakpoints_ms\":1,\"sent_build_surrogate_scan_ms\":0},\"first_content_frame_ms\":653,\"time_to_request_from_spawn_ms\":20685,\"warm_spare_claimed\":false,\"flag_fetch_kick\":\"not_asked_warm\",\"time_origin_ms\":1795727336215.9072,\"queued_turn_count\":0,\"result_index\":0,\"process_start_tuning\":0}\n",
+  "raw_stderr": "",
+  "answer_text": "{\"transfers\": [{\"out\": 447, \"in\": 31}], \"starting_xi\": [385, 8, 115, 504, 156, 236, 400, 427, 166, 411, 79], \"bench_order\": [572, 330, 31, 101], \"captain\": 166, \"vice_captain\": 79, \"chip\": null, \"reasoning\": \"Botman (0.3 form, NEW) sold for Konsa (6.3 form, ARS home vs MCI, \\u00a34.9m), who sits on the bench as cover. About \\u00a31.6m stays in the bank. Captain N.Jackson (7.3 form, AVL vs IPS, easy fixture); vice Evanilson (8.0 form, FUL away). Bogle is the first outfield sub. No chips this week.\"}",
+  "answer": {
+    "transfers": [
+      {
+        "out": 447,
+        "in": 31
+      }
+    ],
+    "starting_xi": [
+      385,
+      8,
+      115,
+      504,
+      156,
+      236,
+      400,
+      427,
+      166,
+      411,
+      79
+    ],
+    "bench_order": [
+      572,
+      330,
+      31,
+      101
+    ],
+    "captain": 166,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Botman (0.3 form, NEW) sold for Konsa (6.3 form, ARS home vs MCI, £4.9m), who sits on the bench as cover. About £1.6m stays in the bank. Captain N.Jackson (7.3 form, AVL vs IPS, easy fixture); vice Evanilson (8.0 form, FUL away). Bogle is the first outfield sub. No chips this week."
+  },
+  "error": null,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "model_mismatch": false,
+  "input_tokens": 130468,
+  "cache_read_tokens": 63869,
+  "cache_creation_tokens": 66595,
+  "output_tokens": 2944,
+  "num_turns": 3,
+  "api_equivalent_usd": 0.01543009,
+  "mock": false,
+  "errors": [],
+  "stale_picks": [],
+  "notes": []
+}

@@ -1,0 +1,77 @@
+{
+  "team": "H-self",
+  "model": "claude-haiku-5-5",
+  "memory": "self",
+  "gw": 12,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-26T21:09:46+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 2,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    [
+      "TRANSFER_OUT_NOT_IN_SQUAD"
+    ],
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 156,
+        "in": 336
+      },
+      {
+        "out": 411,
+        "in": 166
+      }
+    ],
+    "starting_xi": [
+      572,
+      8,
+      60,
+      115,
+      330,
+      504,
+      15,
+      236,
+      336,
+      79,
+      166
+    ],
+    "bench_order": [
+      384,
+      400,
+      101,
+      138
+    ],
+    "captain": 79,
+    "vice_captain": 166,
+    "chip": null,
+    "reasoning": "Neto (form 1.7) out for Okafor (LEE, form 6.7, fixtures COV/MCI/IPS). Haaland (form 2.0, ARS away at difficulty 5) out for N.Jackson (AVL, form 7.3, easy IPS/EVE/CRY), taking a -4 hit. Evanilson stays captain (form 8.0, fixtures FUL/BHA/HUL). Tzolakis, Hill, De Cuyper, Vuskovic, Bogle and Ødegaard all keep their starting places. Bench: Donnarumma, Doku, Henderson, Kostoulas.",
+    "updated_notes": [
+      "GW12: Neto->Okafor (LEE MID, form 6.7). Haaland->N.Jackson (AVL FWD, form 7.3, easy fixtures) with -4 hit.",
+      "Captain Evanilson (form 8.0), vice N.Jackson.",
+      "Bank about £12.4m after both moves; spend on a bench or mid upgrade later.",
+      "Weak bench: Henderson (1.3 form), Kostoulas (1.7), Doku (2.0 at £7.5m). Doku and Henderson are sell candidates; Alysson (AVL MID, form 7.0, £4.9m) is a target.",
+      "Hill, Vuskovic, De Cuyper and Tzolakis are in good form; keep.",
+      "Konsa (ARS DEF, form 6.3, £4.9m) is a cheap defender target.",
+      "Rudoni (COV MID, form 7.0) is another cheap mid option."
+    ]
+  },
+  "chip": null,
+  "transfers_made": 2,
+  "hit_points": 4,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 129963,
+  "output_tokens": 8448,
+  "duration_ms": 37101,
+  "expected_points": 45.79
+}

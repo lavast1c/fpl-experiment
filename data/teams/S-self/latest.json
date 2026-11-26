@@ -18,7 +18,7 @@
     "379": 91
   },
   "bank": 13,
-  "free_transfers": 3,
+  "free_transfers": 4,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
@@ -36,12 +36,12 @@
     ],
     "bench_order": [
       250,
+      173,
       156,
-      101,
-      173
+      101
     ],
-    "captain": 411,
-    "vice_captain": 379
+    "captain": 379,
+    "vice_captain": 411
   },
   "free_hit_backup": null,
   "has_squad": true

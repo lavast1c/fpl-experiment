@@ -2,7 +2,6 @@
   "team_id": "O-verified",
   "squad": {
     "1": 61,
-    "497": 40,
     "8": 60,
     "115": 53,
     "504": 51,
@@ -15,14 +14,15 @@
     "79": 61,
     "166": 68,
     "68": 66,
-    "366": 72
+    "366": 72,
+    "572": 47
   },
-  "bank": 34,
+  "bank": 26,
   "free_transfers": 1,
   "chips_used": [],
   "lineup": {
     "starting_xi": [
-      1,
+      572,
       8,
       115,
       504,
@@ -35,13 +35,13 @@
       411
     ],
     "bench_order": [
-      497,
+      1,
       261,
-      175,
-      173
+      173,
+      175
     ],
-    "captain": 411,
-    "vice_captain": 166
+    "captain": 166,
+    "vice_captain": 411
   },
   "free_hit_backup": null,
   "has_squad": true

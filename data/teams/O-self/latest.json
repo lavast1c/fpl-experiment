@@ -1,7 +1,6 @@
 {
   "team_id": "O-self",
   "squad": {
-    "1": 61,
     "497": 40,
     "8": 60,
     "115": 53,
@@ -15,9 +14,10 @@
     "79": 61,
     "166": 68,
     "68": 66,
-    "366": 72
+    "366": 72,
+    "572": 47
   },
-  "bank": 9,
+  "bank": 23,
   "free_transfers": 1,
   "chips_used": [
     {
@@ -28,26 +28,26 @@
   ],
   "lineup": {
     "starting_xi": [
-      1,
-      8,
+      572,
       115,
       504,
+      8,
       68,
       124,
       366,
-      399,
+      40,
       79,
       166,
       411
     ],
     "bench_order": [
       497,
-      40,
-      175,
-      173
+      399,
+      173,
+      175
     ],
-    "captain": 411,
-    "vice_captain": 166
+    "captain": 166,
+    "vice_captain": 411
   },
   "free_hit_backup": null,
   "has_squad": true

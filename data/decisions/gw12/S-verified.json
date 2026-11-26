@@ -1,0 +1,61 @@
+{
+  "team": "S-verified",
+  "model": "claude-sonnet-5-5",
+  "memory": "verified",
+  "gw": 12,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-26T21:10:35+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [],
+    "starting_xi": [
+      572,
+      8,
+      115,
+      330,
+      504,
+      124,
+      399,
+      427,
+      79,
+      166,
+      411
+    ],
+    "bench_order": [
+      250,
+      101,
+      173,
+      156
+    ],
+    "captain": 411,
+    "vice_captain": 79,
+    "chip": null,
+    "reasoning": "Squad is healthy with decent fixtures; no clear upgrade worth using transfers now, so I'm banking free transfers (3 saved, up to 5). Haaland captained despite a tough Arsenal away game because no better option is affordable; Evanilson is vice.",
+    "lessons": {
+      "keep": [],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 0,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens": 64819,
+  "output_tokens": 736,
+  "duration_ms": 6660,
+  "expected_points": 51.17
+}

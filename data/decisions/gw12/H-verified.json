@@ -1,0 +1,74 @@
+{
+  "team": "H-verified",
+  "model": "claude-haiku-5-5",
+  "memory": "verified",
+  "gw": 12,
+  "prompt_version": "v2",
+  "effort": "medium",
+  "mock": false,
+  "decided_at": "2026-11-26T21:10:15+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 2,
+  "max_attempts": 3,
+  "errors_by_attempt": [
+    [
+      "OVER_BUDGET",
+      "XI_NOT_IN_SQUAD"
+    ],
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 156,
+        "in": 366,
+        "out_lesson_ids": [],
+        "in_lesson_ids": []
+      }
+    ],
+    "starting_xi": [
+      384,
+      8,
+      60,
+      115,
+      504,
+      366,
+      236,
+      427,
+      45,
+      79,
+      411
+    ],
+    "bench_order": [
+      572,
+      330,
+      400,
+      138
+    ],
+    "captain": 79,
+    "vice_captain": 366,
+    "chip": null,
+    "reasoning": "Neto's form has collapsed to 1.7, so he is replaced by Wirtz (form 9.7), who fits the £8.0m available after the sale (£0.6m left). Evanilson captains: form 8.0, xG 5.57, away at Fulham (difficulty 3). Haaland's away trip to Arsenal is difficult, so he is a weaker captain. Bogle covers the defence on the bench; Doku's form is poor, so he drops to the bench.",
+    "lessons": {
+      "keep": [
+        "L1"
+      ],
+      "new": []
+    },
+    "captain_lesson_ids": []
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [
+    "claude-haiku-5-5"
+  ],
+  "input_tokens": 130306,
+  "output_tokens": 6977,
+  "duration_ms": 29106,
+  "expected_points": 48.98
+}

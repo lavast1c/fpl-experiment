@@ -1,6 +1,6 @@
 {
   "kind": "verified",
-  "next_id": 5,
+  "next_id": 7,
   "lessons": [
     {
       "id": "L1",
@@ -39,8 +39,30 @@
       "created_gw": 11,
       "status": "active",
       "uses": []
+    },
+    {
+      "id": "L5",
+      "text": "Keep a backup goalkeeper who actually starts for his club; a third-choice keeper on the bench gives no cover when the first-choice keeper is doubtful.",
+      "created_gw": 12,
+      "status": "active",
+      "uses": []
+    },
+    {
+      "id": "L6",
+      "text": "When the premium captain faces a difficulty-5 away fixture, consider captaining an in-form player who has an easy fixture instead.",
+      "created_gw": 12,
+      "status": "active",
+      "uses": []
     }
   ],
-  "pending": [],
+  "pending": [
+    {
+      "gw": 12,
+      "lesson": "L2",
+      "decision": "bought",
+      "player": 572,
+      "expected": 3.73
+    }
+  ],
   "removed_notices": []
 }

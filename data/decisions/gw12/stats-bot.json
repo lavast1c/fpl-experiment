@@ -1,0 +1,57 @@
+{
+  "team": "stats-bot",
+  "model": "rule-based",
+  "memory": "none",
+  "gw": 12,
+  "mock": false,
+  "decided_at": "2026-11-26T21:11:20+00:00",
+  "first_week": false,
+  "outcome": "accepted",
+  "attempts": 1,
+  "max_attempts": 1,
+  "errors_by_attempt": [
+    []
+  ],
+  "stale_picks": [],
+  "decision": {
+    "transfers": [
+      {
+        "out": 1,
+        "in": 572
+      }
+    ],
+    "starting_xi": [
+      385,
+      4,
+      31,
+      566,
+      68,
+      427,
+      249,
+      79,
+      411,
+      261,
+      426
+    ],
+    "bench_order": [
+      572,
+      290,
+      176,
+      173
+    ],
+    "captain": 249,
+    "vice_captain": 68,
+    "chip": null,
+    "reasoning": "Rule-based: ranks players by the experiment's expected points (next 3 gameweeks for transfers, next gameweek for the lineup)."
+  },
+  "chip": null,
+  "transfers_made": 1,
+  "hit_points": 0,
+  "notes": [],
+  "model_mismatch": false,
+  "models_used": [],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "duration_ms": 0,
+  "expected_points": 52.58
+}

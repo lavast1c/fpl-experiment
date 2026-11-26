@@ -67,9 +67,9 @@
       "timezone": "UTC",
       "static_content_url": "https://fantasy.premierleague.com/gcs/plfpl-prod-static-content/plfpl-production/2026_27/",
       "price_change_deadlines": [
-        "2026-11-21T00:00:00Z",
-        "2026-11-22T00:00:00Z",
-        "2026-11-23T00:00:00Z"
+        "2026-11-27T00:00:00Z",
+        "2026-11-28T00:00:00Z",
+        "2026-11-29T00:00:00Z"
       ]
     },
     "rules": {
@@ -133,7 +133,7 @@
       ]
     },
     "status": {
-      "price_change_last_updated": "2026-11-20T12:05:13.145236Z"
+      "price_change_last_updated": "2026-11-26T20:50:12.629718Z"
     },
     "scoring": {
       "long_play": 2,
@@ -392,6 +392,6 @@
     }
   ],
   "number_of_gameweeks": 38,
-  "number_of_players": 672,
-  "source_file": "gw11/bootstrap-static_20261120T121033Z.json.gz"
+  "number_of_players": 674,
+  "source_file": "gw12/bootstrap-static_20261126T210849Z.json.gz"
 }
